@@ -11,6 +11,30 @@ class Utils {
       FocusScope.of(context).requestFocus(nextFocus);
     }
 
+    static void fieldFocusReviewChange(
+        BuildContext context,
+        FocusNode current,
+        FocusNode nextFocus,
+        FocusNode licence,
+        FocusNode truckNumber,
+
+        ) {
+      current.unfocus();
+      FocusScope.of(context).requestFocus(nextFocus);
+    }
+
+    static void fieldInfoDetailChange(
+        BuildContext context,
+        FocusNode piece,
+        FocusNode totalWeight,
+        FocusNode bolNumber,
+        FocusNode unloadBy,
+
+        ) {
+      piece.unfocus();
+      FocusScope.of(context).requestFocus(totalWeight);
+    }
+
 
     static toastMessage(String message){
       Fluttertoast.showToast(

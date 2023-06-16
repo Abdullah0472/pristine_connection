@@ -1,8 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'dart:async';
 import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dart';
-import 'package:celient_project/res/components/widgets/drawer/drawer.dart';
-import 'package:celient_project/res/components/widgets/panel/panel.dart';
+import 'package:celient_project/res/components/widgets/cards/load_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -39,20 +38,20 @@ class _HomeViewState extends State<HomeView> {
 
   loadData() {
     getUserCurrentLocation().then((value) async {
-      _markers.add(
-        Marker(
-          markerId: const MarkerId('2'),
-          position: LatLng(
-            value.latitude,
-            value.longitude,
-          ),
-          infoWindow: const InfoWindow(
-            title: "Your Current Location",
-          ),
-        ),
-      );
+      // _markers.add(
+      //   Marker(
+      //     markerId: const MarkerId('2'),
+      //     position: LatLng(
+      //       value.latitude,
+      //       value.longitude,
+      //     ),
+      //     infoWindow: const InfoWindow(
+      //       title: "Your Current Location",
+      //     ),
+      //   ),
+      // );
       CameraPosition cameraPosition = CameraPosition(
-        zoom: 15,
+        zoom: 18,
         target: LatLng(
           value.latitude,
           value.longitude,
@@ -80,10 +79,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightOpen = MediaQuery.of(context).size.height *0.3;
-    final panelHeightClosed = MediaQuery.of(context).size.height *0.1;
     return Scaffold(
-      drawer: const DrawerWidget(),
       appBar: CustomAppBar(
         icon: true,
         actionIcon: true,
@@ -142,29 +138,34 @@ class _HomeViewState extends State<HomeView> {
         title: 'Trips on Going',
       ),
       body: SafeArea(
-        child: 
-          SlidingUpPanel(
-
-            controller: panelController,
-            parallaxEnabled: true,
-            parallaxOffset: 0.5,
-            minHeight: panelHeightClosed,
-            maxHeight:  panelHeightOpen,
-            body: GoogleMap(
-              myLocationEnabled: true,
-              initialCameraPosition: _kGooglePlex,
-              markers: Set<Marker>.of(_markers),
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-            ),
-            panelBuilder: (controller) => PanelWidget(
-              controller: controller,
-              panelController: panelController,
-            ),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        child: Stack(alignment: AlignmentDirectional.center, children: [
+          GoogleMap(
+            myLocationEnabled: true,
+            initialCameraPosition: _kGooglePlex,
+            markers: Set<Marker>.of(_markers),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
           ),
-       
+          const Positioned(
+              top: 60,
+              child: LoadCards(
+                refNumber: '458',
+                currentAddress:
+                    '40 Business Man Colony Rahim Yar Khan Punjab Pakistan ',
+                dateTime: 'Tue 06 2021 14:30',
+                piece: '3',
+                dims: '3-5-8',
+                weight: '487',
+                miles: '1258',
+                pickupName: 'Amjad',
+                pickupAddress: 'Thokar Niaz Baig, Lahore',
+                pickupDateTime: 'Wed 08 2021 14:45',
+                deliveryName: 'Faisal',
+                deliveryAddress: '40 Business Man Colony Rahim Yar Khan Punjab Pakistan',
+                deliveryDateTime: 'Wed 08 2021 14:45',
+              ))
+        ]),
       ),
     );
   }

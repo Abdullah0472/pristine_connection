@@ -13,6 +13,11 @@ class AppColor {
   static const textColor = Color(0xff1d75b4);
   static const blueColorShade800 = Color(0xff1053ad);
   static const drawerIconColor =  Color(0xff618a2e);
+  static const Color appBarColor = Color(0xff005e9b);
+  static const Color infoTextColor = Color(0xff545454);
+  static const Color redShadeColor = Color(0xffdf4842);
+  static const Color pinkShadeColor = Color(0xffe11ca6);
+
   //static  Color applicationColor = Colors.blue.shade900;
 
 }

@@ -160,7 +160,7 @@ class SignInView extends StatelessWidget {
                               height: Get.height * 0.06,
                               onPress: () {
                                 if (signinformkey.currentState!.validate()) {
-                                  Get.toNamed(RouteName.homeView);
+                                  Get.toNamed(RouteName.bottomNavBar);
                                   signInVM.emailController.value.clear();
                                   signInVM.passwordController.value.clear();
                                 }

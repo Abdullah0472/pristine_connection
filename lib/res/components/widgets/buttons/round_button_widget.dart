@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../colors/colors.dart';
 
 class RoundButton extends StatelessWidget {
-  const RoundButton(
+   const RoundButton(
       {Key? key,
       this.buttonColor = AppColor.applicationColor,
       this.textColor = AppColor.whiteColor,
@@ -26,6 +26,7 @@ class RoundButton extends StatelessWidget {
         height: height,
         width: width,
         decoration: BoxDecoration(
+          // border: Border.all(color: AppColor.textColor,width: 0),
             color: buttonColor, borderRadius: BorderRadius.circular(25)),
         child: loading
             ? const Center(child: CircularProgressIndicator())

@@ -58,6 +58,12 @@ dependencies:
   simple_animations:
   #Sliding Up-Panel
   sliding_up_panel: ^2.0.0+1
+  #Image Cropper
+  image_cropper: ^5.0.0
+  #Image Picker
+  image_picker: ^0.8.5+3
+  #Permission Handler
+  permission_handler: ^10.3.0
 
 
 
