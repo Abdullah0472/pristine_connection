@@ -1,36 +1,34 @@
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/utils/utils.dart';
-import 'package:celient_project/view/load_info/load_info_view.dart';
 import 'package:celient_project/view_model/controller/button/button_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../colors/colors.dart';
 
-class DialogeBoxConfirmation extends StatelessWidget {
-  final String pickupAddress;
+class DialogeBoxDeliveryConfirmation extends StatelessWidget {
+  final String deliverAddress;
   final String title;
   final String piece;
   final String totalWeight;
-  final String deliverAddress;
   final ButtonController buttonController = Get.put(ButtonController());
 
-  DialogeBoxConfirmation({
+  DialogeBoxDeliveryConfirmation({
     Key? key,
-    required this.pickupAddress, required this.piece,required this.totalWeight,
-    required this.title, required this.deliverAddress,
+    required this.deliverAddress, required this.piece,required this.totalWeight,
+    required this.title,
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        elevation: 0,
-        backgroundColor: AppColor.whiteColor,
-        child: contentBox(context),
-      );
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 0,
+      backgroundColor: AppColor.whiteColor,
+      child: contentBox(context),
+    );
 
   }
 
@@ -50,7 +48,7 @@ class DialogeBoxConfirmation extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                 Text(
+                Text(
                   title,
                   style: TextStyle(
                     fontSize: 20,
@@ -62,7 +60,7 @@ class DialogeBoxConfirmation extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  pickupAddress,
+                  deliverAddress,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
@@ -88,8 +86,8 @@ class DialogeBoxConfirmation extends StatelessWidget {
                         width: 50,
                         onPress: () {
                           Utils.snackBar("Status Changed", "Successfully");
-                          buttonController.buildUpdatedButton(() {
-                            Get.to(() => Scaffold(body: LoadInfoView(piece: piece, totalWeight: totalWeight, deliverAddress: deliverAddress,)));
+                          buttonController.buildUnloadButton(() {
+
                           });
                           Navigator.of(context).pop();
                         },

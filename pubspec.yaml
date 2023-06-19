@@ -55,7 +55,7 @@ dependencies:
   #Custom Info Window
   custom_info_window: ^1.0.1
   #Simple Animation
-  simple_animations:
+  simple_animations: ^3.1.0
   #Sliding Up-Panel
   sliding_up_panel: ^2.0.0+1
   #Image Cropper

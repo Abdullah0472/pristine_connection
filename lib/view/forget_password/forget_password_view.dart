@@ -34,7 +34,7 @@ class ForgetPasswordView extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            const Padding(
+             Padding(
               padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

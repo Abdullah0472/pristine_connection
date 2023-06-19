@@ -28,7 +28,7 @@ class ProfileView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-              const FadeAnimation(
+               FadeAnimation(
               1.2,
               Center(
                 child: CircleAvatar(

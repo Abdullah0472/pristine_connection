@@ -23,10 +23,28 @@ class ButtonController extends GetxController {
       width: 300,
       height: Get.height * 0.06,
       onPress: onPressAction,
-      //     () {
-      //   Get.to(()=> LoadInfoView());
-      // },
       title: 'Loaded',
     );
   }
+
+  void buildArrivedButton(void Function() onPressAction) {
+    button.value = RoundButton(
+      loading: false,
+      width: 300,
+      height: Get.height * 0.06,
+      onPress: onPressAction,
+      title: 'Arrived to Delivery',
+    );
+  }
+
+  void buildUnloadButton(void Function() onPressAction) {
+    button.value = RoundButton(
+      loading: false,
+      width: 300,
+      height: Get.height * 0.06,
+      onPress: onPressAction,
+      title: 'Unloaded',
+    );
+  }
+
 }

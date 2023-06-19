@@ -48,6 +48,8 @@ class LoadDetailView extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return DialogeBoxConfirmation(
+            deliverAddress: deliveryAddress,
+            title: 'Did you arrive to the Pick-up Address Below?',
             pickupAddress: pickupAddress,
             piece: piece,
             totalWeight: weight,
