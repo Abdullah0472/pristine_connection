@@ -1,3 +1,4 @@
+import 'package:celient_project/view/all_job/all_job_view.dart';
 import 'package:celient_project/view/bottomNavigationBar/bottomNavigationBar_view.dart';
 import 'package:celient_project/view/connection/connection_view.dart';
 import 'package:celient_project/view/forget_password/forget_password_view.dart';
@@ -5,6 +6,7 @@ import 'package:celient_project/view/home/home_view.dart';
 import 'package:celient_project/view/profile/profile_view.dart';
 import 'package:celient_project/view/signin/signin_view.dart';
 import 'package:celient_project/view/splash/splash_view.dart';
+import 'package:celient_project/view/unloaded/unloaded_view.dart';
 import 'package:get/get.dart';
 import 'routes_name.dart';
 
@@ -53,12 +55,18 @@ class AppRoutes {
           transitionDuration: const Duration(milliseconds: 250),
           transition: Transition.leftToRightWithFade,
         ),
-        // GetPage(
-        //   name: RouteName.reportsView,
-        //   page: () =>  ReportsView(),
-        //   transitionDuration: const Duration(milliseconds: 250),
-        //   transition: Transition.leftToRightWithFade,
-        // ),
+    GetPage(
+      name: RouteName.unloadedView,
+      page: () =>  UnloadedView(),
+      transitionDuration: const Duration(milliseconds: 250),
+      transition: Transition.rightToLeftWithFade,
+    ),
+    GetPage(
+      name: RouteName.allJobVIew,
+      page: () =>  AllJobView(),
+      transitionDuration: const Duration(milliseconds: 250),
+      transition: Transition.leftToRightWithFade,
+    ),
 
       ];
 }

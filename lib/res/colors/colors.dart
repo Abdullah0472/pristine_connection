@@ -17,6 +17,7 @@ class AppColor {
   static const Color infoTextColor = Color(0xff545454);
   static const Color redShadeColor = Color(0xffdf4842);
   static const Color pinkShadeColor = Color(0xffe11ca6);
+  static const Color containerDateColor = Color(0xff00ff02);
 
   //static  Color applicationColor = Colors.blue.shade900;
 

@@ -7,5 +7,7 @@ class RouteName {
   static const String profileView = '/profile_view';
   static const String bottomNavBar = '/bottomNavigationBar_view';
   static const String connectionView = '/connection_view';
+  static const String unloadedView = '/unloaded_view';
+  static const String allJobVIew = '/all_job_view';
 
 }

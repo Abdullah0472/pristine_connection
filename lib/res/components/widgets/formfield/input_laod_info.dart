@@ -8,11 +8,13 @@ class InputReviewTextField extends StatelessWidget {
   final IconData icons;
   TextEditingController controller;
   final String hintText;
+  final bool keyboardType;
   final loadVM = Get.put(loadDetailViewModel());
   InputReviewTextField({
     super.key,
     required this.controller,
     required this.icons, required this.hintText,
+    this.keyboardType = false,
   });
 
   @override
@@ -29,7 +31,7 @@ class InputReviewTextField extends StatelessWidget {
         );
       },
       cursorColor: Colors.grey,
-      keyboardType: TextInputType.phone,
+      keyboardType: keyboardType == false? TextInputType.phone : TextInputType.name,
       style: const TextStyle(color: AppColor.blackColor,fontSize: 16,fontWeight: FontWeight.w400),
       decoration: InputDecoration(
 

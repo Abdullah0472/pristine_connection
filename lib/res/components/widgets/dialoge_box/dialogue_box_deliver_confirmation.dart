@@ -1,5 +1,6 @@
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/utils/utils.dart';
+import 'package:celient_project/view/unloaded/unloaded_view.dart';
 import 'package:celient_project/view_model/controller/button/button_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,7 @@ class DialogeBoxDeliveryConfirmation extends StatelessWidget {
               children: <Widget>[
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: AppColor.blackColor,
@@ -87,7 +88,8 @@ class DialogeBoxDeliveryConfirmation extends StatelessWidget {
                         onPress: () {
                           Utils.snackBar("Status Changed", "Successfully");
                           buttonController.buildUnloadButton(() {
-
+                                 // Get.toNamed(RouteName.unloadedView);
+                            Get.to(()=> Scaffold(body: UnloadedView()));
                           });
                           Navigator.of(context).pop();
                         },

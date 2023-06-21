@@ -1,3 +1,4 @@
+import 'package:celient_project/res/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -30,7 +31,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? Builder(
                   builder: (context) => IconButton(
                     onPressed: () {
-                      // Scaffold.of(context).openDrawer();
+                     Get.toNamed(RouteName.allJobVIew);
                     },
                     icon: const Icon(
                       Icons.history,
