@@ -33,7 +33,7 @@ class LoadInfoView extends StatelessWidget {
           icon: false,
           actionIcon: false,
           action: Container(),
-          title: 'Load Info',
+          title: 'Load Info', leadingIcon: SizedBox(),
         ),
         body: SafeArea(
           child: SingleChildScrollView(

@@ -1,4 +1,5 @@
 import 'package:celient_project/res/animation/FadeAnimation.dart';
+import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_text_widget.dart';
@@ -14,11 +15,12 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileVM = Get.put(ProfileViewModel());
     return Scaffold(
+      backgroundColor: AppColor.offWhite,
       appBar: const CustomAppBar(
-        icon: false,
+        icon: true,
         actionIcon: false,
         action: Text(''),
-        title: 'User Profile',
+        title: 'User Profile', leadingIcon: SizedBox(),
       ),
       body: SafeArea(
         child: Padding(

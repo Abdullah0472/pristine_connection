@@ -2,12 +2,10 @@
 import 'dart:io';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/navigationBar/navigationBar.dart';
-import 'package:celient_project/view/chats/chats_view.dart';
-import 'package:celient_project/view/connection/connection_view.dart';
+import 'package:celient_project/view/history/history_view.dart';
 import 'package:celient_project/view/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../profile/profile_view.dart';
 
@@ -32,10 +30,10 @@ class _BottomNavigationBarViewState extends State<BottomNavigationBarView> {
 
     /// Will Be Moving To Connection Screen
 
-    ConnectionView(),
-    ///Will Be Moving To Chats Screen
-
-    ChatsView(),
+    HistoryView(),
+    // ///Will Be Moving To Chats Screen
+    //
+    // ChatsView(),
     ///Will Be Moving To Profile View Screen
     // CustomInspectionView(),
     ProfileView(),
@@ -86,30 +84,30 @@ class _BottomNavigationBarViewState extends State<BottomNavigationBarView> {
               ),
               BottomNavyBarItem(
                 icon: const Icon(
-                  MdiIcons.lanConnect,
+                  MdiIcons.history,
                   size: 34,
                 ),
                 title:  Text(
-                  'Connection',
+                  'History',
                   style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                 ),
                 activeColor: AppColor.applicationColor,
                 inactiveColor: AppColor.blackColor,
                 textAlign: TextAlign.center,
               ),
-              BottomNavyBarItem(
-                icon: const Icon(
-                  MdiIcons.chat,
-                  size: 34,
-                ),
-                title:  Text(
-                  'Chat',
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-                ),
-                activeColor: AppColor.redShadeColor,
-                inactiveColor: AppColor.blackColor,
-                textAlign: TextAlign.center,
-              ),
+              // BottomNavyBarItem(
+              //   icon: const Icon(
+              //     MdiIcons.chat,
+              //     size: 34,
+              //   ),
+              //   title:  Text(
+              //     'Chat',
+              //     style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+              //   ),
+              //   activeColor: AppColor.redShadeColor,
+              //   inactiveColor: AppColor.blackColor,
+              //   textAlign: TextAlign.center,
+              // ),
               BottomNavyBarItem(
                 icon: const Icon(
                   MdiIcons.accountCircle,

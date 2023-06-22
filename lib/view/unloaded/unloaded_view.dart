@@ -29,6 +29,7 @@ class UnloadedView extends StatelessWidget {
         actionIcon: false,
         action: Container(),
         title: 'Unloading',
+        leadingIcon: SizedBox(),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

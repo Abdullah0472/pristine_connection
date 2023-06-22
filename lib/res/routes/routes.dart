@@ -1,7 +1,7 @@
 import 'package:celient_project/view/all_job/all_job_view.dart';
 import 'package:celient_project/view/bottomNavigationBar/bottomNavigationBar_view.dart';
-import 'package:celient_project/view/connection/connection_view.dart';
 import 'package:celient_project/view/forget_password/forget_password_view.dart';
+import 'package:celient_project/view/history/history_view.dart';
 import 'package:celient_project/view/home/home_view.dart';
 import 'package:celient_project/view/profile/profile_view.dart';
 import 'package:celient_project/view/signin/signin_view.dart';
@@ -51,7 +51,7 @@ class AppRoutes {
 
         GetPage(
           name: RouteName.connectionView,
-          page: () =>  ConnectionView(),
+          page: () =>  HistoryView(),
           transitionDuration: const Duration(milliseconds: 250),
           transition: Transition.leftToRightWithFade,
         ),

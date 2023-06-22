@@ -1,10 +1,14 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'dart:async';
+import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dart';
 import 'package:celient_project/res/components/widgets/cards/load_cards.dart';
+import 'package:celient_project/res/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeView extends StatefulWidget {
@@ -136,6 +140,16 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
         title: 'Trips on Going',
+        leadingIcon: IconButton(
+          onPressed: () {
+            Get.toNamed(RouteName.allJobVIew);
+          },
+          icon: const Icon(
+            MdiIcons.tag,
+            size: 30,
+            color: AppColor.blackColor,
+          ),
+        ),
       ),
       body: SafeArea(
         child: Stack(alignment: AlignmentDirectional.center, children: [
@@ -162,7 +176,8 @@ class _HomeViewState extends State<HomeView> {
                 pickupAddress: 'Thokar Niaz Baig, Lahore',
                 pickupDateTime: 'Wed 08 2021 14:45',
                 deliveryName: 'Faisal',
-                deliveryAddress: '40 Business Man Colony Rahim Yar Khan Punjab Pakistan',
+                deliveryAddress:
+                    '40 Business Man Colony Rahim Yar Khan Punjab Pakistan',
                 deliveryDateTime: 'Wed 08 2021 14:45',
               ))
         ]),

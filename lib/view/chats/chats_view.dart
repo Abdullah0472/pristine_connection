@@ -7,11 +7,11 @@ class ChatsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar:  CustomAppBar(
         icon: false,
         actionIcon: false,
         action: Text(''),
-        title: 'Chat',
+        title: 'Chat', leadingIcon: SizedBox(),
       ),
       body: SafeArea(
 

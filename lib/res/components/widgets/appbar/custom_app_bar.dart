@@ -10,13 +10,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool icon;
   final bool actionIcon;
   final Widget action;
+  final Widget leadingIcon;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.actionIcon = false,
     this.icon = false,
-    required this.action,
+    required this.action, required this.leadingIcon,
   });
 
   @override
@@ -29,16 +30,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           iconTheme: const IconThemeData(color: AppColor.blackColor),
           leading: icon == true
               ? Builder(
-                  builder: (context) => IconButton(
-                    onPressed: () {
-                     Get.toNamed(RouteName.allJobVIew);
-                    },
-                    icon: const Icon(
-                      Icons.history,
-                      size: 30,
-                      color: AppColor.blackColor,
-                    ),
-                  ),
+                  builder: (context) => leadingIcon
+                  //     IconButton(
+                  //   onPressed: () {
+                  //    Get.toNamed(RouteName.allJobVIew);
+                  //   },
+                  //   icon: const Icon(
+                  //     Icons.history,
+                  //     size: 30,
+                  //     color: AppColor.blackColor,
+                  //   ),
+                  // ),
                 )
               : Builder(
                   builder: (context) => IconButton(

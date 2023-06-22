@@ -1,6 +1,7 @@
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/text/expanded_text.dart';
+import 'package:celient_project/view/detail/detail_view.dart';
 import 'package:celient_project/view_model/controller/card/card_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class AllJobCards extends StatelessWidget {
   final String weight;
   final String distance;
   final String type;
+  final String piece;
   final CardController _cardController = Get.put(CardController());
   AllJobCards({
     Key? key,
@@ -27,7 +29,12 @@ class AllJobCards extends StatelessWidget {
     required this.orderNo,
     required this.price,
     required this.pickupAddress,
-    required this.deliverAddress, required this.time, required this.weight, required this.distance, required this.type,
+    required this.deliverAddress,
+    required this.time,
+    required this.weight,
+    required this.distance,
+    required this.type,
+    required this.piece,
   }) : super(key: key);
 
   @override
@@ -129,7 +136,7 @@ class AllJobCards extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(20),
                           child: SingleChildScrollView(
-                            physics: ScrollPhysics(),
+                            physics: const ScrollPhysics(),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +227,7 @@ class AllJobCards extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 40,
                                 ),
                                 IntrinsicHeight(
@@ -231,15 +238,15 @@ class AllJobCards extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     children: [
                                       infoColumn("Time", time),
-                                      VerticalDivider(
+                                      const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
                                       infoColumn("Weight", "$weight kg"),
-                                      VerticalDivider(
+                                      const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
                                       infoColumn("Distance", "$distance km"),
-                                      VerticalDivider(
+                                      const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
                                       infoColumn("Type", "$type"),
@@ -260,7 +267,24 @@ class AllJobCards extends StatelessWidget {
                   left: 25,
                   child: RoundButton(
                     title: "DETAILS",
-                    onPress: () {},
+                    onPress: () {
+                      Get.to(() => DetailView(
+                            pickupName: "",
+                            pickupAddress: pickupAddress,
+                            pickupDateTime: time,
+                            piece: piece,
+                            dims: "",
+                            weight: weight,
+                            deliveryName: "",
+                            deliveryAddress: deliverAddress,
+                            deliveryTime: "",
+                            orderNo: orderNo,
+                            price: price,
+                            date: date,
+                            day: day,
+                            year: month,
+                          ));
+                    },
                     height: 50,
                     width: 150,
                     buttonColor: AppColor.appBarColor,
@@ -306,167 +330,3 @@ Widget infoColumn(String title, String data) {
     ],
   );
 }
-
-// Container(
-//   width: 110,
-//   height: 300,
-//   decoration: const BoxDecoration(
-//     color: AppColor.blueColorShade800,
-//   ),
-//   child: Column(
-//     mainAxisAlignment: MainAxisAlignment.center,
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       infoColumn("Time","5.32"),
-//       const Divider(
-//         thickness: 4,
-//         color: AppColor.whiteColor,
-//
-//       ),
-//       infoColumn("Distance","856 Km"),
-//       const Divider(
-//         thickness: 4,
-//         color: AppColor.whiteColor,
-//
-//       ),
-//       infoColumn("Weight","78 kg"),
-//       const Divider(
-//         thickness: 4,
-//         color: AppColor.whiteColor,
-//
-//       ),
-//       infoColumn("Type","2"),
-//
-//
-//
-//     ],
-//   ),
-// ),
-
-/// ===========================================Container ===============================///
-
-// Padding(
-//   padding: const EdgeInsets.all(20),
-//   child: SingleChildScrollView(
-//    scrollDirection: Axis.vertical ,
-//     physics: const BouncingScrollPhysics(),
-//     child: Container(
-//       height: 300,
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text(
-//                 orderNo,
-//                 style: const TextStyle(
-//                   color: AppColor.appBarColor,
-//                   fontWeight: FontWeight.w700,
-//                   fontSize: 24,
-//                 ),
-//               ),
-//               const SizedBox(
-//                 width: 100,
-//               ),
-//               const Icon(
-//                 MdiIcons.currencyUsd,
-//                 size: 25,
-//                 color: AppColor.appBarColor,
-//               ),
-//               Text(
-//                 price,
-//                 style: const TextStyle(
-//                   color: AppColor.appBarColor,
-//                   fontWeight: FontWeight.w500,
-//                   fontSize: 20,
-//                 ),
-//               ),
-//             ],
-//           ),
-//           const Text(
-//             'Pick-up point',
-//             style: TextStyle(
-//               fontStyle: FontStyle.normal,
-//               fontWeight: FontWeight.w400,
-//               color: AppColor.greyColor,
-//               fontSize: 17,
-//             ),
-//           ),
-//           const Divider(
-//             color: AppColor.greyColor,
-//             thickness: 2,
-//           ),
-//           SizedBox(
-//             width: MediaQuery.of(context).size.width *
-//                 0.6, // Change this value as needed
-//             child: ExpandableText(
-//               text: pickupAddress,
-//               style: const TextStyle(
-//                 color: AppColor.appBarColor,
-//                 fontWeight: FontWeight.w500,
-//                 fontSize: 18,
-//               ),
-//             ),
-//
-//           ),
-//           const SizedBox(height: 10,),
-//           const Text(
-//             'Delivery Point',
-//             style: TextStyle(
-//               fontStyle: FontStyle.normal,
-//               fontWeight: FontWeight.w400,
-//               color: AppColor.greyColor,
-//               fontSize: 17,
-//             ),
-//           ),
-//           const Divider(
-//             color: AppColor.greyColor,
-//             thickness: 2,
-//           ),
-//           SizedBox(
-//             width: MediaQuery.of(context).size.width *
-//                 0.6, // Change this value as needed
-//             child: ExpandableText(
-//               text: deliverAddress,
-//               style: const TextStyle(
-//                 color: AppColor.appBarColor,
-//                 fontWeight: FontWeight.w500,
-//                 fontSize: 18,
-//               ),
-//             ),
-//
-//           ),
-//         Spacer(),
-//           IntrinsicHeight(
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//               infoColumn("Time", "5.30"),
-//               VerticalDivider(
-//
-//                 color: AppColor.greyColor,
-//               ),
-//               infoColumn("Weight", "78 kg"),
-//                 VerticalDivider(
-//
-//                   color: AppColor.greyColor,
-//                 ),
-//
-//               infoColumn("Distance", "785 km"),
-//                 VerticalDivider(
-//
-//                   color: AppColor.greyColor,
-//                 ),
-//               infoColumn("Type", "8"),
-//
-//             ],),
-//           )
-//         ],
-//       ),
-//     ),
-//   ),
-// ),
