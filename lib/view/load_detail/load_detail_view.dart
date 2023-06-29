@@ -104,22 +104,6 @@ class LoadDetailView extends StatelessWidget {
 
             Obx(() => buttonController.button.value),
 
-            // RoundButton(
-            //   loading: false,
-            //   width: 300,
-            //   height: Get.height * 0.06,
-            //   onPress: () {
-            //     showDialog(
-            //       context: context,
-            //       builder: (BuildContext context) {
-            //         return  DialogeBoxConfirmation(
-            //          pickupAddress: pickupAddress,
-            //         );
-            //       },
-            //     );
-            //   },
-            //   title: 'Arrived to Pick-up',
-            // ),
             SizedBox(
               height: 20,
             ),

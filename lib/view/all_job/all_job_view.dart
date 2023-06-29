@@ -3,6 +3,7 @@ import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dar
 import 'package:celient_project/res/components/widgets/cards/all_job_cards.dart';
 import 'package:celient_project/res/components/widgets/cards/date_cards.dart';
 import 'package:celient_project/res/components/widgets/dialoge_box/dialoge_box_job_filter.dart';
+import 'package:celient_project/view_model/controller/all_jobs/all_jobs_view_model.dart';
 import 'package:celient_project/view_model/controller/datePicker/datePicker_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class AllJobView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final allJobVM = Get.put(AllJobViewModel());
     final DateTime now = DateTime.now();
     final int daysInMonth = DateTime(now.year, now.month + 1, 0).day;
     return GetBuilder<DatePickerController>(
@@ -68,13 +70,13 @@ class AllJobView extends StatelessWidget {
                   Obx(() {
                     if (controller.isDateSelected) {
                       return SizedBox(
-                        height:
-                            MediaQuery.of(context).size.height, // Or any other height that makes sense in your app
+                        height:650,// Or any other height that makes sense in your app
                         child: ListView.builder(
                             physics: const BouncingScrollPhysics(),
                             itemCount: 5,
                             itemBuilder: (BuildContext context, int index) {
                               return AllJobCards(
+
                                 month: controller.selectedMonth ??
                                     'No month selected',
                                 date: controller.selectedDayDate ??
@@ -82,15 +84,19 @@ class AllJobView extends StatelessWidget {
                                 day: controller.selectedDay ??
                                     'No year selected',
                                 orderNo: "554",
-                                price: "3500",
+                                price: allJobVM.price,
                                 pickupAddress:
                                     "40 Business Man Colony Near Paprika Resturant and Nursery Ground Rahim yar khan",
                                 deliverAddress:
                                     'Jinnah Park Street Number 45 House Number 71, Near Allah hu Chock, Rahim Yar Khan',
-                                time: '08:05',
+
                                 weight: '9',
                                 distance: '8',
-                                type: 'container', piece: '5',
+                                type: 'container',
+                                piece: '5',
+                                deliveryDay: 'Tuesday',
+                                deliveryYear: 'July',
+                                deliveryDate: '5', dimension: '8-8-9', stackable: 'Yes', hazardous: 'No', dockLevel: 'No', note: 'This is the note ',
                               );
                             }),
                       );

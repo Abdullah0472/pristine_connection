@@ -1,6 +1,4 @@
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
-import 'package:celient_project/res/components/widgets/dialoge_box/dialoge_box_confirmation.dart';
-import 'package:celient_project/view/load_info/load_info_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

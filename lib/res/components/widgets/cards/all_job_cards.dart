@@ -1,5 +1,6 @@
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
+import 'package:celient_project/res/components/widgets/dialoge_box/job_bid_dialogue.dart';
 import 'package:celient_project/res/components/widgets/text/expanded_text.dart';
 import 'package:celient_project/view/detail/detail_view.dart';
 import 'package:celient_project/view_model/controller/card/card_view_model.dart';
@@ -12,14 +13,21 @@ class AllJobCards extends StatelessWidget {
   final String day;
   final String month;
   final String orderNo;
-  final String price;
+  final RxString price;
   final String pickupAddress;
   final String deliverAddress;
-  final String time;
+ final String dimension;
   final String weight;
   final String distance;
   final String type;
   final String piece;
+  final String stackable;
+  final String hazardous;
+ final String dockLevel;
+  final String deliveryDay;
+  final String deliveryDate;
+  final String deliveryYear;
+  final String note;
   final CardController _cardController = Get.put(CardController());
   AllJobCards({
     Key? key,
@@ -30,11 +38,14 @@ class AllJobCards extends StatelessWidget {
     required this.price,
     required this.pickupAddress,
     required this.deliverAddress,
-    required this.time,
     required this.weight,
     required this.distance,
     required this.type,
     required this.piece,
+    required this.deliveryDay,
+    required this.deliveryDate,
+    required this.deliveryYear, required this.dimension, required this.stackable, required this.hazardous, required this.dockLevel, required this.note,
+
   }) : super(key: key);
 
   @override
@@ -44,11 +55,11 @@ class AllJobCards extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           color: Colors.transparent,
-          height: 370,
+          height: 400,
           child: Stack(
             children: [
               Container(
-                height: 300,
+                height: 320,
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -74,7 +85,7 @@ class AllJobCards extends StatelessWidget {
                       children: [
                         Container(
                           width: 110,
-                          height: 300,
+                          height: 320,
                           decoration: const BoxDecoration(
                             color: AppColor.blueColorShade800,
                           ),
@@ -134,7 +145,7 @@ class AllJobCards extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(15),
                           child: SingleChildScrollView(
                             physics: const ScrollPhysics(),
                             child: Column(
@@ -157,17 +168,33 @@ class AllJobCards extends StatelessWidget {
                                     const SizedBox(
                                       width: 100,
                                     ),
-                                    const Icon(
-                                      MdiIcons.currencyUsd,
-                                      size: 25,
-                                      color: AppColor.appBarColor,
-                                    ),
-                                    Text(
-                                      price,
-                                      style: const TextStyle(
-                                        color: AppColor.appBarColor,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20,
+                                    Container(
+                                      width: 90,
+                                      height: 30,
+                                      decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          color: AppColor.blueColorShade800),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            MdiIcons.currencyUsd,
+                                            size: 25,
+                                            color: AppColor.whiteColor,
+                                          ),
+                                          Text(
+                                            price.value,
+                                            style: const TextStyle(
+                                              color: AppColor.whiteColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -181,11 +208,10 @@ class AllJobCards extends StatelessWidget {
                                     fontSize: 17,
                                   ),
                                 ),
-                                const Divider(
-                                  color: AppColor.greyColor,
-                                  thickness: 2,
-                                  // Add this line
+                                SizedBox(
+                                  height: 5,
                                 ),
+
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width *
                                       0.6, // Change this value as needed
@@ -210,10 +236,19 @@ class AllJobCards extends StatelessWidget {
                                     fontSize: 17,
                                   ),
                                 ),
-                                const Divider(
-                                  color: AppColor.greyColor,
-                                  thickness: 2,
-                                  // Add this line
+
+                                 Text(
+                                  "$deliveryDay/$deliveryDate/$deliveryYear",
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColor.greyColor,
+                                    fontSize: 15,
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  height: 5,
                                 ),
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width *
@@ -228,7 +263,35 @@ class AllJobCards extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 40,
+                                  height: 10,
+                                ),
+                                const Text(
+                                  'Note',
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColor.greyColor,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.6, // Change this value as needed
+                                  child: ExpandableText(
+                                    text: note,
+                                    style: const TextStyle(
+                                      color: AppColor.appBarColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
                                 ),
                                 IntrinsicHeight(
                                   child: Row(
@@ -237,24 +300,84 @@ class AllJobCards extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      infoColumn("Time", time),
-                                      const VerticalDivider(
-                                        color: AppColor.greyColor,
-                                      ),
                                       infoColumn("Weight", "$weight kg"),
                                       const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
-                                      infoColumn("Distance", "$distance km"),
+                                      infoColumn("Loaded Miles", "$distance km"),
                                       const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
-                                      infoColumn("Type", "$type"),
+                                      infoColumn("Piece", piece),
+                                      const VerticalDivider(
+                                        color: AppColor.greyColor,
+                                      ),
+                                      infoColumn("Dims(l*h)", dimension),
                                     ],
                                   ),
-                                )
+                                ),
+                                SizedBox(height: 10,),
+                                IntrinsicHeight(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      infoColumn("Stackable", stackable ),
+                                      const VerticalDivider(
+                                        color: AppColor.greyColor,
+                                      ),
+                                      infoColumn("Hazardous", hazardous ),
+                                      const VerticalDivider(
+                                        color: AppColor.greyColor,
+                                      ),
+                                      infoColumn("Dock Level", dockLevel),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 60,
+                right: 15,
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return JobBidDialogBox();
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 90,
+                    height: 30,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: AppColor.blueColorShade800),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          MdiIcons.cursorDefaultClickOutline,
+                          size: 25,
+                          color: AppColor.whiteColor,
+                        ),
+                        Text(
+                          'Bid',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
                           ),
                         ),
                       ],
@@ -271,18 +394,20 @@ class AllJobCards extends StatelessWidget {
                       Get.to(() => DetailView(
                             pickupName: "",
                             pickupAddress: pickupAddress,
-                            pickupDateTime: time,
                             piece: piece,
                             dims: "",
                             weight: weight,
                             deliveryName: "",
                             deliveryAddress: deliverAddress,
-                            deliveryTime: "",
+
                             orderNo: orderNo,
                             price: price,
                             date: date,
                             day: day,
                             year: month,
+                            deliveryDay: deliveryDay,
+                            deliveryDate: deliveryDate,
+                            deliveryYear: deliveryYear,
                           ));
                     },
                     height: 50,
@@ -314,7 +439,7 @@ Widget infoColumn(String title, String data) {
       Text(
         title,
         style: const TextStyle(
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w600,
           color: AppColor.appBarColor,
         ),
@@ -322,7 +447,7 @@ Widget infoColumn(String title, String data) {
       Text(
         data,
         style: const TextStyle(
-          fontSize: 12,
+          fontSize: 10,
           fontWeight: FontWeight.w400,
           color: AppColor.infoTextColor,
         ),

@@ -16,22 +16,23 @@ class DialogeBoxConfirmation extends StatelessWidget {
 
   DialogeBoxConfirmation({
     Key? key,
-    required this.pickupAddress, required this.piece,required this.totalWeight,
-    required this.title, required this.deliverAddress,
-
+    required this.pickupAddress,
+    required this.piece,
+    required this.totalWeight,
+    required this.title,
+    required this.deliverAddress,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        elevation: 0,
-        backgroundColor: AppColor.whiteColor,
-        child: contentBox(context),
-      );
-
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 0,
+      backgroundColor: AppColor.whiteColor,
+      child: contentBox(context),
+    );
   }
 
   contentBox(context) {
@@ -50,7 +51,7 @@ class DialogeBoxConfirmation extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                 Text(
+                Text(
                   title,
                   style: TextStyle(
                     fontSize: 20,
@@ -89,13 +90,17 @@ class DialogeBoxConfirmation extends StatelessWidget {
                         onPress: () {
                           Utils.snackBar("Status Changed", "Successfully");
                           buttonController.buildUpdatedButton(() {
-                            Get.to(() => Scaffold(body: LoadInfoView(piece: piece, totalWeight: totalWeight, deliverAddress: deliverAddress,)));
+                            Get.to(() => Scaffold(
+                                    body: LoadInfoView(
+                                  piece: piece,
+                                  totalWeight: totalWeight,
+                                  deliverAddress: deliverAddress,
+                                )));
                           });
                           Navigator.of(context).pop();
                         },
                       ),
                     ),
-
                   ],
                 )
               ],

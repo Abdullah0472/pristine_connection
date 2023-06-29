@@ -22,6 +22,18 @@ class Utils {
       current.unfocus();
       FocusScope.of(context).requestFocus(nextFocus);
     }
+    static void fieldFocusAllJob(
+        BuildContext context,
+        FocusNode current,
+        FocusNode nextFocus,
+        FocusNode bid,
+
+
+        ) {
+      current.unfocus();
+      FocusScope.of(context).requestFocus(nextFocus);
+    }
+
 
     static void fieldInfoDetailChange(
         BuildContext context,

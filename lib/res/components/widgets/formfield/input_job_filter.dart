@@ -7,29 +7,27 @@ import '../../../colors/colors.dart';
 // ignore: must_be_immutable
 class InputJobFilterTextField extends StatelessWidget {
   TextEditingController controller;
-
   final String hint;
-  // final String? Function(String?)? validator;
-  final allJobVM = Get.put(AllJobViewModel());
+  final AllJobViewModel allJobVM;
 
   InputJobFilterTextField({
     Key? key,
-    // required this.validator,
     required this.controller,
     required this.hint,
-  }) : super(key: key);
+  })  : allJobVM = Get.put(AllJobViewModel()),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       keyboardType: TextInputType.phone,
-      //   validator: validator,
       controller: controller,
       onFieldSubmitted: (value) {
-        Utils.fieldFocusChange(
+        Utils.fieldFocusAllJob(
           context,
           allJobVM.radiusFocusNode.value,
           allJobVM.postalCodeFocusNode.value,
+          allJobVM.bidFocusNode.value,
         );
       },
       style: const TextStyle(
@@ -40,15 +38,14 @@ class InputJobFilterTextField extends StatelessWidget {
       decoration: InputDecoration(
         border: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: AppColor.greyColor, // your desired color
-            width: 2.0, // your desired width
+            color: AppColor.greyColor,
+            width: 2.0,
           ),
         ),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: AppColor
-                .greyColor, // your desired color when the TextFormField is focused
-            width: 2.0, // your desired width when the TextFormField is focused
+            color: AppColor.greyColor,
+            width: 2.0,
           ),
         ),
         fillColor: Colors.transparent,
