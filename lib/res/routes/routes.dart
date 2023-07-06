@@ -5,6 +5,7 @@ import 'package:celient_project/view/history/history_view.dart';
 import 'package:celient_project/view/home/home_view.dart';
 import 'package:celient_project/view/profile/profile_view.dart';
 import 'package:celient_project/view/signin/signin_view.dart';
+import 'package:celient_project/view/signup_view/signup_view.dart';
 import 'package:celient_project/view/splash/splash_view.dart';
 import 'package:celient_project/view/unloaded/unloaded_view.dart';
 import 'package:get/get.dart';
@@ -36,6 +37,12 @@ class AppRoutes {
           transitionDuration: const Duration(milliseconds: 250),
           transition: Transition.leftToRightWithFade,
         ),
+    GetPage(
+      name: RouteName.signUpView,
+      page: () => const SignUpView(),
+      transitionDuration: const Duration(milliseconds: 250),
+      transition: Transition.leftToRightWithFade,
+    ),
         GetPage(
           name: RouteName.homeView,
           page: () =>  HomeView(),

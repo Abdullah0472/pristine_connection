@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-         SystemUiOverlayStyle(statusBarColor: AppColor.applicationColor));
+         const SystemUiOverlayStyle(statusBarColor: AppColor.applicationColor));
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       builder: (context, child) =>
@@ -39,12 +39,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: AppColor.whiteColor,
       ),
-      home: WillPopScope(
-        onWillPop: () async {
-          return true;
-        },
-        child: const SplashView(),
-      ),
+
+      // home: WillPopScope(
+      //   onWillPop: () async {
+      //     return true;
+      //   },
+      //   child: const SplashView(),
+      // ),
+
+
+      home: const SplashView(),
       getPages: AppRoutes.appRoutes(),
     );
   }}

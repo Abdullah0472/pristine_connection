@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:celient_project/res/components/widgets/text/report_rich_text.dart';
-import 'package:celient_project/res/routes/routes_name.dart';
-import 'package:celient_project/view/signin/signin_view.dart';
+import 'package:celient_project/view_model/services/splash_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../res/assets/images.dart';
@@ -15,12 +13,13 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+
+  SplashServices splashScreen = SplashServices();
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3),
-        () =>
-            Get.toNamed(RouteName.signInView));
+    splashScreen.isLogin();
   }
 
   @override

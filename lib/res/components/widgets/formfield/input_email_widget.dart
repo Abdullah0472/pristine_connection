@@ -7,6 +7,8 @@ import '../../../colors/colors.dart';
 // ignore: must_be_immutable
 class InputEmailTextField extends StatelessWidget {
   final Icon icons;
+  final String hintText;
+  final bool number;
   TextEditingController controller;
   final String? Function(String?)? validator;
   final signInVM = Get.put(SignInViewModel());
@@ -15,6 +17,8 @@ class InputEmailTextField extends StatelessWidget {
     required this.validator,
     required this.controller,
     required this.icons,
+    this.number = true,
+   this.hintText = 'Email',
   });
 
   @override
@@ -22,11 +26,13 @@ class InputEmailTextField extends StatelessWidget {
     return TextFormField(
       validator: validator,
       controller: controller,
+      keyboardType: number ? TextInputType.emailAddress : TextInputType.phone,
       onFieldSubmitted: (value) {
         Utils.fieldFocusChange(
           context,
           signInVM.emailFocusNode.value,
           signInVM.passwordFocusNode.value,
+
         );
       },
       cursorColor: Colors.grey,
@@ -40,29 +46,12 @@ class InputEmailTextField extends StatelessWidget {
        fillColor: Colors.transparent,
 
         filled: true,
-        hintText: "Email",
+        hintText: hintText,
         hintStyle:  TextStyle(
           color: Colors.grey.shade400,
           fontSize: 18,
         ),
-        //suffixIconColor: Colors.white,
-        // focusedErrorBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(30),
-        // ),
-        // disabledBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(30),
-        //     borderSide: const BorderSide(color: AppColor.greyColor, width: 1.3)),
-        // focusedBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(
-        //       30,
-        //     ),
-        //     borderSide: const BorderSide(color: AppColor.greyColor, width: 1.3)),
-        // errorBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(30),
-        //     borderSide: const BorderSide(color: AppColor.redColor, width: 1.3)),
-        // enabledBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(30),
-        //     borderSide: const BorderSide(color: AppColor.greyColor, width: 1.3)),
+
       ),
     );
   }

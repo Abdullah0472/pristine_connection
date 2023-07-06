@@ -3,19 +3,19 @@ import 'package:celient_project/res/components/widgets/buttons/round_button_widg
 import 'package:celient_project/res/components/widgets/formfield/input_email_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_password_widget.dart';
 import 'package:celient_project/res/components/widgets/text/text_widget.dart';
-import 'package:celient_project/res/routes/routes_name.dart';
 import 'package:celient_project/view_model/controller/signin/signin_view_model.dart';
+import 'package:celient_project/view_model/controller/signup/signup_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class SignInView extends StatelessWidget {
-  const SignInView({Key? key}) : super(key: key);
+class SignUpView extends StatelessWidget {
+  const SignUpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final signInVM = Get.put(SignInViewModel());
-    GlobalKey<FormState> signinformkey = GlobalKey<FormState>();
+    final signUpVM = Get.put(SignUpViewModel());
+    GlobalKey<FormState> singnUpformkey = GlobalKey<FormState>();
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -35,7 +35,7 @@ class SignInView extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,8 +43,11 @@ class SignInView extends StatelessWidget {
                   FadeAnimation(
                     1,
                     const Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w700),
+                      "Sign Up",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
                   const SizedBox(
@@ -53,8 +56,8 @@ class SignInView extends StatelessWidget {
                   FadeAnimation(
                     1.3,
                     const Text(
-                      "Welcome OnBoard",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      "Provide your Details ",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                 ],
@@ -63,7 +66,7 @@ class SignInView extends StatelessWidget {
             const SizedBox(height: 20),
             Expanded(
               child: Form(
-                key: signinformkey,
+                key: singnUpformkey,
                 child: Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -76,7 +79,6 @@ class SignInView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(30),
                       child: Column(
-
                         children: <Widget>[
                           const SizedBox(
                             height: 60,
@@ -109,12 +111,46 @@ class SignInView extends StatelessWidget {
                                       ),
                                     ),
                                     child: InputEmailTextField(
-                                      validator: signInVM.validateEmail,
+                                      validator: signUpVM.validateEmail,
                                       controller:
-                                          signInVM.emailController.value,
+                                      signUpVM.nameController.value,
+                                      hintText: 'Name',
+                                      icons: const Icon(MdiIcons.accountCircle),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.grey.shade200,
+                                        ),
+                                      ),
+                                    ),
+                                    child: InputEmailTextField(
+                                      validator: signUpVM.validateEmail,
+                                      controller:
+                                          signUpVM.emailController.value,
                                       icons: const Icon(MdiIcons.email),
                                     ),
-
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.grey.shade200,
+                                        ),
+                                      ),
+                                    ),
+                                    child: InputEmailTextField(
+                                      number: false,
+                                      hintText: 'Phone Number',
+                                      validator: signUpVM.validateEmail,
+                                      controller:
+                                      signUpVM.phoneController.value,
+                                      icons: const Icon(MdiIcons.phone),
+                                    ),
                                   ),
                                   Container(
                                       padding: const EdgeInsets.all(10),
@@ -127,29 +163,18 @@ class SignInView extends StatelessWidget {
                                       ),
                                       child: InputPasswordTextField(
                                         isPasswordType: true,
-                                        validator: signInVM.validatePassword,
                                         icons: const Icon(MdiIcons.lock),
                                         controllerpass:
-                                            signInVM.passwordController.value,
-                                      )
-
+                                        signUpVM.passwordController.value,
                                       ),
+
+                                  ),
+
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(RouteName.forgetPasswordView);
-                            },
-                            child:  FadeAnimation(
-                              1.5,
-                                customText(" Forgot Password ? ", true, size: 16)
-                            ),
-                          ),
+
                           const SizedBox(
                             height: 40,
                           ),
@@ -160,35 +185,16 @@ class SignInView extends StatelessWidget {
                               width: 300,
                               height: Get.height * 0.06,
                               onPress: () {
-                                if (signinformkey.currentState!.validate()) {
-                                  // Get.toNamed(RouteName.bottomNavBar);
-                                  signInVM.loginApi();
-                                  signInVM.emailController.value.clear();
-                                  signInVM.passwordController.value.clear();
-                                }
+                                signUpVM.signUpApi();
+                                  signUpVM.emailController.value.clear();
+                                  signUpVM.passwordController.value.clear();
+                                  signUpVM.nameController.value.clear();
+                                  signUpVM.phoneController.value.clear();
+                                Get.back();
                               },
-                              title: 'Sign In',
-                            ),
-
-                          ),
-
-                           SizedBox(
-                            height: Get.height * .2,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-
-                              Get.toNamed(RouteName.signUpView);
-                            },
-                            child:  FadeAnimation(
-                                1.7,
-                                customText(" Create an Account ", true, size: 16)
+                              title: 'Sign Up',
                             ),
                           ),
-                          // const SizedBox(
-                          //   height: 40,
-                          // ),
-
                         ],
                       ),
                     ),

@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+// ignore: camel_case_types
 class loadDetailViewModel extends GetxController {
   final Completer<GoogleMapController> controller = Completer();
 
