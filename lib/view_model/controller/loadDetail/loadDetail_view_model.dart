@@ -28,36 +28,85 @@ class loadDetailViewModel extends GetxController {
     Rx<File>(File('')), // For the second container
     Rx<File>(File('')), // For the third container
     Rx<File>(File('')), // For the fourth container
+    Rx<File>(File('')), // For the fifth container
+    Rx<File>(File('')), // For the sixth container
+    Rx<File>(File('')), // For the seventh container
+
 
   ];
 
 
   final picker = ImagePicker();
 
-  Future<void> imgFromGallery(int containerIndex) async {
+  // Future<String> imgFromGallery(int containerIndex) async {
+  //   final pickedFile = await picker.pickImage(
+  //     source: ImageSource.gallery,
+  //     imageQuality: 50,
+  //   );
+  //
+  //   if (pickedFile != null) {
+  //     await cropImage(File(pickedFile.path), containerIndex);
+  //     String imagePath = File(pickedFile.path).path;
+  //     print('Gallery Image Path: $imagePath');
+  //     return imagePath;
+  //   }
+  //
+  //   return ''; // Return a default value if no image is selected
+  // }
+
+
+  Future<String> imgFromGallery(int containerIndex) async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
     );
 
     if (pickedFile != null) {
-      await cropImage(File(pickedFile.path), containerIndex);
+      String? croppedPath = await cropImage(File(pickedFile.path), containerIndex);
+      print('Gallery Image Path: $croppedPath');
+      return croppedPath ?? '';
     }
+
+    return ''; // Return a default value if no image is selected
   }
 
-  Future<void> imgFromCamera(int containerIndex) async {
+  // Future<String> imgFromCamera(int containerIndex) async {
+  //   final pickedFile = await picker.pickImage(
+  //     source: ImageSource.camera,
+  //     imageQuality: 50,
+  //   );
+  //
+  //   if (pickedFile != null) {
+  //     await cropImage(File(pickedFile.path), containerIndex);
+  //     String imagePath = File(pickedFile.path).path;
+  //     print('Camera Image Path: $imagePath');
+  //     return imagePath;
+  //   }
+  //
+  //   return ''; // Return a default value if no image is captured
+  // }
+
+  Future<String> imgFromCamera(int containerIndex) async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.camera,
       imageQuality: 50,
     );
 
     if (pickedFile != null) {
-      await cropImage(File(pickedFile.path), containerIndex);
+      String? croppedPath = await cropImage(File(pickedFile.path), containerIndex);
+      print('Camera Image Path: $croppedPath');
+      return croppedPath ?? '';
     }
+
+    return ''; // Return a default value if no image is captured
   }
 
-  Future<void> cropImage(File imgFile, int containerIndex) async {
-    final croppedFile = await ImageCropper().cropImage(
+  // Future<void> cropImage(File imgFile, int containerIndex) async
+  Future<String?> cropImage(File imgFile, int containerIndex) async
+  {
+    // final croppedFile = await ImageCropper().cropImage
+    final croppedFile = await ImageCropper().cropImage
+      (
       sourcePath: imgFile.path,
       aspectRatioPresets: Platform.isAndroid
           ? [
@@ -90,10 +139,17 @@ class loadDetailViewModel extends GetxController {
         ),
       ],
     );
+    // if (croppedFile != null) {
+    //   imageCache.clear();
+    //   imageFiles[containerIndex].value = File(croppedFile.path);
+    // }
+
     if (croppedFile != null) {
       imageCache.clear();
       imageFiles[containerIndex].value = File(croppedFile.path);
+      return croppedFile.path;  //returning the path of the cropped image
     }
+    return null;
 
 
   }

@@ -10,7 +10,7 @@ class ChatsView extends StatelessWidget {
       appBar:  CustomAppBar(
         icon: false,
         actionIcon: false,
-        action: Text(''),
+        action: [Text('')],
         title: 'Chat', leadingIcon: SizedBox(),
       ),
       body: SafeArea(

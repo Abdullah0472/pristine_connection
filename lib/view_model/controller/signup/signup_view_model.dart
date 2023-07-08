@@ -27,9 +27,7 @@ class SignUpViewModel extends GetxController {
     if (value == null || value.isEmpty) {
       return "Enter Your Email";
     }
-    // if (!GetUtils.isEmail(value)) {
-    //   return "Enter Valid Email";
-    // }
+
     return null;
   }
 

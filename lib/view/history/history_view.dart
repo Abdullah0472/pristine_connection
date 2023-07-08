@@ -14,7 +14,7 @@ class HistoryView extends StatelessWidget {
       appBar: const CustomAppBar(
         icon: true,
         actionIcon: false,
-        action: Text(''),
+        action: [Text('')],
         title: 'History',
         leadingIcon: SizedBox(),
       ),

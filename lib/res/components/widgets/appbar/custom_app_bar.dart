@@ -9,7 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool icon;
   final bool actionIcon;
-  final Widget action;
+  final List<Widget> action; // Update the type to List<Widget>
   final Widget leadingIcon;
 
   const CustomAppBar({
@@ -26,7 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       preferredSize: Size.fromHeight(appBarHeight),
       child: SafeArea(
         child: AppBar(
-          actions: actionIcon == true ? [action] : [],
+          actions: actionIcon == true ? action : [],
           iconTheme: const IconThemeData(color: AppColor.blackColor),
           leading: icon == true
               ? Builder(

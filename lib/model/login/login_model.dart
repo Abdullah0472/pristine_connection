@@ -1,35 +1,13 @@
-// class UserModel {
-//   String? token;
-//   bool? isLogin ;
-//
-//   UserModel({this.token , this.isLogin});
-//
-//   UserModel.fromJson(Map<String, dynamic> json) {
-//     token = json['token'];
-//     isLogin = json['isLogin'];
-//
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = Map<String, dynamic>();
-//     data['token'] = token;
-//     data['isLogin'] = token;
-//     return data;
-//   }
-// }
-
-
-
-class UserModel {
+class LoginModel {
   int? statusCode;
   String? message;
   String? error;
   Data? data;
   bool? isLogin ;
 
-  UserModel({this.statusCode, this.message, this.error, this.data, this.isLogin});
+  LoginModel({this.statusCode, this.message, this.error, this.data, this.isLogin});
 
-  UserModel.fromJson(Map<String, dynamic> json) {
+  LoginModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['status_code'];
     message = json['message'];
     error = json['error'];
@@ -39,10 +17,12 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status_code'] = this.statusCode;
-    data['message'] = this.message;
-    data['error'] = this.error;
-    data['isLogin'] = data;
+    data['status_code'] = statusCode;
+    data['message'] = message;
+    data['error'] = error;
+   // data['isLogin'] = this.data?.bearerToken;
+    data['isLogin'] = isLogin;
+
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -63,8 +43,8 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['bearer_token'] = this.bearerToken;
-    data['unique_id'] = this.uniqueId;
+    data['bearer_token'] = bearerToken;
+    data['unique_id'] = uniqueId;
     return data;
   }
 }

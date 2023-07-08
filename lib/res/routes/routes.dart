@@ -8,6 +8,7 @@ import 'package:celient_project/view/signin/signin_view.dart';
 import 'package:celient_project/view/signup_view/signup_view.dart';
 import 'package:celient_project/view/splash/splash_view.dart';
 import 'package:celient_project/view/unloaded/unloaded_view.dart';
+import 'package:celient_project/view/update_password/update_password_view.dart';
 import 'package:get/get.dart';
 import 'routes_name.dart';
 
@@ -71,6 +72,12 @@ class AppRoutes {
     GetPage(
       name: RouteName.allJobVIew,
       page: () =>  AllJobView(),
+      transitionDuration: const Duration(milliseconds: 250),
+      transition: Transition.leftToRightWithFade,
+    ),
+    GetPage(
+      name: RouteName.updatePasswordView,
+      page: () =>  UpdatePasswordView(),
       transitionDuration: const Duration(milliseconds: 250),
       transition: Transition.leftToRightWithFade,
     ),

@@ -1,4 +1,4 @@
-import 'package:celient_project/model/login/user_model.dart';
+import 'package:celient_project/model/login/login_model.dart';
 import 'package:celient_project/repository/login_repository/login_repository.dart';
 import 'package:celient_project/res/routes/routes_name.dart';
 import 'package:celient_project/utils/utils.dart';
@@ -49,62 +49,6 @@ class SignInViewModel extends GetxController {
     }
   }
 
-  // void loginApi() async {
-  //   try{
-  //   Get.dialog(
-  //     WillPopScope(
-  //         child: const Center(child: CupertinoActivityIndicator()),
-  //         onWillPop: () async {
-  //           return false;
-  //         }),
-  //     barrierDismissible: true,
-  //   );
-  //   loading.value = true;
-  //   Map data = {
-  //     'email': emailController.value.text,
-  //     'password': passwordController.value.text
-  //   };
-  //   _api.loginApi(data).then((value) {
-  //     loading.value = false;
-  //
-  //     if (value['error'] == 'user not found') {
-  //       Utils.snackBar('Login', value['error']);
-  //     } else {
-  //       UserModel userModel = UserModel(data: value['bearer_token'], isLogin: true);
-  //
-  //       userPreference.saveUser(userModel).then((value) {
-  //         // releasing resouces because we are not going to use this
-  //         Get.delete<SignInViewModel>();
-  //         Get.toNamed(RouteName.homeView)!.then((value) {});
-  //         Utils.snackBar('Login', 'Login successfully');
-  //       }).onError((error, stackTrace) {});
-  //     }
-  //   }).onError((error, stackTrace) {
-  //     loading.value = false;
-  //     Utils.snackBar('Error', error.toString());
-  //   });
-  // }
-  //   catch (e) {
-  //     Utils.snackBar(
-  //         'Login Failed', 'An error occurred while logging in');
-  //     // Add logic here to display activity indicator and navigate back after 2 seconds
-  //     Get.dialog(
-  //       WillPopScope(
-  //           child: const Center(child: CupertinoActivityIndicator()),
-  //           onWillPop: () async {
-  //             return false;
-  //           }),
-  //       barrierDismissible: false,
-  //     );
-  //
-  //     await Future.delayed(const Duration(seconds: 2)); // Delay for 2 seconds
-  //
-  //     Get.back(); // Close the dialog
-  //     Get.offAllNamed(RouteName.signInView); // Navigate back to login screen
-  //     return; // End the function
-  //   }
-  // }
-
   void loginApi() async {
     try {
       Get.dialog(
@@ -129,11 +73,11 @@ class SignInViewModel extends GetxController {
           Utils.snackBar('Login', value['error']);
         } else {
           Data userData = Data(
-            bearerToken: value['bearer_token'],
-            uniqueId: value['unique_id'],
+            bearerToken: value['data']['bearer_token'],
+            uniqueId: value['data']['unique_id'],
           );
 
-          UserModel userModel = UserModel(
+          LoginModel userModel = LoginModel(
             statusCode: value['status_code'],
             message: value['message'],
             error: value['error'],

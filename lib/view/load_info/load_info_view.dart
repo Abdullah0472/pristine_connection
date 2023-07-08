@@ -32,7 +32,7 @@ class LoadInfoView extends StatelessWidget {
         appBar: CustomAppBar(
           icon: false,
           actionIcon: false,
-          action: Container(),
+          action: [Container()],
           title: 'Load Info', leadingIcon: SizedBox(),
         ),
         body: SafeArea(

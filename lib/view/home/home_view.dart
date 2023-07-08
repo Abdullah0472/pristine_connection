@@ -87,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
       appBar: CustomAppBar(
         icon: true,
         actionIcon: true,
-        action: PopupMenuButton(
+        action: [PopupMenuButton(
           itemBuilder: (context) => [
             PopupMenuItem(
               onTap: () {
@@ -138,7 +138,7 @@ class _HomeViewState extends State<HomeView> {
               child: const Text('Night'),
             ),
           ],
-        ),
+        )],
         title: 'Trips on Going',
         leadingIcon: IconButton(
           onPressed: () {

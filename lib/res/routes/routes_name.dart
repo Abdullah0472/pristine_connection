@@ -10,5 +10,6 @@ class RouteName {
   static const String connectionView = '/connection_view';
   static const String unloadedView = '/unloaded_view';
   static const String allJobVIew = '/all_job_view';
+  static const String updatePasswordView = '/update_password_view';
 
 }

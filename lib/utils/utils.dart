@@ -15,8 +15,13 @@ class Utils {
         BuildContext context,
         FocusNode current,
         FocusNode nextFocus,
-        FocusNode licence,
-        FocusNode truckNumber,
+        FocusNode phone,
+        FocusNode regNumber,
+        FocusNode city,
+        FocusNode state,
+        FocusNode address,
+        FocusNode zip,
+
 
         ) {
       current.unfocus();

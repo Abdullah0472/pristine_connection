@@ -9,13 +9,14 @@ class InputPasswordTextField extends StatefulWidget {
   final Icon icons;
   bool isPasswordType;
   final TextEditingController controllerpass;
-
+  final String hintText;
   final String? Function(String?)? validator;
   InputPasswordTextField(
       {Key? key,
       required this.isPasswordType,
       required this.controllerpass,
       this.validator,
+        this.hintText = "Password",
       required this.icons})
       : super(key: key);
 
@@ -44,7 +45,7 @@ class _InputPasswordTextFieldState extends State<InputPasswordTextField> {
         Utils.fieldFocusChange(context, signInVM.emailFocusNode.value,
             signInVM.passwordFocusNode.value);
       },
-      style: const TextStyle(
+      style:  TextStyle(
           color: AppColor.blackColor,
           fontSize: 18,
           fontWeight: FontWeight.w400),
@@ -56,7 +57,7 @@ class _InputPasswordTextFieldState extends State<InputPasswordTextField> {
       cursorColor: Colors.grey,
       minLines: 1,
       decoration: InputDecoration(
-        hintText: "Password",
+        hintText: widget.hintText,
         hintStyle: TextStyle(
           color: Colors.grey.shade400,
           fontSize: 18,
@@ -68,28 +69,9 @@ class _InputPasswordTextFieldState extends State<InputPasswordTextField> {
         // contentPadding: const EdgeInsets.symmetric(vertical: 18),
         border: InputBorder.none,
         fillColor: Colors.transparent,
-        //   fillColor: const Color.fromARGB(255, 251, 250, 249),
-        //    focusedErrorBorder: OutlineInputBorder(
-        //      borderRadius: BorderRadius.circular(30),
-        //    ),
-        // disabledBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(30),
-        //     borderSide: const BorderSide(color: AppColor.greyColor, width: 1.3)),
-        // focusedBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(
-        //       30,
-        //     ),
-        //     borderSide: const BorderSide(color: AppColor.greyColor, width: 1.3)),
-        // errorBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(30),
-        //     borderSide: const BorderSide(color: AppColor.redColor, width: 1.3)),
-        // enabledBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(30),
-        //     borderSide: const BorderSide(color: AppColor.greyColor, width: 1.3)),
+
         suffixIcon:
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-            //  child:
+
             GestureDetector(
           onTapDown: inContact,
           onTapUp: outContact,

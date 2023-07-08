@@ -50,7 +50,7 @@ class HistoryDetailView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.offWhite,
       appBar: const CustomAppBar(
-          title: "Details", action: SizedBox(), leadingIcon: SizedBox()),
+          title: "Details", action: [SizedBox()], leadingIcon: SizedBox()),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),

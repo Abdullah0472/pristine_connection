@@ -24,7 +24,8 @@ class AllJobView extends StatelessWidget {
         return Scaffold(
           appBar: CustomAppBar(
               title: "All Jobs",
-              action: IconButton(
+              action:[
+                IconButton(
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -39,6 +40,8 @@ class AllJobView extends StatelessWidget {
                   color: AppColor.blackColor,
                 ),
               ),
+              ],
+
               actionIcon: true,
               leadingIcon: SizedBox()),
           backgroundColor: AppColor.offWhite,

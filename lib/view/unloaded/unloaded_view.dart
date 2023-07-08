@@ -27,7 +27,7 @@ class UnloadedView extends StatelessWidget {
       appBar: CustomAppBar(
         icon: false,
         actionIcon: false,
-        action: Container(),
+        action: [Container()],
         title: 'Unloading',
         leadingIcon: SizedBox(),
       ),

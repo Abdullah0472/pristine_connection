@@ -2,20 +2,19 @@ import 'package:celient_project/res/animation/FadeAnimation.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_email_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_password_widget.dart';
-import 'package:celient_project/res/components/widgets/text/text_widget.dart';
 import 'package:celient_project/view_model/controller/signin/signin_view_model.dart';
-import 'package:celient_project/view_model/controller/signup/signup_view_model.dart';
+import 'package:celient_project/view_model/controller/update_password/update_password_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class SignUpView extends StatelessWidget {
-  const SignUpView({Key? key}) : super(key: key);
+class UpdatePasswordView extends StatelessWidget {
+  const UpdatePasswordView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final signUpVM = Get.put(SignUpViewModel());
-    GlobalKey<FormState> singnUpformkey = GlobalKey<FormState>();
+    final updatePasswordVM = Get.put(UpdatePasswordViewModel());
+    GlobalKey<FormState> updatePassFormKey = GlobalKey<FormState>();
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -43,7 +42,7 @@ class SignUpView extends StatelessWidget {
                   FadeAnimation(
                     1,
                     const Text(
-                      "Sign Up",
+                      "Update Password",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 40,
@@ -56,7 +55,7 @@ class SignUpView extends StatelessWidget {
                   FadeAnimation(
                     1.3,
                     const Text(
-                      "Provide your Details ",
+                      "Provide your old password to make the Updation",
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
@@ -66,7 +65,7 @@ class SignUpView extends StatelessWidget {
             const SizedBox(height: 20),
             Expanded(
               child: Form(
-                key: singnUpformkey,
+                key: updatePassFormKey,
                 child: Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -110,12 +109,13 @@ class SignUpView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    child: InputEmailTextField(
-                                      validator: signUpVM.validateEmail,
-                                      controller:
-                                      signUpVM.nameController.value,
-                                      hintText: 'Name',
-                                      icons: const Icon(MdiIcons.accountCircle),
+                                    child: InputPasswordTextField(
+                                      validator: updatePasswordVM.validate,
+                                      controllerpass: updatePasswordVM
+                                          .oldPasswordController.value,
+                                      hintText: "Old Password",
+                                      icons: const Icon(MdiIcons.lock),
+                                      isPasswordType: true,
                                     ),
                                   ),
                                   Container(
@@ -127,55 +127,19 @@ class SignUpView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    child: InputEmailTextField(
-                                      validator: signUpVM.validateEmail,
-                                      controller:
-                                          signUpVM.emailController.value,
-                                      icons: const Icon(MdiIcons.email),
+                                    child: InputPasswordTextField(
+                                      validator: updatePasswordVM.validate,
+                                      controllerpass: updatePasswordVM
+                                          .newPasswordController.value,
+                                      hintText: "New Password",
+                                      icons: const Icon(MdiIcons.lockCheck),
+                                      isPasswordType: true,
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color: Colors.grey.shade200,
-                                        ),
-                                      ),
-                                    ),
-                                    child: InputEmailTextField(
-                                      number: false,
-                                      hintText: 'Phone Number',
-                                      validator: signUpVM.validateEmail,
-                                      controller:
-                                      signUpVM.phoneController.value,
-                                      icons: const Icon(MdiIcons.phone),
-                                    ),
-                                  ),
-                                  Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: Colors.grey.shade200,
-                                          ),
-                                        ),
-                                      ),
-                                      child: InputPasswordTextField(
-
-                                        isPasswordType: true,
-                                        icons: const Icon(MdiIcons.lock),
-                                        controllerpass:
-                                        signUpVM.passwordController.value,
-                                      ),
-
-                                  ),
-
                                 ],
                               ),
                             ),
                           ),
-
                           const SizedBox(
                             height: 40,
                           ),
@@ -186,14 +150,16 @@ class SignUpView extends StatelessWidget {
                               width: 300,
                               height: Get.height * 0.06,
                               onPress: () {
-                                signUpVM.signUpApi();
-                                  signUpVM.emailController.value.clear();
-                                  signUpVM.passwordController.value.clear();
-                                  signUpVM.nameController.value.clear();
-                                  signUpVM.phoneController.value.clear();
-                                Get.back();
+                                if (updatePassFormKey.currentState!
+                                    .validate()) {
+                                  updatePasswordVM.updatePasswordApi();
+                                  updatePasswordVM.oldPasswordController.value
+                                      .clear();
+                                  updatePasswordVM.newPasswordController.value
+                                      .clear();
+                                }
                               },
-                              title: 'Sign Up',
+                              title: 'Update Password',
                             ),
                           ),
                         ],

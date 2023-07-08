@@ -10,14 +10,18 @@ class InputTextField extends StatelessWidget {
   TextEditingController controller;
   final bool number;
   final String hintText;
+  final String initialValue; // add this line
   final profileVM = Get.put(ProfileViewModel());
   InputTextField({
-    super.key,
+    Key? key,
     required this.controller,
     required this.icons,
     this.number = false,
     required this.hintText,
-  });
+    this.initialValue = '',
+  }): super(key: key) {
+    controller.text = initialValue; // set initial value to controller here
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +33,12 @@ class InputTextField extends StatelessWidget {
           context,
         profileVM.emailFocusNode.value,
           profileVM.phoneNumberFocusNode.value,
-            profileVM.licenceNumberFocusNode.value,
-          profileVM.truckNumberFocusNode.value,
+         profileVM.nameFocusNode.value,
+          profileVM.regNumberFocusNode.value,
+          profileVM.cityFocusNode.value,
+          profileVM.stateFocusNode.value,
+          profileVM.addressNode.value,
+          profileVM.zipFocusNode.value,
         );
       },
       cursorColor: Colors.grey,
