@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:celient_project/data/response/status.dart';
 import 'package:celient_project/model/user/user_model.dart';
 import 'package:celient_project/repository/user_profile_repository/user_profile_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import '../../../utils/utils.dart';
 
 class ProfileViewModel extends GetxController {
@@ -69,16 +66,6 @@ class ProfileViewModel extends GetxController {
 
   void updateUserApi() async {
     try {
-      // Get.dialog(
-      //   WillPopScope(
-      //     child: const Center(child: CupertinoActivityIndicator()),
-      //     onWillPop: () async {
-      //       return false;
-      //     },
-      //   ),
-      //   barrierDismissible: true,
-      // );
-
       Map<String, dynamic> data = {
         'email': emailController.value.text,
         'name': nameController.value.text,
@@ -104,49 +91,6 @@ class ProfileViewModel extends GetxController {
     }
   }
 
-  // void updateImageApi(String avatar, String licence) async {
-  //   try {
-  //     final avatarFile = File(avatar);
-  //     final licenceFile = File(licence);
-  //
-  //     print('Avatar Image Path Before error : $avatar');
-  //     print('License Image Path Before Error : $licence');
-  //
-  //     if (!avatarFile.existsSync() || !licenceFile.existsSync()) {
-  //       Utils.snackBar('File not found', 'Please select a valid image file.');
-  //       return;
-  //     }
-  //     print('Avatar Image Path: $avatar');
-  //     print('License Image Path: $licence');
-  //     // Convert the avatar image to base64
-  //     final avatarBytes = await avatarFile.readAsBytes();
-  //     final avatarBase64 = base64Encode(avatarBytes);
-  //     // Convert the licence image to base64
-  //     final licenceBytes = await licenceFile.readAsBytes();
-  //     final licenceBase64 = base64Encode(licenceBytes);
-  //     Map<String, dynamic> data = {
-  //       'license': licenceBase64,
-  //       'avatar': avatarBase64,
-  //     };
-  //
-  //     final response = await _api.updateImageUser(data);
-  //
-  //     if (response.statusCode == 200) {
-  //       Utils.snackBar('Image Uploaded', 'Successfully');
-  //     } else {
-  //       Utils.snackBar('Failed to Upload Image', 'Server responded with status code: ${response.statusCode}');
-  //       print('The error is Uploading image  $response');
-  //     }
-  //
-  //
-  //   } catch (e) {
-  //     Utils.snackBar('Failed to Update Image', 'An error occurred while updating image: ${e.toString()}');
-  //     print('The error is Uploading image  ${e.toString()}');
-  //     return; // End the function
-  //   }
-  // }
-
-
   void updateImageApi(String avatar, String licence) async {
     try {
 
@@ -161,6 +105,7 @@ class ProfileViewModel extends GetxController {
         Utils.snackBar('File not found', 'Please select a valid image file.');
         return;
       }
+
       print('Avatar Image Path: $avatar');
       print('License Image Path: $licence');
 
@@ -168,17 +113,9 @@ class ProfileViewModel extends GetxController {
       final avatarExtension = avatar.split(".").last;
       final licenceExtension = licence.split(".").last;
 
-      // // Convert the avatar image to base64
-      // final avatarBytes = await avatarFile.readAsBytes();
-      // final avatarBase64 = 'data:image/$avatarExtension;base64,${base64Encode(avatarBytes)}';
-
       // Convert the avatar image to base64
       final avatarBytes = await avatarFile.readAsBytes();
       final avatarBase64 = 'data:image/$avatarExtension;base64,${base64Encode(avatarBytes)}';
-
-      // // Convert the licence image to base64
-      // final licenceBytes = await licenceFile.readAsBytes();
-      // final licenceBase64 = 'data:image/$licenceExtension;base64,${base64Encode(licenceBytes)}';
 
       // Convert the license image to base64
       final licenceBytes = await licenceFile.readAsBytes();
@@ -189,14 +126,6 @@ class ProfileViewModel extends GetxController {
         'avatar': avatarBase64,
       };
 
-      // final response = await _api.updateImageUser(data);
-      //
-      // if (response.statusCode == 200) {
-      //   Utils.snackBar('Image Uploaded', 'Successfully');
-      // } else {
-      //   Utils.snackBar('Failed to Upload Image', 'Server responded with status code: ${response.statusCode}');
-      //   print('The error is Uploading image  $response');
-      // }
 
       final response = await _api.updateImageUser(data);
 

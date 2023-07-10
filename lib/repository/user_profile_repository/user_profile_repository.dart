@@ -17,10 +17,6 @@ class UserProfileRepository {
     return response ;
   }
 
-  // Future<dynamic> updateImageUser(var data) async{
-  //   dynamic response = await _apiService.updateApi(data, AppUrl.updateImageApi);
-  //   return response ;
-  // }
 
   Future<dynamic> updateImageUser(var data) async {
     try {

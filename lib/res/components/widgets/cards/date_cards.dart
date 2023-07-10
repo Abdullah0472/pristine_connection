@@ -1,6 +1,7 @@
 import 'package:celient_project/res/colors/colors.dart';
-import 'package:celient_project/res/components/widgets/cards/load_detail_route_card.dart';
-import 'package:celient_project/view_model/controller/datePicker/datePicker_view_model.dart';
+
+import 'package:celient_project/view_model/controller/all_jobs/all_jobs_view_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,11 +21,14 @@ class DateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final datePickerController = Get.find<DatePickerController>();
+    final datePickerController = Get.find<AllJobViewModel>();
+    final allJobVM = Get.put(AllJobViewModel());
+
     return GestureDetector(
       onTap: () {
-        datePickerController.selectDate(DateTime(DateTime.now().year, DateTime.now().month, day));
+        datePickerController.selectDate(DateTime(allJobVM.now.year, allJobVM.now.month, day));
       },
+
       child: Container(
         decoration: BoxDecoration(
             color: isToday ? AppColor.blueColorShade800 : AppColor.applicationColor,

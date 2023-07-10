@@ -1,6 +1,7 @@
 import 'package:celient_project/view/all_job/all_job_view.dart';
 import 'package:celient_project/view/bottomNavigationBar/bottomNavigationBar_view.dart';
 import 'package:celient_project/view/forget_password/forget_password_view.dart';
+import 'package:celient_project/view/get_bids/get_bids_view.dart';
 import 'package:celient_project/view/history/history_view.dart';
 import 'package:celient_project/view/home/home_view.dart';
 import 'package:celient_project/view/profile/profile_view.dart';
@@ -80,6 +81,13 @@ class AppRoutes {
       page: () =>  UpdatePasswordView(),
       transitionDuration: const Duration(milliseconds: 250),
       transition: Transition.leftToRightWithFade,
+    ),
+
+    GetPage(
+      name: RouteName.getBidView,
+      page: () =>  GetBidView(),
+      transitionDuration: const Duration(milliseconds: 250),
+      transition: Transition.rightToLeftWithFade,
     ),
 
       ];

@@ -6,8 +6,11 @@ import 'package:get/get.dart';
 import '../buttons/round_button_widget.dart';
 
 class JobBidDialogBox extends StatelessWidget {
+  final String vehicleType;
+  final String comment;
+  final String loadId;
   JobBidDialogBox({
-    super.key,
+    super.key, required this.vehicleType, required this.comment, required this.loadId,
   });
 
   @override
@@ -67,12 +70,58 @@ class JobBidDialogBox extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Text(
+                          "Bid",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppColor.blueColorShade800,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                         InputJobFilterTextField(
                           hint: "Bid",
+
                           controller: allJobVM.bidController.value,
                           // Set the initial value to the price
                           // validator: settingsVM.validateTextField,
                         ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text(
+                          "Vehicle Type",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppColor.blueColorShade800,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        InputJobFilterTextField(
+                          initialValue: vehicleType,
+                          hint: "Vehicle Type",
+                          controller: allJobVM.vehicleTypeController.value,
+                          // Set the initial value to the price
+                          // validator: settingsVM.validateTextField,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text(
+                          "Comment",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppColor.blueColorShade800,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        InputJobFilterTextField(
+                          initialValue: comment,
+                          hint: "Comments",
+                          controller: allJobVM.messageController.value,
+                          // Set the initial value to the price
+                          // validator: settingsVM.validateTextField,
+                        ),
+
                         SizedBox(
                           height: 20,
                         ),
@@ -83,7 +132,8 @@ class JobBidDialogBox extends StatelessWidget {
                               width: 150,
                               height: Get.height * 0.05,
                               onPress: () {
-                                allJobVM.updatePrice(allJobVM.bidController.value.text);
+                                allJobVM.makeBidApi(loadId);
+                               // allJobVM.updatePrice(allJobVM.bidController.value.text);
                                 Get.back();
                               }),
                         ),

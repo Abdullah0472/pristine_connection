@@ -16,14 +16,14 @@ class AllJobCards extends StatelessWidget {
   final RxString price;
   final String pickupAddress;
   final String deliverAddress;
- final String dimension;
+  final String dimension;
   final String weight;
   final String distance;
   final String type;
   final String piece;
   final String stackable;
   final String hazardous;
- final String dockLevel;
+  final String dockLevel;
   final String deliveryDay;
   final String deliveryDate;
   final String deliveryYear;
@@ -44,8 +44,12 @@ class AllJobCards extends StatelessWidget {
     required this.piece,
     required this.deliveryDay,
     required this.deliveryDate,
-    required this.deliveryYear, required this.dimension, required this.stackable, required this.hazardous, required this.dockLevel, required this.note,
-
+    required this.deliveryYear,
+    required this.dimension,
+    required this.stackable,
+    required this.hazardous,
+    required this.dockLevel,
+    required this.note,
   }) : super(key: key);
 
   @override
@@ -55,7 +59,7 @@ class AllJobCards extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           color: Colors.transparent,
-          height: 400,
+          height: 340,
           child: Stack(
             children: [
               Container(
@@ -158,7 +162,7 @@ class AllJobCards extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      orderNo,
+                                      orderNo as String,
                                       style: const TextStyle(
                                         color: AppColor.appBarColor,
                                         fontWeight: FontWeight.w700,
@@ -211,7 +215,6 @@ class AllJobCards extends StatelessWidget {
                                 SizedBox(
                                   height: 5,
                                 ),
-
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width *
                                       0.6, // Change this value as needed
@@ -236,8 +239,7 @@ class AllJobCards extends StatelessWidget {
                                     fontSize: 17,
                                   ),
                                 ),
-
-                                 Text(
+                                Text(
                                   "$deliveryDay/$deliveryDate/$deliveryYear",
                                   style: TextStyle(
                                     fontStyle: FontStyle.normal,
@@ -246,7 +248,6 @@ class AllJobCards extends StatelessWidget {
                                     fontSize: 15,
                                   ),
                                 ),
-
                                 SizedBox(
                                   height: 5,
                                 ),
@@ -277,7 +278,6 @@ class AllJobCards extends StatelessWidget {
                                 SizedBox(
                                   height: 5,
                                 ),
-
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width *
                                       0.6, // Change this value as needed
@@ -300,39 +300,55 @@ class AllJobCards extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      infoColumn("Weight", "$weight kg"),
+                                      infoColumn("Weight", weight),
                                       const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
-                                      infoColumn("Loaded Miles", "$distance km"),
+                                      infoColumn("Loaded Miles", distance),
                                       const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
-                                      infoColumn("Piece", piece),
-                                      const VerticalDivider(
-                                        color: AppColor.greyColor,
-                                      ),
-                                      infoColumn("Dims(l*h)", dimension),
+                                      infoColumn("Pieces", piece),
+
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 10,),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 IntrinsicHeight(
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceAround,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      infoColumn("Stackable", stackable ),
+                                      infoColumn("Stackable", stackable),
                                       const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
-                                      infoColumn("Hazardous", hazardous ),
+                                      infoColumn("Hazardous", hazardous),
                                       const VerticalDivider(
                                         color: AppColor.greyColor,
                                       ),
                                       infoColumn("Dock Level", dockLevel),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                IntrinsicHeight(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      infoColumn("Vehicle Type", type),
+                                      const VerticalDivider(
+                                        color: AppColor.greyColor,
+                                      ),
+                                      infoColumn("Dims", dimension),
                                     ],
                                   ),
                                 ),
@@ -346,14 +362,14 @@ class AllJobCards extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: 60,
+                bottom: 2,
                 right: 15,
                 child: GestureDetector(
                   onTap: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return JobBidDialogBox();
+                        return JobBidDialogBox(vehicleType: type, comment: note, loadId: orderNo,);
                       },
                     );
                   },
@@ -385,44 +401,45 @@ class AllJobCards extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                  bottom: 5,
-                  left: 25,
-                  child: RoundButton(
-                    title: "DETAILS",
-                    onPress: () {
-                      Get.to(() => DetailView(
-                            pickupName: "",
-                            pickupAddress: pickupAddress,
-                            piece: piece,
-                            dims: "",
-                            weight: weight,
-                            deliveryName: "",
-                            deliveryAddress: deliverAddress,
-
-                            orderNo: orderNo,
-                            price: price,
-                            date: date,
-                            day: day,
-                            year: month,
-                            deliveryDay: deliveryDay,
-                            deliveryDate: deliveryDate,
-                            deliveryYear: deliveryYear,
-                          ));
-                    },
-                    height: 50,
-                    width: 150,
-                    buttonColor: AppColor.appBarColor,
-                  )),
-              Positioned(
-                  bottom: 5,
-                  right: 25,
-                  child: RoundButton(
-                    title: "ACCEPT",
-                    onPress: () {},
-                    height: 50,
-                    width: 150,
-                  )),
+              // Positioned(
+              //     bottom: 5,
+              //     left: 25,
+              //     child: RoundButton(
+              //       title: "DETAILS",
+              //       onPress: () {
+              //         Get.to(() => DetailView(
+              //               pickupName: "",
+              //               pickupAddress: pickupAddress,
+              //               piece: piece,
+              //               dims: dimension,
+              //               weight: weight,
+              //               deliveryName: "",
+              //               deliveryAddress: deliverAddress,
+              //               orderNo: orderNo,
+              //               price: price,
+              //               date: date,
+              //               day: day,
+              //               year: month,
+              //               deliveryDay: deliveryDay,
+              //               deliveryDate: deliveryDate,
+              //               deliveryYear: deliveryYear,
+              //             ));
+              //       },
+              //       height: 50,
+              //       width: 150,
+              //       buttonColor: AppColor.appBarColor,
+              //     )),
+              // Positioned(
+              //     bottom: 5,
+              //     right: 85, //25
+              //     child: RoundButton(
+              //       title: "ACCEPT",
+              //       onPress: () {
+              //
+              //       },
+              //       height: 50,
+              //       width: 150,
+              //     )),
             ],
           ),
         ),

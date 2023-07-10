@@ -9,13 +9,16 @@ class InputJobFilterTextField extends StatelessWidget {
   TextEditingController controller;
   final String hint;
   final AllJobViewModel allJobVM;
+  final String initialValue; // add this line
 
   InputJobFilterTextField({
     Key? key,
     required this.controller,
     required this.hint,
-  })  : allJobVM = Get.put(AllJobViewModel()),
-        super(key: key);
+    this.initialValue = '',
+  }) : allJobVM = Get.put(AllJobViewModel()), super(key: key) {
+    controller.text = initialValue; // set initial value to controller here
+  }
 
   @override
   Widget build(BuildContext context) {

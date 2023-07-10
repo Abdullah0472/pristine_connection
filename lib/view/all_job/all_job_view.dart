@@ -1,10 +1,14 @@
+import 'package:celient_project/data/response/status.dart';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dart';
+import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/cards/all_job_cards.dart';
 import 'package:celient_project/res/components/widgets/cards/date_cards.dart';
 import 'package:celient_project/res/components/widgets/dialoge_box/dialoge_box_job_filter.dart';
+import 'package:celient_project/res/components/widgets/exception/general_exception.dart';
+import 'package:celient_project/res/components/widgets/exception/internet_exceptions_widget.dart';
+import 'package:celient_project/res/routes/routes_name.dart';
 import 'package:celient_project/view_model/controller/all_jobs/all_jobs_view_model.dart';
-import 'package:celient_project/view_model/controller/datePicker/datePicker_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -16,32 +20,31 @@ class AllJobView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allJobVM = Get.put(AllJobViewModel());
-    final DateTime now = DateTime.now();
-    final int daysInMonth = DateTime(now.year, now.month + 1, 0).day;
-    return GetBuilder<DatePickerController>(
-      init: DatePickerController(),
+    //  DateTime parsedDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(allJobVM.loadsList.value.data![index].deliveryDate.toString());
+    DateTime? parsedDate;
+    return GetBuilder<AllJobViewModel>(
+      init: allJobVM,
       builder: (controller) {
         return Scaffold(
           appBar: CustomAppBar(
               title: "All Jobs",
-              action:[
+              action: [
                 IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return JobFilterDialogBox();
-                    },
-                  );
-                },
-                icon: Icon(
-                  MdiIcons.filterMultiple,
-                  size: 30,
-                  color: AppColor.blackColor,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return JobFilterDialogBox();
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    MdiIcons.filterMultiple,
+                    size: 30,
+                    color: AppColor.blackColor,
+                  ),
                 ),
-              ),
               ],
-
               actionIcon: true,
               leadingIcon: SizedBox()),
           backgroundColor: AppColor.offWhite,
@@ -56,53 +59,118 @@ class AllJobView extends StatelessWidget {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
-                      itemCount: daysInMonth,
+                      itemCount: allJobVM.daysInMonth,
                       itemBuilder: (BuildContext ctx, int index) {
-                        final DateTime day =
-                            DateTime(now.year, now.month, index + 1);
-                        final bool isToday = DateTime.now().day == day.day;
+                        final thisDate = DateTime(
+                            allJobVM.now.year, allJobVM.now.month, index + 1);
+                        final bool isToday =
+                            DateTime.now().day == thisDate.day &&
+                                DateTime.now().month == thisDate.month;
                         return DateCard(
-                          day: day.day,
-                          month: DateFormat('MMMM').format(day),
-                          dayOfWeek: DateFormat('EEE').format(day),
+                          day: thisDate.day,
+                          month: DateFormat('MMMM').format(thisDate),
+                          dayOfWeek: DateFormat('EEE').format(thisDate),
                           isToday: isToday,
                         );
                       },
                     ),
                   ),
+                  SizedBox(height: 5,),
+
+                  RoundButton(title: 'See You Bids', onPress: (){
+                    Get.toNamed(RouteName.getBidView);
+                  },width: 150,height: 30,),
+                  SizedBox(height: 5,),
                   Obx(() {
                     if (controller.isDateSelected) {
-                      return SizedBox(
-                        height:650,// Or any other height that makes sense in your app
-                        child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: 5,
-                            itemBuilder: (BuildContext context, int index) {
-                              return AllJobCards(
+                      switch (allJobVM.rxRequestStatus.value) {
+                        case Status.LOADING:
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        case Status.ERROR:
+                          if (allJobVM.error.value == 'No internet') {
+                            return InterNetExceptionWidget(
+                              onPress: () {
+                                allJobVM.refreshApi();
+                              },
+                            );
+                          } else {
+                            return GeneralExceptionWidget(onPress: () {
+                              allJobVM.refreshApi();
+                            });
+                          }
+                        case Status.COMPLETED:
+                          return (allJobVM.loadsList.value.data!.isNotEmpty)
+                              ? SizedBox(
+                                  height:
+                                      650, // Or any other height that makes sense in your app
+                                  child: ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount:
+                                          allJobVM.loadsList.value.data!.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        try {
+                                          parsedDate =
+                                              DateFormat('yyyy-MM-dd HH:mm:ss')
+                                                  .parse(allJobVM
+                                                      .loadsList
+                                                      .value
+                                                      .data![index]
+                                                      .deliveryDate
+                                                      .toString());
+                                        } catch (e) {
+                                          print('Failed to parse date: $e');
+                                          // Handle the error in a way that makes sense for your application
+                                        }
 
-                                month: controller.selectedMonth ??
-                                    'No month selected',
-                                date: controller.selectedDayDate ??
-                                    'No date selected',
-                                day: controller.selectedDay ??
-                                    'No year selected',
-                                orderNo: "554",
-                                price: allJobVM.price,
-                                pickupAddress:
-                                    "40 Business Man Colony Near Paprika Resturant and Nursery Ground Rahim yar khan",
-                                deliverAddress:
-                                    'Jinnah Park Street Number 45 House Number 71, Near Allah hu Chock, Rahim Yar Khan',
-
-                                weight: '9',
-                                distance: '8',
-                                type: 'container',
-                                piece: '5',
-                                deliveryDay: 'Tuesday',
-                                deliveryYear: 'July',
-                                deliveryDate: '5', dimension: '8-8-9', stackable: 'Yes', hazardous: 'No', dockLevel: 'No', note: 'This is the note ',
-                              );
-                            }),
-                      );
+                                        return AllJobCards(
+                                          month: controller.selectedMonth ??
+                                              'No month selected',
+                                          date: controller.selectedDayDate ??
+                                              'No date selected',
+                                          day: controller.selectedDay ??
+                                              'No year selected',
+                                          orderNo: allJobVM
+                                              .loadsList.value.data![index].id.toString(),
+                                          price: allJobVM.price,
+                                          pickupAddress: allJobVM.loadsList
+                                              .value.data![index].pickupLocation
+                                              .toString(),
+                                          deliverAddress: allJobVM
+                                              .loadsList
+                                              .value
+                                              .data![index]
+                                              .deliveryLocation
+                                              .toString(),
+                                          weight: allJobVM.loadsList.value
+                                              .data![index].weight
+                                              .toString(),
+                                          distance: allJobVM.loadsList.value
+                                              .data![index].miles
+                                              .toString(),
+                                          type: allJobVM.loadsList.value
+                                              .data![index].vehicleTypes
+                                              .toString(),
+                                          piece: '5',
+                                          deliveryDay: DateFormat('EEEE')
+                                              .format(parsedDate!), // 'Tuesday'
+                                          deliveryYear: DateFormat('MMMM')
+                                              .format(parsedDate!), // 'July'
+                                          deliveryDate: DateFormat('d')
+                                              .format(parsedDate!), // '5'
+                                          dimension: allJobVM
+                                              .loadsList.value.data![index].dims
+                                              .toString(),
+                                          stackable: 'Yes',
+                                          hazardous: 'No',
+                                          dockLevel: 'No',
+                                          note: 'This is the note ',
+                                        );
+                                      }),
+                                )
+                              : Center(child: Text('No Job Found'));
+                      }
                     } else {
                       return const SizedBox();
                     }
