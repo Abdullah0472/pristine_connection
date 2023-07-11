@@ -42,7 +42,6 @@ class ProfileViewModel extends GetxController {
 
   void userListApi() {
     //  setRxRequestStatus(Status.LOADING);
-
     _api.userListApi().then((value) {
       setRxRequestStatus(Status.COMPLETED);
       setUserList(value);

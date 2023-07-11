@@ -97,6 +97,7 @@ class JobBidDialogBox extends StatelessWidget {
                           ),
                         ),
                         InputJobFilterTextField(
+number: false,
                           initialValue: vehicleType,
                           hint: "Vehicle Type",
                           controller: allJobVM.vehicleTypeController.value,
@@ -115,6 +116,7 @@ class JobBidDialogBox extends StatelessWidget {
                           ),
                         ),
                         InputJobFilterTextField(
+                          number: false,
                           initialValue: comment,
                           hint: "Comments",
                           controller: allJobVM.messageController.value,

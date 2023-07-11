@@ -8,6 +8,7 @@ import '../../../colors/colors.dart';
 class InputJobFilterTextField extends StatelessWidget {
   TextEditingController controller;
   final String hint;
+  final bool number;
   final AllJobViewModel allJobVM;
   final String initialValue; // add this line
 
@@ -16,6 +17,7 @@ class InputJobFilterTextField extends StatelessWidget {
     required this.controller,
     required this.hint,
     this.initialValue = '',
+    this.number = true,
   }) : allJobVM = Get.put(AllJobViewModel()), super(key: key) {
     controller.text = initialValue; // set initial value to controller here
   }
@@ -23,7 +25,7 @@ class InputJobFilterTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      keyboardType: TextInputType.phone,
+      keyboardType: number ? TextInputType.phone : TextInputType.name,
       controller: controller,
       onFieldSubmitted: (value) {
         Utils.fieldFocusAllJob(

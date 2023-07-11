@@ -81,6 +81,7 @@ class AllJobView extends StatelessWidget {
                     Get.toNamed(RouteName.getBidView);
                   },width: 150,height: 30,),
                   SizedBox(height: 5,),
+
                   Obx(() {
                     if (controller.isDateSelected) {
                       switch (allJobVM.rxRequestStatus.value) {

@@ -10,4 +10,5 @@ class AppUrl {
   static const String updatePasswordApi = '$baseUrl/api/change/password' ;
   static const String loadsApi = '$baseUrl/api/get/loads' ;
   static const String makeBidApi = '$baseUrl/api/make/bid' ;
+  static const String getBidApi = '$baseUrl/api/get/bids' ;
 }
