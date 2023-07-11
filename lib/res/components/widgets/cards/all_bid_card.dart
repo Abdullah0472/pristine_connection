@@ -28,6 +28,7 @@ class BidCard extends StatelessWidget {
   final String deliveryDate;
   final String deliveryYear;
   final String note;
+  final VoidCallback onPress;
   final CardController _cardController = Get.put(CardController());
   BidCard({
     Key? key,
@@ -50,6 +51,7 @@ class BidCard extends StatelessWidget {
     required this.hazardous,
     required this.dockLevel,
     required this.note,
+    required this.onPress,
   }) : super(key: key);
 
   @override
@@ -59,7 +61,7 @@ class BidCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           color: Colors.transparent,
-          height: 340,
+          height: 390,
           child: Stack(
             children: [
               Container(
@@ -402,34 +404,16 @@ class BidCard extends StatelessWidget {
               //     ),
               //   ),
               // ),
-              // Positioned(
-              //     bottom: 5,
-              //     left: 25,
-              //     child: RoundButton(
-              //       title: "DETAILS",
-              //       onPress: () {
-              //         Get.to(() => DetailView(
-              //               pickupName: "",
-              //               pickupAddress: pickupAddress,
-              //               piece: piece,
-              //               dims: dimension,
-              //               weight: weight,
-              //               deliveryName: "",
-              //               deliveryAddress: deliverAddress,
-              //               orderNo: orderNo,
-              //               price: price,
-              //               date: date,
-              //               day: day,
-              //               year: month,
-              //               deliveryDay: deliveryDay,
-              //               deliveryDate: deliveryDate,
-              //               deliveryYear: deliveryYear,
-              //             ));
-              //       },
-              //       height: 50,
-              //       width: 150,
-              //       buttonColor: AppColor.appBarColor,
-              //     )),
+              Positioned(
+                  bottom: 5,
+                  left: 15,
+                  child: RoundButton(
+                    title: "DECLINE",
+                    onPress: onPress,
+                    height: 50,
+                    width: 350,
+                    buttonColor: AppColor.redColor,
+                  )),
               // Positioned(
               //     bottom: 5,
               //     right: 85, //25

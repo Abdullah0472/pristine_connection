@@ -2,14 +2,12 @@ import 'package:celient_project/data/response/status.dart';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dart';
 import 'package:celient_project/res/components/widgets/cards/all_bid_card.dart';
-import 'package:celient_project/res/components/widgets/cards/all_job_cards.dart';
 import 'package:celient_project/res/components/widgets/exception/general_exception.dart';
 import 'package:celient_project/res/components/widgets/exception/internet_exceptions_widget.dart';
 import 'package:celient_project/view_model/controller/get_bids/get_bids_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class GetBidView extends StatefulWidget {
   const GetBidView({Key? key}) : super(key: key);
@@ -34,7 +32,7 @@ class _GetBidViewState extends State<GetBidView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.offWhite,
-      appBar:  CustomAppBar(
+      appBar:  const CustomAppBar(
         actionIcon: false,
         action: [Text('')],
         title: 'Your Bids',
@@ -171,10 +169,14 @@ class _GetBidViewState extends State<GetBidView> {
                             dockLevel: 'No',
                             note: getBidsVM.bidsList.value.data![index].message
                                 .toString(),
+                            onPress: (){
+                              getBidsVM.cancelBidApi(getBidsVM.bidsList.value.data![index].bidId
+                                  .toString());
+                            },
                           );
                         }),
                   )
-                : Center(child: Text('No Bid Found'));
+                : const Center(child: Text('No Bid Found'));
         }
       })),
     );

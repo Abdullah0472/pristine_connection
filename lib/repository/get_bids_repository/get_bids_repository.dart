@@ -2,7 +2,7 @@ import 'package:celient_project/data/network/network_api_services.dart';
 import 'package:celient_project/model/get_bids/get_bids_model.dart';
 import 'package:celient_project/res/app_url/app_url.dart';
 
-class GetBidsRepository {
+class BidsRepository {
 
   final _apiService = NetworkApiServices();
 
@@ -10,5 +10,12 @@ class GetBidsRepository {
     dynamic response = await _apiService.getApi(AppUrl.getBidApi);
     return GetBidsModel.fromJson(response);
   }
+
+
+  Future<dynamic> cancelBid(var data) async{
+    dynamic response = await _apiService.updateApi(data, AppUrl.cancelBidApi);
+    return response ;
+  }
+
 
 }

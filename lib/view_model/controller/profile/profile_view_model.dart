@@ -90,51 +90,128 @@ class ProfileViewModel extends GetxController {
     }
   }
 
+  // void updateImageApi(String avatar, String licence) async {
+  //   try {
+  //     //
+  //     // print('Avatar Image Path Before error : $avatar');
+  //     // print('License Image Path Before Error : $licence');
+  //     //
+  //     // final avatarFile = File(avatar);
+  //     // final licenceFile = File(licence);
+  //     //
+  //     //
+  //     // if (!avatarFile.existsSync() || !licenceFile.existsSync()) {
+  //     //   Utils.snackBar('File not found', 'Please select a valid image file.');
+  //     //   return;
+  //     // }
+  //     //
+  //     // print('Avatar Image Path: $avatar');
+  //     // print('License Image Path: $licence');
+  //
+  //     print('Avatar Image Path Before error : $avatar');
+  //     print('License Image Path Before Error : $licence');
+  //
+  //     final avatarFile = File(avatar);
+  //     final licenceFile = File(licence);
+  //
+  //     if (!avatarFile.existsSync()) {
+  //       print('Avatar file does not exist at the path provided');
+  //     }
+  //
+  //     if (!licenceFile.existsSync()) {
+  //       print('License file does not exist at the path provided');
+  //     }
+  //
+  //     if (!avatarFile.existsSync() || !licenceFile.existsSync()) {
+  //       Utils.snackBar('File not found', 'Please select a valid image file.');
+  //       return;
+  //     }
+  //
+  //     print('Avatar Image Path: $avatar');
+  //     print('License Image Path: $licence');
+  //
+  //     // Extract image extensions
+  //     final avatarExtension = avatar.split(".").last;
+  //     final licenceExtension = licence.split(".").last;
+  //
+  //     // Convert the avatar image to base64
+  //     final avatarBytes = await avatarFile.readAsBytes();
+  //     final avatarBase64 = 'data:image/$avatarExtension;base64,${base64Encode(avatarBytes)}';
+  //
+  //     // Convert the license image to base64
+  //     final licenceBytes = await licenceFile.readAsBytes();
+  //     final licenceBase64 = 'data:image/$licenceExtension;base64,${base64Encode(licenceBytes)}';
+  //
+  //
+  //     Map<String, dynamic> data = {
+  //       'license': licenceBase64,
+  //       'avatar': avatarBase64,
+  //     };
+  //
+  //
+  //     final response = await _api.updateImageUser(data);
+  //
+  //     if (response['statusCode'] == 200) {
+  //       Utils.snackBar('Image Uploaded', 'Successfully');
+  //     } else {
+  //       Utils.snackBar('Failed to Upload Image', 'Server responded with status code: ${response['statusCode']}');
+  //       print('The error is Uploading image  $response');
+  //     }
+  //
+  //
+  //   } catch (e) {
+  //     Utils.snackBar('Failed to Update Image', 'An error occurred while updating image: ${e.toString()}');
+  //     print('The error is Uploading image  ${e.toString()}');
+  //     return; // End the function
+  //   }
+  // }
+
+
+
   void updateImageApi(String avatar, String licence) async {
     try {
+      // Prepare a data map to store base64 strings
+      Map<String, dynamic> data = {};
 
-      print('Avatar Image Path Before error : $avatar');
-      print('License Image Path Before Error : $licence');
+      // Check if avatar is not null and exists, then process it
+      if (avatar != null && File(avatar).existsSync()) {
+        print('Processing Avatar Image at Path: $avatar');
 
-      final avatarFile = File(avatar);
-      final licenceFile = File(licence);
+        final avatarFile = File(avatar);
+        final avatarExtension = avatar.split(".").last;
+        final avatarBytes = await avatarFile.readAsBytes();
+        final avatarBase64 = 'data:image/$avatarExtension;base64,${base64Encode(avatarBytes)}';
 
+        data['avatar'] = avatarBase64;
+      }
 
-      if (!avatarFile.existsSync() || !licenceFile.existsSync()) {
-        Utils.snackBar('File not found', 'Please select a valid image file.');
+      // Check if licence is not null and exists, then process it
+      if (licence != null && File(licence).existsSync()) {
+        print('Processing License Image at Path: $licence');
+
+        final licenceFile = File(licence);
+        final licenceExtension = licence.split(".").last;
+        final licenceBytes = await licenceFile.readAsBytes();
+        final licenceBase64 = 'data:image/$licenceExtension;base64,${base64Encode(licenceBytes)}';
+
+        data['license'] = licenceBase64;
+      }
+
+      // Check if both avatar and license are not uploaded
+      if (data.isEmpty) {
+        //Utils.snackBar('No File Uploaded', 'Please upload at least one image file.');
+        print('Neither avatar nor license image is uploaded');
         return;
       }
 
-      print('Avatar Image Path: $avatar');
-      print('License Image Path: $licence');
-
-      // Extract image extensions
-      final avatarExtension = avatar.split(".").last;
-      final licenceExtension = licence.split(".").last;
-
-      // Convert the avatar image to base64
-      final avatarBytes = await avatarFile.readAsBytes();
-      final avatarBase64 = 'data:image/$avatarExtension;base64,${base64Encode(avatarBytes)}';
-
-      // Convert the license image to base64
-      final licenceBytes = await licenceFile.readAsBytes();
-      final licenceBase64 = 'data:image/$licenceExtension;base64,${base64Encode(licenceBytes)}';
-
-      Map<String, dynamic> data = {
-        'license': licenceBase64,
-        'avatar': avatarBase64,
-      };
-
-
       final response = await _api.updateImageUser(data);
 
-      if (response['statusCode'] == 200) {
+      if (response['status_code'] == 200) {
         Utils.snackBar('Image Uploaded', 'Successfully');
       } else {
-        Utils.snackBar('Failed to Upload Image', 'Server responded with status code: ${response['statusCode']}');
+        Utils.snackBar('Failed to Upload Image', 'Server responded with status code: ${response['status_code']}');
         print('The error is Uploading image  $response');
       }
-
 
     } catch (e) {
       Utils.snackBar('Failed to Update Image', 'An error occurred while updating image: ${e.toString()}');
