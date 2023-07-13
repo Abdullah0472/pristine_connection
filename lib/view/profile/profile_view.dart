@@ -29,15 +29,14 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  final homeController = Get.put(ProfileViewModel());
-  final loadVM = Get.put(loadDetailViewModel());
+  final profileVM = Get.put(ProfileViewModel());
   UserPreference userPreference = UserPreference();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    homeController.userListApi();
+    profileVM.userListApi();
   }
 
   @override
@@ -75,19 +74,19 @@ class _ProfileViewState extends State<ProfileView> {
       ),
       body: SafeArea(
         child: Obx(() {
-          switch (homeController.rxRequestStatus.value) {
+          switch (profileVM.rxRequestStatus.value) {
             case Status.LOADING:
               return const Center(child: CircularProgressIndicator());
             case Status.ERROR:
-              if (homeController.error.value == 'No internet') {
+              if (profileVM.error.value == 'No internet') {
                 return InterNetExceptionWidget(
                   onPress: () {
-                    homeController.refreshApi();
+                    profileVM.refreshApi();
                   },
                 );
               } else {
                 return GeneralExceptionWidget(onPress: () {
-                  homeController.refreshApi();
+                  profileVM.refreshApi();
                 });
               }
             case Status.COMPLETED:
@@ -119,17 +118,9 @@ class _ProfileViewState extends State<ProfileView> {
                                     builder: (BuildContext context) {
                                       return ShowBottom(
                                           containerIndex: 5,
-                                          // onImageSelected: (String? imageUrl) {
-                                          //   // Update the image URL
-                                          //   setState(() {
-                                          //     homeController.userList.value.data?.avatar = imageUrl;
-                                          //   });
-                                          // },
                                           onImageSelected: (String? imageUrl) {
                                             if (imageUrl != null) {
-                                              // If the container index is 5, it's an avatar image
-
-                                              homeController.avatarPath.value = imageUrl;
+                                              profileVM.avatarPath.value = imageUrl;
                                             }
                                           }); // Pass the container index as 1 for the second container
                                     },
@@ -152,12 +143,12 @@ class _ProfileViewState extends State<ProfileView> {
                               },
                               child: CircleAvatar(
                                 radius: 60,
-                                backgroundImage: homeController
+                                backgroundImage: profileVM
                                                 .userList.value.data?.avatar !=
                                             null &&
-                                        homeController.userList.value.data!
+                                        profileVM.userList.value.data!
                                             .avatar!.isNotEmpty
-                                    ? NetworkImage(homeController
+                                    ? NetworkImage(profileVM
                                         .userList
                                         .value
                                         .data!
@@ -174,9 +165,9 @@ class _ProfileViewState extends State<ProfileView> {
                             1.4,
                             InputTextField(
                               initialValue:
-                                  homeController.userList.value.data?.email ??
+                                  profileVM.userList.value.data?.email ??
                                       '',
-                              controller: homeController.emailController.value,
+                              controller: profileVM.emailController.value,
                               icons: MdiIcons.emailOutline,
                               hintText: "Email",
                             )),
@@ -187,9 +178,9 @@ class _ProfileViewState extends State<ProfileView> {
                             1.6,
                             InputTextField(
                               initialValue:
-                                  homeController.userList.value.data?.name ??
+                                  profileVM.userList.value.data?.name ??
                                       '',
-                              controller: homeController.nameController.value,
+                              controller: profileVM.nameController.value,
                               icons: MdiIcons.accountCircle,
                               hintText: "Name",
                             )),
@@ -200,9 +191,9 @@ class _ProfileViewState extends State<ProfileView> {
                           1.8,
                           InputTextField(
                             initialValue:
-                                homeController.userList.value.data?.phone ?? '',
+                                profileVM.userList.value.data?.phone ?? '',
                             number: true,
-                            controller: homeController.phoneNumberController.value,
+                            controller: profileVM.phoneNumberController.value,
                             icons: MdiIcons.phoneOutline,
                             hintText: "Phone Number",
                           ),
@@ -214,8 +205,8 @@ class _ProfileViewState extends State<ProfileView> {
                           2,
                           InputTextField(
                             initialValue:
-                                homeController.userList.value.data?.city ?? '',
-                            controller: homeController.cityController.value,
+                                profileVM.userList.value.data?.city ?? '',
+                            controller: profileVM.cityController.value,
                             icons: MdiIcons.city,
                             hintText: "City",
                           ),
@@ -227,8 +218,8 @@ class _ProfileViewState extends State<ProfileView> {
                           2.2,
                           InputTextField(
                             initialValue:
-                                homeController.userList.value.data?.state ?? '',
-                            controller: homeController.stateController.value,
+                                profileVM.userList.value.data?.state ?? '',
+                            controller: profileVM.stateController.value,
                             icons: MdiIcons.homeGroup,
                             hintText: "State",
                           ),
@@ -240,9 +231,9 @@ class _ProfileViewState extends State<ProfileView> {
                           2.4,
                           InputTextField(
                             initialValue:
-                                homeController.userList.value.data?.address ??
+                                profileVM.userList.value.data?.address ??
                                     '',
-                            controller: homeController.addressController.value,
+                            controller: profileVM.addressController.value,
                             icons: MdiIcons.mapMarker,
                             hintText: "Address",
                           ),
@@ -255,8 +246,8 @@ class _ProfileViewState extends State<ProfileView> {
                           InputTextField(
                             number: true,
                             initialValue:
-                                homeController.userList.value.data?.zip ?? '',
-                            controller: homeController.zipController.value,
+                                profileVM.userList.value.data?.zip ?? '',
+                            controller: profileVM.zipController.value,
                             icons: MdiIcons.poundBox,
                             hintText: "Zip Code",
                           ),
@@ -269,8 +260,8 @@ class _ProfileViewState extends State<ProfileView> {
                           InputTextField(
                             number: true,
                             initialValue:
-                                homeController.userList.value.data?.regNo ?? '',
-                            controller: homeController.regNumberController.value,
+                                profileVM.userList.value.data?.regNo ?? '',
+                            controller: profileVM.regNumberController.value,
                             icons: MdiIcons.poundBox,
                             hintText: "Registration Number",
                           ),
@@ -303,7 +294,7 @@ class _ProfileViewState extends State<ProfileView> {
                                             onImageSelected:
                                                 (String? imageUrl) {
                                               if (imageUrl != null) {
-                                                homeController.licencePath
+                                                profileVM.licencePath
                                                     .value = imageUrl;
                                               }
                                             });
@@ -325,13 +316,13 @@ class _ProfileViewState extends State<ProfileView> {
                                   }
                                 },
                                 icon: Obx(() {
-                                  if (homeController
+                                  if (profileVM
                                               .userList.value.data?.license !=
                                           null &&
-                                      homeController.userList.value.data!
+                                      profileVM.userList.value.data!
                                           .license!.isNotEmpty) {
                                     return Image.network(
-                                      homeController
+                                      profileVM
                                           .userList.value.data!.license!,
                                       fit: BoxFit.fill,
                                       width: MediaQuery.of(context).size.width,
@@ -360,17 +351,17 @@ class _ProfileViewState extends State<ProfileView> {
                             height: Get.height * 0.06,
                             onPress: () {
                               // Update the profile
-                              homeController.updateUserApi();
+                              profileVM.updateUserApi();
 
                               // Get the avatar image path
                               final avatarPath =
-                                  homeController.avatarPath.value;
+                                  profileVM.avatarPath.value;
                               // Get the licence image path
                               final licencePath =
-                                  homeController.licencePath.value;
+                                  profileVM.licencePath.value;
 
                               // Update the images
-                              homeController.updateImageApi(avatarPath, licencePath);
+                              profileVM.updateImageApi(avatarPath, licencePath);
                             },
                             title: 'Update the Profile',
                           ),

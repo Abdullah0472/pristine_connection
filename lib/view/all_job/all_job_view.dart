@@ -20,8 +20,9 @@ class AllJobView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allJobVM = Get.put(AllJobViewModel());
-    //  DateTime parsedDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(allJobVM.loadsList.value.data![index].deliveryDate.toString());
+    allJobVM.addScrollListener();
     DateTime? parsedDate;
+    DateTime? parsePickUpDate;
     return GetBuilder<AllJobViewModel>(
       init: allJobVM,
       builder: (controller) {
@@ -64,30 +65,62 @@ class AllJobView extends StatelessWidget {
                         final thisDate = DateTime(
                             allJobVM.now.year, allJobVM.now.month, index + 1);
                         final bool isToday =
-                            DateTime.now().day == thisDate.day &&
-                                DateTime.now().month == thisDate.month;
+                            DateTime
+                                .now()
+                                .day == thisDate.day &&
+                                DateTime
+                                    .now()
+                                    .month == thisDate.month;
+
                         return DateCard(
                           day: thisDate.day,
-                          month: DateFormat('MMMM').format(thisDate),
-                          dayOfWeek: DateFormat('EEE').format(thisDate),
-                          isToday: isToday,
+                          month: DateFormat('MMM').format(thisDate),
+                          dayOfWeek: DateFormat('EEEE').format(thisDate),
+                          isToday: DateTime.now().day == thisDate.day,
+                          date: thisDate,
                         );
+
                       },
                     ),
                   ),
-                  SizedBox(height: 5,),
-
-                  RoundButton(title: 'See You Bids', onPress: (){
-                    Get.toNamed(RouteName.getBidView);
-                  },width: 150,height: 30,),
-                  SizedBox(height: 5,),
-
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      RoundButton(
+                        title: 'Pending Bids',
+                        onPress: () {
+                          Get.toNamed(RouteName.getBidView);
+                        },
+                        width: 150,
+                        height: 30,
+                      ),
+                      RoundButton(
+                        title: 'Assigned Bids',
+                        onPress: () {
+                          Get.toNamed(RouteName.assignBidView);
+                        },
+                        width: 160,
+                        height: 30,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Obx(() {
                     if (controller.isDateSelected) {
                       switch (allJobVM.rxRequestStatus.value) {
                         case Status.LOADING:
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return  Column(
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(height: 10),
+                              Text("Loading..."),
+                            ],
+                          );
                         case Status.ERROR:
                           if (allJobVM.error.value == 'No internet') {
                             return InterNetExceptionWidget(
@@ -101,42 +134,69 @@ class AllJobView extends StatelessWidget {
                             });
                           }
                         case Status.COMPLETED:
-                          return (allJobVM.loadsList.value.data!.isNotEmpty)
-                              ? SizedBox(
+                          if (allJobVM.loadsList.value.data == null ||
+                              allJobVM.loadsList.value.data!.isEmpty){
+                              return Center(child: Text("No Job Found"));
+
+                          }
+                          else {
+                            return
+                              Column(
+                              children: [
+                                SizedBox(
                                   height:
-                                      650, // Or any other height that makes sense in your app
+                                  650,
+                                  // Or any other height that makes sense in your app
                                   child: ListView.builder(
+                                      controller: allJobVM.scrollController,
                                       physics: const BouncingScrollPhysics(),
                                       itemCount:
-                                          allJobVM.loadsList.value.data!.length,
+                                      allJobVM.loadsList.value.data!.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         try {
-                                          parsedDate =
-                                              DateFormat('yyyy-MM-dd HH:mm:ss')
-                                                  .parse(allJobVM
-                                                      .loadsList
-                                                      .value
-                                                      .data![index]
-                                                      .deliveryDate
-                                                      .toString());
+                                          parsedDate = DateFormat(
+                                              'yyyy-MM-dd HH:mm:ss')
+                                              .parse(allJobVM.loadsList.value
+                                              .data![index].deliveryDate
+                                              .toString());
                                         } catch (e) {
                                           print('Failed to parse date: $e');
                                           // Handle the error in a way that makes sense for your application
+                                          parsedDate = DateTime
+                                              .now(); // provide a default value when parsing fails
                                         }
 
+
+                                        String pickUpDateString = allJobVM.loadsList.value.data![index].pickupDate.toString();
+
+                                        if (pickUpDateString != "ASAP") {
+                                          try {
+                                            parsePickUpDate = DateFormat('yyyy-MM-dd HH:mm:ss').parse(pickUpDateString);
+                                          } catch (e) {
+                                            print('Failed to parse date: $e');
+                                            parsePickUpDate = DateTime.now(); // provide a default value when parsing fails
+                                          }
+                                        }
+
+
                                         return AllJobCards(
-                                          month: controller.selectedMonth ??
-                                              'No month selected',
-                                          date: controller.selectedDayDate ??
-                                              'No date selected',
-                                          day: controller.selectedDay ??
-                                              'No year selected',
-                                          orderNo: allJobVM
-                                              .loadsList.value.data![index].id.toString(),
+                                          pickUpmonth: pickUpDateString != "ASAP"
+                                              ? DateFormat('MMMM').format(parsePickUpDate!)
+                                              : '',
+                                          pickUpdate: pickUpDateString != "ASAP"
+                                              ? DateFormat('d').format(parsePickUpDate!)
+                                              : 'ASAP',
+                                          pickUpday: pickUpDateString != "ASAP"
+                                              ? DateFormat('EEEE').format(parsePickUpDate!)
+                                              : '',
+                                          loadId: allJobVM
+                                              .loadsList.value.data![index].id
+                                              .toString(),
                                           price: allJobVM.price,
                                           pickupAddress: allJobVM.loadsList
-                                              .value.data![index].pickupLocation
+                                              .value.data![index]
+                                              .pickupLocation
                                               .toString(),
                                           deliverAddress: allJobVM
                                               .loadsList
@@ -153,24 +213,45 @@ class AllJobView extends StatelessWidget {
                                           type: allJobVM.loadsList.value
                                               .data![index].vehicleTypes
                                               .toString(),
-                                          piece: '5',
-                                          deliveryDay: DateFormat('EEEE')
-                                              .format(parsedDate!), // 'Tuesday'
-                                          deliveryYear: DateFormat('MMMM')
-                                              .format(parsedDate!), // 'July'
-                                          deliveryDate: DateFormat('d')
-                                              .format(parsedDate!), // '5'
-                                          dimension: allJobVM
-                                              .loadsList.value.data![index].dims
+                                          piece: allJobVM.loadsList.value
+                                              .data![index].pieces
                                               .toString(),
-                                          stackable: 'Yes',
-                                          hazardous: 'No',
-                                          dockLevel: 'No',
-                                          note: 'This is the note ',
+                                          deliveryDay: parsedDate != null
+                                              ? DateFormat('EEEE').format(
+                                              parsedDate!)
+                                              : 'N/A',
+                                          deliveryYear: parsedDate != null
+                                              ? DateFormat('MMMM').format(
+                                              parsedDate!)
+                                              : 'N/A',
+                                          deliveryDate: parsedDate != null
+                                              ? DateFormat('d').format(
+                                              parsedDate!)
+                                              : 'N/A',
+                                          dimension: allJobVM
+                                              .loadsList.value.data![index]
+                                              .dims
+                                              .toString(),
+                                          stackable: allJobVM.loadsList.value
+                                              .data![index].stackable
+                                              .toString(),
+                                          hazardous: allJobVM.loadsList.value
+                                              .data![index].hazardous
+                                              .toString(),
+                                          dockLevel: allJobVM.loadsList.value
+                                              .data![index].dockLevel
+                                              .toString(),
+                                          note: allJobVM.loadsList.value
+                                              .data![index].notes
+                                              .toString(),
                                         );
                                       }),
-                                )
-                              : Center(child: Text('No Job Found'));
+                                ),
+                                if (allJobVM.isLoadingNextOffset.value)
+                                  CircularProgressIndicator(),
+                              ],
+                            );
+                          }
                       }
                     } else {
                       return const SizedBox();

@@ -12,4 +12,5 @@ class AppUrl {
   static const String makeBidApi = '$baseUrl/api/make/bid' ;
   static const String getBidApi = '$baseUrl/api/get/bids' ;
   static const String cancelBidApi = '$baseUrl/api/cancel/bid' ;
+  static const String assignBidApi = '$baseUrl/api/get/assigned' ;
 }

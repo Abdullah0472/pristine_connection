@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:celient_project/data/response/status.dart';
 import 'package:celient_project/model/loads/loads_model.dart';
@@ -16,9 +17,15 @@ class AllJobViewModel extends GetxController {
 
   RxString price = '0'.obs;
 
-  void updatePrice(String newPrice) {
+  //  updatePrice(String newPrice) {
+  //   price.value = newPrice;
+  // }
+
+  String updatePrice(String newPrice) {
     price.value = newPrice;
+    return price.value;
   }
+
 
   final radiusFocusNode = FocusNode().obs;
   final postalCodeFocusNode = FocusNode().obs;
@@ -38,14 +45,24 @@ class AllJobViewModel extends GetxController {
 
   /// =================== Date Selection ================== ///
   Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
+  int offset = 0;
 
   void selectDate(DateTime date) {
-    selectedDate.value = date;
-    userListApi(); // make a network call when a date is selected
+    if (selectedDate.value != date) {
+      selectedDate.value = date;
+      offset = 0; // Reset the offset to 0
+      loadsList.value.data = []; // Clear the list of jobs
+      loadsList
+          .refresh(); // Notify listeners to rebuild the view and clear the previous data
+      setRxRequestStatus(Status.LOADING); // Set the loading status
+      Future.delayed(Duration(milliseconds: 100), () {
+        userListApi();
+        update(); // Make a network call when a date is selected
+      });
+    }
   }
 
   bool get isDateSelected => selectedDate.value != null;
-
   String? get selectedMonth {
     if (isDateSelected) {
       return DateFormat('MMMM').format(selectedDate.value!);
@@ -79,32 +96,61 @@ class AllJobViewModel extends GetxController {
     }
   }
 
-  /// =================== Date Selection ================== ///
-
   void setRxRequestStatus(Status _value) => rxRequestStatus.value = _value;
-  void setUserList(LoadsModel _value) => loadsList.value = _value;
+  void setLoadsList(LoadsModel _value) => loadsList.value = _value;
   void setError(String _value) => error.value = _value;
-
   AllJobViewModel() {
     now = DateTime.now();
     daysInMonth = DateTime(now.year, now.month + 1, 0).day;
     day = DateTime(now.year, now.month, now.day);
   }
+  ScrollController scrollController = ScrollController();
+  RxBool isLoadingNextOffset = false.obs; // add this variable
+  void addScrollListener() {
+    scrollController.addListener(() {
+      // Load more when scrolled to the bottom
+      if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent &&
+          hasMoreData.value) {
+        offset += 1;
+        userListApi();
+      }
+      // Load previous when scrolled to the top
+      else if (scrollController.position.pixels ==
+              scrollController.position.minScrollExtent &&
+          offset > 0) {
+        offset -= 1;
+        userListApi();
+      }
+    });
+  }
+
+  RxBool hasMoreData = true.obs;
 
   void userListApi() {
-    Map<String, dynamic> data = {
-      'date': selectedDate.value != null
-          ? DateFormat('yyyy-MM-dd').format(selectedDate.value!)
-          : '',
-    };
-
-    _api.loadsApi(data).then((value) {
-      setRxRequestStatus(Status.COMPLETED);
-      setUserList(value);
-    }).onError((error, stackTrace) {
-      setError(error.toString());
-      setRxRequestStatus(Status.ERROR);
-    });
+    if (selectedDate.value != null) {
+      Map<String, dynamic> data = {
+        'date': DateFormat('yyyy-MM-dd').format(selectedDate.value!),
+        'offset': offset.toString(),
+      };
+      isLoadingNextOffset.value = true;
+      _api.loadsApi(data).then((value) {
+        setRxRequestStatus(Status.COMPLETED);
+        if (value.data != null) {
+          hasMoreData.value = value.data!.length >= 10;
+        } else {
+          hasMoreData.value = false;
+        }
+        appendLoadsList(value); // call appendLoadsList instead of setLoadsList
+        isLoadingNextOffset.value = false;
+      }).onError((error, stackTrace) {
+        isLoadingNextOffset.value = false;
+        setError(error.toString());
+        setRxRequestStatus(Status.ERROR);
+      });
+    } else {
+      print('No date selected.');
+    }
   }
 
   void refreshApi() {
@@ -113,35 +159,25 @@ class AllJobViewModel extends GetxController {
       'date': selectedDate.value != null
           ? DateFormat('yyyy-MM-dd').format(selectedDate.value!)
           : '',
+      'offset': offset.toString(),
     };
-
+    isLoadingNextOffset.value = true;
     _api.loadsApi(data).then((value) {
       setRxRequestStatus(Status.COMPLETED);
-      setUserList(value);
+      appendLoadsList(value); // call appendLoadsList instead of setLoadsList
+      isLoadingNextOffset.value = false;
     }).onError((error, stackTrace) {
+      isLoadingNextOffset.value = false;
       setError(error.toString());
       setRxRequestStatus(Status.ERROR);
     });
   }
 
-  void loadsApi() async {
-    try {
-      if (selectedDate.value != null) {
-        Map<String, dynamic> data = {
-          'date': DateFormat('yyyy-MM-dd').format(selectedDate.value!),
-        };
-
-        _api.loadsApi(data).then((value) {
-          print('Date Uploaded');
-        }).onError((error, stackTrace) {
-          print("The error while sending data ${error.toString()}");
-        });
-      } else {
-        print('No date selected.');
-      }
-    } catch (e) {
-      print('Failed to Update, An error occurred while updating');
-      return; // End the function
+  void appendLoadsList(LoadsModel value) {
+    if (loadsList.value.data == null) {
+      loadsList.value.data = value.data ?? [];
+    } else {
+      loadsList.value.data?.addAll(value.data ?? []);
     }
   }
 
@@ -160,6 +196,9 @@ class AllJobViewModel extends GetxController {
         Utils.snackBar('Bid Uploaded', 'Successfully');
         updatePrice(bidController
             .value.text); // Assuming response contains the new price
+        String updatedPrice = updatePrice(bidController.value.text);
+        print("The Bid Amount is $updatedPrice");
+
       } else {
         Utils.snackBar(
             'Error', response['error'] ?? 'An error occurred while making bid');

@@ -12,4 +12,5 @@ class RouteName {
   static const String allJobVIew = '/all_job_view';
   static const String updatePasswordView = '/update_password_view';
   static const String getBidView = '/get_bids_view';
+  static const String assignBidView = '/assign_bids_view';
 }

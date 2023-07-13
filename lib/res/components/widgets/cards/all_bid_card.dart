@@ -29,6 +29,7 @@ class BidCard extends StatelessWidget {
   final String deliveryYear;
   final String note;
   final VoidCallback onPress;
+  final String roundButtonText;
   final CardController _cardController = Get.put(CardController());
   BidCard({
     Key? key,
@@ -51,7 +52,7 @@ class BidCard extends StatelessWidget {
     required this.hazardous,
     required this.dockLevel,
     required this.note,
-    required this.onPress,
+    required this.onPress, required this.roundButtonText,
   }) : super(key: key);
 
   @override
@@ -408,7 +409,7 @@ class BidCard extends StatelessWidget {
                   bottom: 5,
                   left: 15,
                   child: RoundButton(
-                    title: "DECLINE",
+                    title: roundButtonText,
                     onPress: onPress,
                     height: 50,
                     width: 350,

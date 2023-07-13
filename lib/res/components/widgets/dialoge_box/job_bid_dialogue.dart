@@ -9,8 +9,13 @@ class JobBidDialogBox extends StatelessWidget {
   final String vehicleType;
   final String comment;
   final String loadId;
+  final AllJobViewModel jobVM;
   JobBidDialogBox({
-    super.key, required this.vehicleType, required this.comment, required this.loadId,
+    super.key,
+    required this.vehicleType,
+    required this.comment,
+    required this.loadId,
+    required this.jobVM,
   });
 
   @override
@@ -25,7 +30,6 @@ class JobBidDialogBox extends StatelessWidget {
     );
   }
 
-  final allJobVM = Get.put(AllJobViewModel());
   contentBox(context) {
     GlobalKey<FormState> geofenceformkey = GlobalKey<FormState>();
     return Stack(
@@ -80,8 +84,7 @@ class JobBidDialogBox extends StatelessWidget {
                         ),
                         InputJobFilterTextField(
                           hint: "Bid",
-
-                          controller: allJobVM.bidController.value,
+                          controller: jobVM.bidController.value,
                           // Set the initial value to the price
                           // validator: settingsVM.validateTextField,
                         ),
@@ -97,10 +100,10 @@ class JobBidDialogBox extends StatelessWidget {
                           ),
                         ),
                         InputJobFilterTextField(
-number: false,
+                          number: false,
                           initialValue: vehicleType,
                           hint: "Vehicle Type",
-                          controller: allJobVM.vehicleTypeController.value,
+                          controller: jobVM.vehicleTypeController.value,
                           // Set the initial value to the price
                           // validator: settingsVM.validateTextField,
                         ),
@@ -119,11 +122,10 @@ number: false,
                           number: false,
                           initialValue: comment,
                           hint: "Comments",
-                          controller: allJobVM.messageController.value,
+                          controller: jobVM.messageController.value,
                           // Set the initial value to the price
                           // validator: settingsVM.validateTextField,
                         ),
-
                         SizedBox(
                           height: 20,
                         ),
@@ -134,12 +136,11 @@ number: false,
                               width: 150,
                               height: Get.height * 0.05,
                               onPress: () {
-                                allJobVM.makeBidApi(loadId);
-                               // allJobVM.updatePrice(allJobVM.bidController.value.text);
+                                jobVM.makeBidApi(loadId);
+                                // allJobVM.updatePrice(allJobVM.bidController.value.text);
                                 Get.back();
                               }),
                         ),
-
                       ],
                     ),
                   ),

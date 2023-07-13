@@ -10,6 +10,7 @@ class DateCard extends StatelessWidget {
   final String month;
   final String dayOfWeek;
   final bool isToday;
+  final DateTime date;
 
   const DateCard({
     Key? key,
@@ -17,26 +18,34 @@ class DateCard extends StatelessWidget {
     required this.month,
     required this.dayOfWeek,
     this.isToday = false,
+    required this.date,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final datePickerController = Get.find<AllJobViewModel>();
-    final allJobVM = Get.put(AllJobViewModel());
+
+    // bool isSelected = datePickerController.selectedDate.value?.day == day &&
+    //     datePickerController.selectedDate.value?.month == date.month &&
+    //     datePickerController.selectedDate.value?.year == date.year;
+
+    bool isSelected = datePickerController.selectedDate.value?.day == day;
 
     return GestureDetector(
       onTap: () {
-        datePickerController.selectDate(DateTime(allJobVM.now.year, allJobVM.now.month, day));
+       // datePickerController.selectDate(DateTime(datePickerController.now.year, datePickerController.now.month, day));
+        datePickerController.selectDate(DateTime(date.year, date.month, day));
+
       },
 
       child: Container(
         decoration: BoxDecoration(
-            color: isToday ? AppColor.blueColorShade800 : AppColor.applicationColor,
-          borderRadius: BorderRadius.all(Radius.circular(5))
+            color: isSelected ? Colors.green : (isToday ? AppColor.blueColorShade800 : AppColor.applicationColor),
+            borderRadius: BorderRadius.all(Radius.circular(5))
         ),
         margin: const EdgeInsets.symmetric(vertical: 5,horizontal: 5),
 
-        width: 60,
+        width: 65,
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

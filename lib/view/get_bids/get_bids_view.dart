@@ -4,10 +4,12 @@ import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dar
 import 'package:celient_project/res/components/widgets/cards/all_bid_card.dart';
 import 'package:celient_project/res/components/widgets/exception/general_exception.dart';
 import 'package:celient_project/res/components/widgets/exception/internet_exceptions_widget.dart';
+import 'package:celient_project/view_model/controller/all_jobs/all_jobs_view_model.dart';
 import 'package:celient_project/view_model/controller/get_bids/get_bids_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class GetBidView extends StatefulWidget {
   const GetBidView({Key? key}) : super(key: key);
@@ -18,6 +20,7 @@ class GetBidView extends StatefulWidget {
 
 class _GetBidViewState extends State<GetBidView> {
   final getBidsVM = Get.put(GetBidsController());
+  final allJobVM = Get.put(AllJobViewModel());
   DateTime? parsedDatedeliver;
   DateTime? parsedDatepickup;
 
@@ -32,11 +35,24 @@ class _GetBidViewState extends State<GetBidView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.offWhite,
-      appBar:  const CustomAppBar(
+      appBar:   CustomAppBar(
+        icon: true,
         actionIcon: false,
         action: [Text('')],
-        title: 'Your Bids',
-        leadingIcon: SizedBox(),
+        title: 'Pending Bids',
+        leadingIcon: IconButton(onPressed: (){
+          allJobVM.offset = 0; // Reset the offset to 0
+          allJobVM.loadsList.value.data = []; // Clear the list of jobs
+          // allJobVM.loadsList
+          //     .refresh(); // Notify listeners to rebuild the view and clear the previous data
+           allJobVM.setRxRequestStatus(Status.LOADING);
+           allJobVM.userListApi();
+          Get.back();
+        }, icon: Icon(
+          MdiIcons.arrowLeft,
+          size: 30,
+          color: AppColor.blackColor,
+        ),),
       ),
       body: SafeArea(child: Obx(() {
         switch (getBidsVM.rxRequestStatus.value) {
@@ -90,30 +106,8 @@ class _GetBidViewState extends State<GetBidView> {
                             }
                           }
 
-                          // try {
-                          //   parsedDatedeliver =
-                          //       DateFormat('yyyy-MM-dd HH:mm:ss').parse(
-                          //           getBidsVM.bidsList.value.data![index]
-                          //               .deliveryDate
-                          //               .toString());
-                          // } catch (e) {
-                          //   print('Failed to parse date: $e');
-                          //   // Handle the error in a way that makes sense for your application
-                          // }
-                          //
-                          // try {
-                          //   parsedDatepickup = DateFormat('yyyy-MM-dd HH:mm:ss')
-                          //       .parse(getBidsVM
-                          //           .bidsList.value.data![index].pickupDate
-                          //           .toString());
-                          // } catch (e) {
-                          //   print('Failed to parse date: $e');
-                          //   // Handle the error in a way that makes sense for your application
-                          // }
                           return BidCard(
-                            // month: DateFormat('MMMM').format(parsedDatepickup!),
-                            // date: DateFormat('d').format(parsedDatepickup!),
-                            // day: DateFormat('EEEE').format(parsedDatepickup!),
+                            roundButtonText: "DECLINE",
                             month: parsedDatepickup != null
                                 ? DateFormat('MMMM').format(parsedDatepickup!)
                                 : "no month",
@@ -142,7 +136,8 @@ class _GetBidViewState extends State<GetBidView> {
                             type: getBidsVM
                                 .bidsList.value.data![index].vehicleTypes
                                 .toString(),
-                            piece: '5',
+                            piece: getBidsVM.bidsList.value.data![index].pieces
+                                .toString(),
                             deliveryDay:
                                 // DateFormat('EEEE').format(parsedDatedeliver!),
                             parsedDatedeliver != null
@@ -164,9 +159,12 @@ class _GetBidViewState extends State<GetBidView> {
                             dimension: getBidsVM
                                 .bidsList.value.data![index].dims
                                 .toString(),
-                            stackable: 'Yes',
-                            hazardous: 'No',
-                            dockLevel: 'No',
+                            stackable: getBidsVM.bidsList.value.data![index].stackable
+                                .toString(),
+                            hazardous: getBidsVM.bidsList.value.data![index].hazardous
+                                .toString(),
+                            dockLevel: getBidsVM.bidsList.value.data![index].dockLevel
+                                .toString(),
                             note: getBidsVM.bidsList.value.data![index].message
                                 .toString(),
                             onPress: (){

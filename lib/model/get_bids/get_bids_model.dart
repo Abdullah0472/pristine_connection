@@ -44,6 +44,11 @@ class Data {
   int? loadId;
   String? vehicleInfo;
   String? amount;
+  int? pieces;
+  String? stackable;
+  String? hazardous;
+  String? dockLevel;
+  String? notes;
 
   Data(
       {this.bidId,
@@ -58,7 +63,13 @@ class Data {
         this.message,
         this.loadId,
         this.vehicleInfo,
-        this.amount});
+        this.amount,
+        this.pieces,
+        this.stackable,
+        this.hazardous,
+        this.dockLevel,
+        this.notes,
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     bidId = json['bid_id'];
@@ -74,6 +85,11 @@ class Data {
     loadId = json['load_id'];
     vehicleInfo = json['vehicle_info'];
     amount = json['amount'];
+    pieces = json['pieces'];
+    stackable = json['stackable'];
+    hazardous = json['hazardous'];
+    dockLevel = json['dock_level'];
+    notes = json['notes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +107,12 @@ class Data {
     data['load_id'] = this.loadId;
     data['vehicle_info'] = this.vehicleInfo;
     data['amount'] = this.amount;
+    data['pieces'] = this.pieces;
+    data['stackable'] = this.stackable;
+    data['hazardous'] =this.hazardous;
+    data['dock_level'] = this.dockLevel;
+    data['notes'] = this.notes;
+
     return data;
   }
 }

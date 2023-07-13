@@ -3,16 +3,18 @@ import 'package:celient_project/res/components/widgets/buttons/round_button_widg
 import 'package:celient_project/res/components/widgets/dialoge_box/job_bid_dialogue.dart';
 import 'package:celient_project/res/components/widgets/text/expanded_text.dart';
 import 'package:celient_project/view/detail/detail_view.dart';
+import 'package:celient_project/view_model/controller/all_jobs/all_jobs_view_model.dart';
 import 'package:celient_project/view_model/controller/card/card_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AllJobCards extends StatelessWidget {
-  final String date;
-  final String day;
-  final String month;
-  final String orderNo;
+  final String pickUpdate;
+  final String pickUpday;
+  final String pickUpmonth;
+  final String loadId;
   final RxString price;
   final String pickupAddress;
   final String deliverAddress;
@@ -31,10 +33,10 @@ class AllJobCards extends StatelessWidget {
   final CardController _cardController = Get.put(CardController());
   AllJobCards({
     Key? key,
-    required this.date,
-    required this.day,
-    required this.month,
-    required this.orderNo,
+    required this.pickUpdate,
+    required this.pickUpday,
+    required this.pickUpmonth,
+    required this.loadId,
     required this.price,
     required this.pickupAddress,
     required this.deliverAddress,
@@ -54,6 +56,7 @@ class AllJobCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final allJobVM = Get.put(AllJobViewModel());
     return Obx(() {
       return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -100,7 +103,7 @@ class AllJobCards extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  date,
+                                  pickUpdate,
                                   style: const TextStyle(
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.bold,
@@ -112,7 +115,7 @@ class AllJobCards extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  day,
+                                  pickUpday,
                                   style: const TextStyle(
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.w400,
@@ -130,7 +133,7 @@ class AllJobCards extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  month,
+                                  pickUpmonth,
                                   style: const TextStyle(
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.w400,
@@ -162,7 +165,7 @@ class AllJobCards extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      orderNo as String,
+                                      loadId as String,
                                       style: const TextStyle(
                                         color: AppColor.appBarColor,
                                         fontWeight: FontWeight.w700,
@@ -172,35 +175,46 @@ class AllJobCards extends StatelessWidget {
                                     const SizedBox(
                                       width: 100,
                                     ),
-                                    Container(
-                                      width: 90,
-                                      height: 30,
-                                      decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          color: AppColor.blueColorShade800),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          const Icon(
-                                            MdiIcons.currencyUsd,
-                                            size: 25,
-                                            color: AppColor.whiteColor,
-                                          ),
-                                          Text(
-                                            price.value,
-                                            style: const TextStyle(
-                                              color: AppColor.whiteColor,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+
+                                    // Container(
+                                    //   width: 90,
+                                    //   height: 30,
+                                    //   decoration: const BoxDecoration(
+                                    //       borderRadius: BorderRadius.all(
+                                    //           Radius.circular(20)),
+                                    //       color: AppColor.blueColorShade800),
+                                    //   child: Row(
+                                    //     mainAxisAlignment:
+                                    //         MainAxisAlignment.center,
+                                    //     crossAxisAlignment:
+                                    //         CrossAxisAlignment.center,
+                                    //     children: [
+                                    //       const Icon(
+                                    //         MdiIcons.currencyUsd,
+                                    //         size: 25,
+                                    //         color: AppColor.whiteColor,
+                                    //       ),
+                                    //       // Text(
+                                    //       //   price.value,
+                                    //       //   style: const TextStyle(
+                                    //       //     color: AppColor.whiteColor,
+                                    //       //     fontWeight: FontWeight.w500,
+                                    //       //     fontSize: 20,
+                                    //       //   ),
+                                    //       // ),
+                                    //      Text(
+                                    //         allJobVM.bidController.value.text,
+                                    //         style: const TextStyle(
+                                    //           color: AppColor.whiteColor,
+                                    //           fontWeight: FontWeight.w500,
+                                    //           fontSize: 20,
+                                    //         ),
+                                    //       )
+                                    //
+                                    //
+                                    //     ],
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                                 const Text(
@@ -309,7 +323,6 @@ class AllJobCards extends StatelessWidget {
                                         color: AppColor.greyColor,
                                       ),
                                       infoColumn("Pieces", piece),
-
                                     ],
                                   ),
                                 ),
@@ -340,7 +353,8 @@ class AllJobCards extends StatelessWidget {
                                 ),
                                 IntrinsicHeight(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
@@ -369,7 +383,12 @@ class AllJobCards extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return JobBidDialogBox(vehicleType: type, comment: note, loadId: orderNo,);
+                        return JobBidDialogBox(
+                          vehicleType: type,
+                          comment: note,
+                          loadId: loadId,
+                          jobVM: AllJobViewModel(),
+                        );
                       },
                     );
                   },
@@ -401,45 +420,6 @@ class AllJobCards extends StatelessWidget {
                   ),
                 ),
               ),
-              // Positioned(
-              //     bottom: 5,
-              //     left: 25,
-              //     child: RoundButton(
-              //       title: "DETAILS",
-              //       onPress: () {
-              //         Get.to(() => DetailView(
-              //               pickupName: "",
-              //               pickupAddress: pickupAddress,
-              //               piece: piece,
-              //               dims: dimension,
-              //               weight: weight,
-              //               deliveryName: "",
-              //               deliveryAddress: deliverAddress,
-              //               orderNo: orderNo,
-              //               price: price,
-              //               date: date,
-              //               day: day,
-              //               year: month,
-              //               deliveryDay: deliveryDay,
-              //               deliveryDate: deliveryDate,
-              //               deliveryYear: deliveryYear,
-              //             ));
-              //       },
-              //       height: 50,
-              //       width: 150,
-              //       buttonColor: AppColor.appBarColor,
-              //     )),
-              // Positioned(
-              //     bottom: 5,
-              //     right: 85, //25
-              //     child: RoundButton(
-              //       title: "ACCEPT",
-              //       onPress: () {
-              //
-              //       },
-              //       height: 50,
-              //       width: 150,
-              //     )),
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:celient_project/view/all_job/all_job_view.dart';
+import 'package:celient_project/view/assign_bids/assign_bids_view.dart';
 import 'package:celient_project/view/bottomNavigationBar/bottomNavigationBar_view.dart';
 import 'package:celient_project/view/forget_password/forget_password_view.dart';
 import 'package:celient_project/view/get_bids/get_bids_view.dart';
@@ -88,6 +89,13 @@ class AppRoutes {
       page: () =>  GetBidView(),
       transitionDuration: const Duration(milliseconds: 250),
       transition: Transition.rightToLeftWithFade,
+    ),
+
+    GetPage(
+      name: RouteName.assignBidView,
+      page: () =>  AssignBidView(),
+      transitionDuration: const Duration(milliseconds: 250),
+      transition: Transition.leftToRightWithFade,
     ),
 
       ];

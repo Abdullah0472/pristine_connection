@@ -118,51 +118,51 @@ class NetworkApiServices extends BaseApiServices {
     return responseJson;
   }
 
-  // dynamic returnResponse(http.Response response) {
-  //
-  //   switch (response.statusCode) {
-  //     case 200:
-  //       dynamic responseJson = jsonDecode(response.body);
-  //       return responseJson;
-  //     case 400:
-  //       dynamic responseJson = jsonDecode(response.body);
-  //       return responseJson;
-  //     case 401:
-  //       dynamic responseJson = jsonDecode(response.body);
-  //       return responseJson;
-  //     case 404:
-  //       dynamic responseJson = jsonDecode(response.body);
-  //       return responseJson;
-  //     case 405:
-  //       dynamic responseJson = jsonDecode(response.body);
-  //       return responseJson;
-  //     case 500:
-  //       dynamic responseJson = jsonDecode(response.body);
-  //       return responseJson;
-  //
-  //     default:
-  //       throw FetchDataException(
-  //           'Error accoured while communicating with server ' +
-  //               response.statusCode.toString());
-  //   }
-  // }
-
   dynamic returnResponse(http.Response response) {
-    dynamic responseJson = jsonDecode(response.body);
+
     switch (response.statusCode) {
       case 200:
+        dynamic responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
       case 401:
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
       case 404:
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
       case 405:
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
       case 500:
-        throw ApiException(responseJson['message'] ?? "Error");
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
+
       default:
         throw FetchDataException(
-            'Error occurred while communicating with server ' +
+            'Error accoured while communicating with server ' +
                 response.statusCode.toString());
     }
   }
+
+  // dynamic returnResponse(http.Response response) {
+  //   dynamic responseJson = jsonDecode(response.body);
+  //   switch (response.statusCode) {
+  //     case 200:
+  //       return responseJson;
+  //     case 400:
+  //     case 401:
+  //     case 404:
+  //     case 405:
+  //     case 500:
+  //       throw ApiException(responseJson['message'] ?? "Error");
+  //     default:
+  //       throw FetchDataException(
+  //           'Error occurred while communicating with server ' +
+  //               response.statusCode.toString());
+  //   }
+  // }
 
 }
