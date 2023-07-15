@@ -1,13 +1,11 @@
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/buttons/card_button.dart';
-import 'package:celient_project/view/load_detail/load_detail_view.dart';
 import 'package:celient_project/view/load_detail_tabBar/load_detail_tabBar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoadCards extends StatelessWidget {
-  final String refNumber;
-  final String currentAddress;
+  final String loadId;
   final String dateTime;
   final String piece;
   final String dims;
@@ -22,8 +20,7 @@ class LoadCards extends StatelessWidget {
 
   const LoadCards(
       {Key? key,
-      required this.refNumber,
-      required this.currentAddress,
+      required this.loadId,
       required this.dateTime,
       required this.piece,
       required this.dims,
@@ -72,7 +69,7 @@ class LoadCards extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'invia Ref.# $refNumber',
+                        'Load Id. $loadId',
                         style: const TextStyle(
                           fontStyle: FontStyle.normal,
                           fontWeight: FontWeight.w400,
@@ -104,8 +101,8 @@ class LoadCards extends StatelessWidget {
                     title: 'More',
                     onPress: () {
                       Get.to(() => loadDetailTabBarView(
-                            refNumber: refNumber,
-                            currentAddress: currentAddress,
+                            loadId: loadId,
+                            currentAddress: pickupAddress,
                             dateTime: dateTime,
                             piece: piece,
                             weight: weight,
@@ -131,7 +128,7 @@ class LoadCards extends StatelessWidget {
                 thickness: 2,
               ),
               const Text(
-                'Current Location',
+                'PickUp Location',
                 style: TextStyle(
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w400,
@@ -140,7 +137,7 @@ class LoadCards extends StatelessWidget {
                 ),
               ),
               Text(
-                currentAddress,
+                pickupAddress,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                   fontStyle: FontStyle.normal,

@@ -6,6 +6,7 @@ import 'package:celient_project/repository/user_profile_repository/user_profile_
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../utils/utils.dart';
 
 class ProfileViewModel extends GetxController {
@@ -40,6 +41,9 @@ class ProfileViewModel extends GetxController {
   void setUserList(UserModel _value) => userList.value = _value;
   void setError(String _value) => error.value = _value;
 
+  RefreshController refreshController = RefreshController();
+
+
   void userListApi() {
     //  setRxRequestStatus(Status.LOADING);
     _api.userListApi().then((value) {
@@ -51,9 +55,8 @@ class ProfileViewModel extends GetxController {
     });
   }
 
-  void refreshApi() {
+   refreshApi() {
     setRxRequestStatus(Status.LOADING);
-
     _api.userListApi().then((value) {
       setRxRequestStatus(Status.COMPLETED);
       setUserList(value);

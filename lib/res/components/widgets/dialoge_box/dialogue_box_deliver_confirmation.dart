@@ -2,6 +2,8 @@ import 'package:celient_project/res/components/widgets/buttons/round_button_widg
 import 'package:celient_project/utils/utils.dart';
 import 'package:celient_project/view/unloaded/unloaded_view.dart';
 import 'package:celient_project/view_model/controller/button/button_view_model.dart';
+import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
+import 'package:celient_project/view_model/controller/trip_status/trip_status_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../colors/colors.dart';
@@ -11,15 +13,18 @@ class DialogeBoxDeliveryConfirmation extends StatelessWidget {
   final String title;
   final String piece;
   final String totalWeight;
+  final String loadId;
+  final String status;
   final ButtonController buttonController = Get.put(ButtonController());
 
   DialogeBoxDeliveryConfirmation({
     Key? key,
     required this.deliverAddress, required this.piece,required this.totalWeight,
-    required this.title,
+    required this.title, required this.loadId, required this.status,
 
   }) : super(key: key);
-
+  final tripStatusVM = Get.put(TripStatusViewModel());
+  final currentTripVM = Get.put(CurrentTripController());
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -75,7 +80,9 @@ class DialogeBoxDeliveryConfirmation extends StatelessWidget {
                       child: RoundButton(
                           textColor: AppColor.textColor,
                           title: "No",
-                          onPress: () {},
+                          onPress: () {
+                            Get.back();
+                          },
                           buttonColor: AppColor.offWhite,
                           width: 50),
                     ),
@@ -85,14 +92,20 @@ class DialogeBoxDeliveryConfirmation extends StatelessWidget {
                         textColor: AppColor.textColor,
                         buttonColor: AppColor.offWhite,
                         width: 50,
-                        onPress: () {
-                          Utils.snackBar("Status Changed", "Successfully");
-                          buttonController.buildUnloadButton(() {
-                                 // Get.toNamed(RouteName.unloadedView);
-                            Get.to(()=> Scaffold(body: UnloadedView()));
-                          });
-                          Navigator.of(context).pop();
-                        },
+
+                          onPress: () async {
+                            tripStatusVM.tripDeliveryStatusApi(loadId, status, piece, totalWeight, deliverAddress);
+
+                            // Assuming that you have access to CurrentTripController in DialogeBoxConfirmation
+                            // Call currentTripListApi() after calling tripStatusApi()
+                            // Make sure to handle any potential exceptions and consider using a loading state for better UX
+                            await currentTripVM.currentTripListApi();
+
+                            // Update the button based on the new status
+                           // buttonController.updateButton();
+
+                            Navigator.of(context).pop();
+                          }
                       ),
                     ),
 

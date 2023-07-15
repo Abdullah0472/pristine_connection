@@ -2,13 +2,13 @@ import 'package:celient_project/res/colors/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoadDetailCards extends StatelessWidget {
-  final String refNumber;
+  final String loadId;
   final String currentAddress;
   final String dateTime;
   final String pieces;
  final String dims;
  final String weight;
-  const LoadDetailCards({Key? key, required this.refNumber, required this.currentAddress, required this.dateTime, required this.pieces, required this.dims, required this.weight}) : super(key: key);
+  const LoadDetailCards({Key? key, required this.loadId, required this.currentAddress, required this.dateTime, required this.pieces, required this.dims, required this.weight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class LoadDetailCards extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'invia Ref.# $refNumber',
+                'Load Id. $loadId',
                 style: const TextStyle(
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w400,

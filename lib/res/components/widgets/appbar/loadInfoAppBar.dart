@@ -7,11 +7,11 @@ import '../../../colors/colors.dart';
 
 class LoadDetailTabBar extends StatelessWidget implements PreferredSizeWidget {
   final double appBarHeight = 120.0;
-  final String refNumber;
+  final String loadId;
 
   const LoadDetailTabBar({
     Key? key,
-    required this.refNumber,
+    required this.loadId,
   }) : super(key: key);
 
   @override
@@ -86,7 +86,7 @@ class LoadDetailTabBar extends StatelessWidget implements PreferredSizeWidget {
             },
           ),
           title: Text(
-            'invia Ref.# $refNumber',
+            'Load Id. $loadId',
             style: const TextStyle(
               color: AppColor.blackColor,
               fontSize: 20,

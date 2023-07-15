@@ -7,6 +7,7 @@ import 'package:celient_project/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AllJobViewModel extends GetxController {
   final radiusController = TextEditingController().obs;
@@ -14,6 +15,8 @@ class AllJobViewModel extends GetxController {
   final bidController = TextEditingController().obs;
   final messageController = TextEditingController().obs;
   final vehicleTypeController = TextEditingController().obs;
+
+  RefreshController refreshController = RefreshController();
 
   RxString price = '0'.obs;
 
@@ -153,7 +156,7 @@ class AllJobViewModel extends GetxController {
     }
   }
 
-  void refreshApi() {
+   refreshApi() {
     setRxRequestStatus(Status.LOADING);
     Map<String, dynamic> data = {
       'date': selectedDate.value != null
@@ -164,6 +167,11 @@ class AllJobViewModel extends GetxController {
     isLoadingNextOffset.value = true;
     _api.loadsApi(data).then((value) {
       setRxRequestStatus(Status.COMPLETED);
+      if (value.data != null) {
+        hasMoreData.value = value.data!.length >= 10;
+      } else {
+        hasMoreData.value = false;
+      }
       appendLoadsList(value); // call appendLoadsList instead of setLoadsList
       isLoadingNextOffset.value = false;
     }).onError((error, stackTrace) {

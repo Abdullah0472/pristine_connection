@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:celient_project/repository/upload_loaded_repository/upload_loaded_repository.dart';
 import 'package:celient_project/res/colors/colors.dart';
+import 'package:celient_project/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,6 +26,8 @@ class loadDetailViewModel extends GetxController {
   final bolNumberFocusNode = FocusNode().obs;
   final unloadByFocusNode = FocusNode().obs;
 
+  final _api = UploadLoadedRepository();
+
   final List<Rx<File>> imageFiles = [
     Rx<File>(File('')), // For the first container
     Rx<File>(File('')), // For the second container
@@ -31,28 +36,14 @@ class loadDetailViewModel extends GetxController {
     Rx<File>(File('')), // For the fifth container
     Rx<File>(File('')), // For the sixth container
     Rx<File>(File('')), // For the seventh container
-
-
   ];
 
 
   final picker = ImagePicker();
 
-  // Future<String> imgFromGallery(int containerIndex) async {
-  //   final pickedFile = await picker.pickImage(
-  //     source: ImageSource.gallery,
-  //     imageQuality: 50,
-  //   );
-  //
-  //   if (pickedFile != null) {
-  //     await cropImage(File(pickedFile.path), containerIndex);
-  //     String imagePath = File(pickedFile.path).path;
-  //     print('Gallery Image Path: $imagePath');
-  //     return imagePath;
-  //   }
-  //
-  //   return ''; // Return a default value if no image is selected
-  // }
+
+  RxString bolPicPath = ''.obs;
+  RxString freightPicPath = ''.obs;
 
 
   Future<String> imgFromGallery(int containerIndex) async {
@@ -70,21 +61,6 @@ class loadDetailViewModel extends GetxController {
     return ''; // Return a default value if no image is selected
   }
 
-  // Future<String> imgFromCamera(int containerIndex) async {
-  //   final pickedFile = await picker.pickImage(
-  //     source: ImageSource.camera,
-  //     imageQuality: 50,
-  //   );
-  //
-  //   if (pickedFile != null) {
-  //     await cropImage(File(pickedFile.path), containerIndex);
-  //     String imagePath = File(pickedFile.path).path;
-  //     print('Camera Image Path: $imagePath');
-  //     return imagePath;
-  //   }
-  //
-  //   return ''; // Return a default value if no image is captured
-  // }
 
   Future<String> imgFromCamera(int containerIndex) async {
     final pickedFile = await picker.pickImage(
@@ -139,10 +115,7 @@ class loadDetailViewModel extends GetxController {
         ),
       ],
     );
-    // if (croppedFile != null) {
-    //   imageCache.clear();
-    //   imageFiles[containerIndex].value = File(croppedFile.path);
-    // }
+
 
     if (croppedFile != null) {
       imageCache.clear();
@@ -153,4 +126,47 @@ class loadDetailViewModel extends GetxController {
 
 
   }
+
+
+  void uploadLoadApi(String bolPic, String freightPic, String loadId) async {
+    try {
+        final bolPicFile = File(bolPic);
+        final bolPicExtension = bolPic.split(".").last;
+        final bolPicBytes = await bolPicFile.readAsBytes();
+        final bolPicBase64 = 'data:image/$bolPicExtension;base64,${base64Encode(bolPicBytes)}';
+
+
+        final freightPicFile = File(freightPic);
+        final freightPicExtension = freightPic.split(".").last;
+        final freightPicBytes = await freightPicFile.readAsBytes();
+        final freightPicBase64 = 'data:image/$freightPicExtension;base64,${base64Encode(freightPicBytes)}';
+
+        Map<String, dynamic> data = {
+          'bol_pic': bolPicBase64,
+          'freight_pic': freightPicBase64,
+          'load_id': loadId,
+          'weight': totalWeightController.value.text,
+          'pieces': pieceController.value.text,
+          'bol_number': bolNumberController.value.text,
+        };
+
+
+      final response = await _api.uploadData(data);
+
+      if (response['status_code'] == 200) {
+        Utils.snackBar('Load Data Uploaded', 'Successfully');
+      } else {
+        Utils.snackBar('Failed to Upload Load data', 'Server responded with status code: ${response['status_code']}');
+        print('The error is Loading data  $response');
+      }
+
+    } catch (e) {
+      Utils.snackBar('Failed to Upload Loading Data', 'An error occurred while uploading load data: ${e.toString()}');
+      print('The error is Uploading load data  ${e.toString()}');
+      return; // End the function
+    }
+  }
+
+
+
 }

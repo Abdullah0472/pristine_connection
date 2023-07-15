@@ -1,3 +1,4 @@
+import 'package:celient_project/model/current_trip/current_trip_model.dart';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/cards/load_detail_card.dart';
@@ -5,11 +6,13 @@ import 'package:celient_project/res/components/widgets/cards/load_detail_general
 import 'package:celient_project/res/components/widgets/cards/load_detail_route_card.dart';
 import 'package:celient_project/res/components/widgets/dialoge_box/dialoge_box_confirmation.dart';
 import 'package:celient_project/view_model/controller/button/button_view_model.dart';
+import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
+import 'package:celient_project/view_model/controller/load_status_view_model/load_status_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoadDetailView extends StatelessWidget {
-  final String refNumber;
+  final String loadId;
   final String currentAddress;
   final String dateTime;
   final String piece;
@@ -24,7 +27,7 @@ class LoadDetailView extends StatelessWidget {
   final String deliveryDateTime;
   LoadDetailView(
       {Key? key,
-      required this.refNumber,
+      required this.loadId,
       required this.currentAddress,
       required this.dateTime,
       required this.piece,
@@ -40,10 +43,59 @@ class LoadDetailView extends StatelessWidget {
       : super(key: key);
 
   final ButtonController buttonController = Get.put(ButtonController());
-
+  final currentTripVM = Get.put(CurrentTripController());
+  LoadStatusPrefernce loadStatuses = LoadStatusPrefernce();
   @override
   Widget build(BuildContext context) {
-    buttonController.setInitialButton(() {
+    // final loadStatus = currentTripVM.currentTripList.value.data![0].loadStatus;
+// final loadStatus = loadStatuses.getLoadStatus();
+// Future<void> updatedButton() async {
+//   final loadStatus = await loadStatuses.getLoadStatus();
+//
+//   // Add your switch-case logic here to update the button based on the loadStatus
+//   switch (loadStatus) {
+//     case 'started':
+//       buttonController.setInitialButton(() {
+//         showDialog(
+//           context: context,
+//           builder: (BuildContext context) {
+//             return DialogeBoxConfirmation(
+//               deliverAddress: deliveryAddress,
+//               title: 'Did you arrive to the Pick-up Address Below?',
+//               pickupAddress: pickupAddress,
+//               piece: piece,
+//               totalWeight: weight,
+//               loadId: loadId,
+//               status: 'pickup',
+//             );
+//           },
+//         );
+//       });
+//       break;
+//     case 'pickup':
+//       buttonController.buildUpdatedButton(() {
+//         // Handle the button press for 'pickup' load status
+//       });
+//       break;
+//     case 'in-transit':
+//       buttonController.buildArrivedButton(() {
+//         // Handle the button press for 'in-transit' load status
+//       });
+//       break;
+//     case 'customer':
+//       buttonController.buildUnloadButton(() {
+//         // Handle the button press for 'customer' load status
+//       });
+//       break;
+//     default:
+//       buttonController.setInitialButton(() {
+//         // Handle the button press for other load statuses
+//       });
+//       break;
+//   }
+// }
+
+buttonController.setInitialButton(() {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -53,6 +105,8 @@ class LoadDetailView extends StatelessWidget {
             pickupAddress: pickupAddress,
             piece: piece,
             totalWeight: weight,
+            loadId: loadId,
+            status: 'pickup',
           );
         },
       );
@@ -69,7 +123,7 @@ class LoadDetailView extends StatelessWidget {
             ),
             LoadDetailCards(
               dateTime: dateTime,
-              refNumber: refNumber,
+              loadId: loadId,
               currentAddress: currentAddress,
               pieces: piece,
               dims: dims,
@@ -97,12 +151,101 @@ class LoadDetailView extends StatelessWidget {
               deliveryAddress: deliveryAddress,
               deliveryTime: deliveryDateTime,
             ),
-
             SizedBox(
               height: 40,
             ),
 
-            Obx(() => buttonController.button.value),
+              Obx(() => buttonController.button.value),
+
+            // FutureBuilder<String?>(
+            //   future: loadStatuses.getLoadStatus(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.connectionState == ConnectionState.waiting) {
+            //       return CircularProgressIndicator();
+            //     } else if (snapshot.hasError) {
+            //       // Handle error case
+            //       return Text('Error: ${snapshot.error}');
+            //     } else {
+            //       final loadStatus = snapshot.data;
+            //
+            //       // Add your switch-case logic here to update the button based on the loadStatus
+            //       switch (loadStatus) {
+            //         case 'started':
+            //           print(loadStatus);
+            //           buttonController.setInitialButton(() {
+            //             showDialog(
+            //               context: context,
+            //               builder: (BuildContext context) {
+            //                 return DialogeBoxConfirmation(
+            //                   deliverAddress: deliveryAddress,
+            //                   title: 'Did you arrive to the Pick-up Address Below?',
+            //                   pickupAddress: pickupAddress,
+            //                   piece: piece,
+            //                   totalWeight: weight,
+            //                   loadId: loadId,
+            //                   status: 'pickup',
+            //                 );
+            //               },
+            //             );
+            //             loadStatuses
+            //                 .saveLoadStatus('pickup')
+            //                 .then((value) {
+            //               // You could do something here after saving, or simply do nothing
+            //             })
+            //                 .onError((error, stackTrace) {
+            //               // Log or handle error here
+            //              // setError(error.toString());
+            //             });
+            //           });
+            //           break;
+            //         case 'pickup':
+            //           buttonController.buildUpdatedButton(() {
+            //             // Handle the button press for 'pickup' load status
+            //           });
+            //           break;
+            //         case 'in-transit':
+            //           buttonController.buildArrivedButton(() {
+            //             // Handle the button press for 'in-transit' load status
+            //           });
+            //           break;
+            //         case 'customer':
+            //           buttonController.buildUnloadButton(() {
+            //             // Handle the button press for 'customer' load status
+            //           });
+            //           break;
+            //         default:
+            //           buttonController.setInitialButton(() {
+            //             showDialog(
+            //               context: context,
+            //               builder: (BuildContext context) {
+            //                 return DialogeBoxConfirmation(
+            //                   deliverAddress: deliveryAddress,
+            //                   title:
+            //                       'Did you arrive to the Pick-up Address Below?',
+            //                   pickupAddress: pickupAddress,
+            //                   piece: piece,
+            //                   totalWeight: weight,
+            //                   loadId: loadId,
+            //                   status: 'pickup',
+            //                 );
+            //               },
+            //             );
+            //             loadStatuses.saveLoadStatus('pickup').then((value) {
+            //               // You could do something here after saving, or simply do nothing
+            //             }).onError((error, stackTrace) {
+            //               // Log or handle error here
+            //               // setError(error.toString());
+            //             });
+            //           });
+            //           break;
+            //       }
+            //
+            //       return SizedBox(
+            //         height: 20,
+            //       );
+            //     }
+            //   },
+            // ),
 
             SizedBox(
               height: 20,

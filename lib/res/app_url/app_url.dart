@@ -13,4 +13,9 @@ class AppUrl {
   static const String getBidApi = '$baseUrl/api/get/bids' ;
   static const String cancelBidApi = '$baseUrl/api/cancel/bid' ;
   static const String assignBidApi = '$baseUrl/api/get/assigned' ;
+  static const String startTripApi = '$baseUrl/api/start/trip';
+  static const String tripStatusApi = '$baseUrl/api/trip/status';
+  static const String currentTripApi = '$baseUrl/api/current/trip';
+  static const String uploadDataApi = '$baseUrl/api/load/data';
+  static const String uploadUnloadDataApi = '$baseUrl/api/unload/data';
 }

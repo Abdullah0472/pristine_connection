@@ -1,7 +1,9 @@
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
+import 'package:celient_project/res/routes/routes_name.dart';
 import 'package:celient_project/utils/utils.dart';
 import 'package:celient_project/view/unloaded/unloaded_view.dart';
 import 'package:celient_project/view_model/controller/button/button_view_model.dart';
+import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../colors/colors.dart';
@@ -12,6 +14,8 @@ class DialogeBoxCongrats extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  final currentTripVM = Get.put(CurrentTripController());
+
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -63,9 +67,13 @@ class DialogeBoxCongrats extends StatelessWidget {
                   textColor: AppColor.textColor,
                   buttonColor: AppColor.offWhite,
                   width: 100,
-                  onPress: () {
+                  onPress: () async {
                     Utils.snackBar("Status Changed", "Successfully");
-                    Get.close(3);
+                    await currentTripVM.currentTripListApi();
+
+                    Get.toNamed(RouteName.homeView);
+                    //Get.close(3);
+
 
                   },
                 )

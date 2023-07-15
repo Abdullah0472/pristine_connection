@@ -7,22 +7,31 @@ import 'package:celient_project/res/components/widgets/buttons/round_button_widg
 import 'package:celient_project/res/components/widgets/dialoge_box/dialoge_box_congrats.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_laod_info.dart';
 import 'package:celient_project/view_model/controller/button/button_view_model.dart';
+import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
 import 'package:celient_project/view_model/controller/loadDetail/loadDetail_view_model.dart';
+import 'package:celient_project/view_model/controller/unloaded/unloaded_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class UnloadedView extends StatelessWidget {
+  final String loadId;
   final ButtonController buttonController = Get.put(ButtonController());
 
   UnloadedView({
-    Key? key,
+    Key? key, this.loadId = "",
   }) : super(key: key);
+  final unloadVM = Get.put(UnloadDataViewModel());
   final loadVM = Get.put(loadDetailViewModel());
+  final currentTripVM = Get.put(CurrentTripController());
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: AppColor.offWhite,
       appBar: CustomAppBar(
         icon: false,
@@ -40,7 +49,7 @@ class UnloadedView extends StatelessWidget {
                 height: 15,
               ),
               const Text(
-                'UNLOADING BY',
+                'RECEIVED BY',
                 style: TextStyle(
                     color: AppColor.infoTextColor,
                     fontWeight: FontWeight.w500,
@@ -60,9 +69,9 @@ class UnloadedView extends StatelessWidget {
                     children: [
                       InputReviewTextField(
                         keyboardType: true,
-                        controller: loadVM.unloadByController.value,
+                        controller: unloadVM.receiveByController.value,
                         icons: MdiIcons.truckCargoContainer,
-                        hintText: 'Unloaded By',
+                        hintText: 'Received By',
                       )
                     ],
                   ),
@@ -94,15 +103,35 @@ class UnloadedView extends StatelessWidget {
                         Permission.camera,
                       ].request();
                       if (statuses[Permission.camera]!.isGranted) {
-                        showBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            print("The button is clicked for camera");
+                        // showBottomSheet(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     print("The button is clicked for camera");
+                        //     return ShowBottom(
+                        //         containerIndex:
+                        //             2,
+                        //         onImageSelected: (String? imageUrl) {
+                        //           if (imageUrl != null) {
+                        //             unloadVM.podPath.value = imageUrl;
+                        //           }
+                        //         }
+                        //     ); // Pass the container index as 0 for the first container
+                        //   },
+                        // );
+                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                          scaffoldKey.currentState!.showBottomSheet((context) {
                             return ShowBottom(
-                                containerIndex:
-                                    2); // Pass the container index as 0 for the first container
+                                        containerIndex:
+                                            2,
+                                        onImageSelected: (String? imageUrl) {
+                                          if (imageUrl != null) {
+                                            unloadVM.podPath.value = imageUrl;
+                                          }
+                                        }
+                                    );  // Pass the container index as 0 for the first container
                           },
-                        );
+                          );
+                        });
                       } else {
                         print('No permission provided');
                         if (statuses[Permission.storage]!.isDenied ||
@@ -164,15 +193,36 @@ class UnloadedView extends StatelessWidget {
                       ].request();
 
                       if (statuses[Permission.camera]!.isGranted) {
-                        showBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            print("The button is clicked for camera");
+                        // showBottomSheet(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     print("The button is clicked for camera");
+                        //     return ShowBottom(
+                        //         containerIndex:
+                        //             3,
+                        //         onImageSelected: (String? imageUrl) {
+                        //           if (imageUrl != null) {
+                        //             unloadVM.unloadPlacePath.value = imageUrl;
+                        //           }
+                        //         }
+                        //     ); // Pass the container index as 1 for the second container
+                        //   },
+                        // );
+
+                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                          scaffoldKey.currentState!.showBottomSheet((context) {
                             return ShowBottom(
-                                containerIndex:
-                                    3); // Pass the container index as 1 for the second container
+                                        containerIndex:
+                                            3,
+                                        onImageSelected: (String? imageUrl) {
+                                          if (imageUrl != null) {
+                                            unloadVM.unloadPlacePath.value = imageUrl;
+                                          }
+                                        }
+                                    ); // Pass the container index as 0 for the first container
                           },
-                        );
+                          );
+                        });
                       } else {
                         print('No permission provided');
                         if (statuses[Permission.storage]!.isDenied ||
@@ -215,12 +265,23 @@ class UnloadedView extends StatelessWidget {
                 width: 300,
                 height: Get.height * 0.06,
                 onPress: () async {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return DialogeBoxCongrats();
-                    },
-                  );
+                  // Get the avatar image path
+                  final podPath = unloadVM.podPath.value;
+                  // Get the licence image path
+                  final unloadPlacePath = unloadVM.unloadPlacePath.value;
+
+                  unloadVM.uploadUnLoadApi(podPath, unloadPlacePath, loadId);
+
+                  await currentTripVM.currentTripListApi();
+
+                //  buttonController.updateButton();
+
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return DialogeBoxCongrats();
+                  //   },
+                  // );
                 },
                 title: 'Complete Shipment',
               ),

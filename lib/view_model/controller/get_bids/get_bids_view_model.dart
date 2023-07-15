@@ -3,10 +3,11 @@ import 'package:celient_project/model/get_bids/get_bids_model.dart';
 import 'package:celient_project/repository/get_bids_repository/get_bids_repository.dart';
 import 'package:celient_project/utils/utils.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class GetBidsController extends GetxController {
   final _api = BidsRepository();
-
+  RefreshController refreshController = RefreshController();
   final rxRequestStatus = Status.LOADING.obs;
   final bidsList = GetBidsModel().obs;
   RxString error = ''.obs;
@@ -25,7 +26,7 @@ class GetBidsController extends GetxController {
     });
   }
 
-  void refreshApi() {
+   refreshApi() {
     setRxRequestStatus(Status.LOADING);
     _api.getBidsApi().then((value) {
       setRxRequestStatus(Status.COMPLETED);

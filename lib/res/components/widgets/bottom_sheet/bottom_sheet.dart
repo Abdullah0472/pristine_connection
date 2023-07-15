@@ -7,7 +7,8 @@ class ShowBottom extends StatelessWidget {
   final loadVM = Get.put(loadDetailViewModel());
   final int containerIndex;
   final Function(String?)? onImageSelected;
-  ShowBottom({Key? key, required this.containerIndex, this.onImageSelected }) : super(key: key);
+  ShowBottom({Key? key, required this.containerIndex, this.onImageSelected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +34,22 @@ class ShowBottom extends StatelessWidget {
                     Text(
                       "Gallery",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontStyle: FontStyle.normal,
+                      style: TextStyle(
+                        fontStyle: FontStyle.normal,
                         fontWeight: FontWeight.w700,
                         color: AppColor.blackColor,
-                        fontSize: 19,),
+                        fontSize: 19,
+                      ),
                     ),
                   ],
                 ),
-
-
                 onTap: () async {
-                  String? imagePath = await loadVM.imgFromGallery(containerIndex);
+                  String? imagePath =
+                      await loadVM.imgFromGallery(containerIndex);
                   print('Gallery Image Path: $imagePath');
                   onImageSelected?.call(imagePath);
                   Get.back();
                 },
-
-
-
               ),
             ),
             Expanded(
@@ -66,24 +65,23 @@ class ShowBottom extends StatelessWidget {
                       Text(
                         "Camera",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontStyle: FontStyle.normal,
+                        style: TextStyle(
+                          fontStyle: FontStyle.normal,
                           fontWeight: FontWeight.w700,
                           color: AppColor.blackColor,
-                          fontSize: 19,),
+                          fontSize: 19,
+                        ),
                       ),
                     ],
                   ),
                 ),
-
                 onTap: () async {
-                  String? imagePath = await loadVM.imgFromCamera(containerIndex);
+                  String? imagePath =
+                      await loadVM.imgFromCamera(containerIndex);
                   print('Camera Image Path: $imagePath');
                   onImageSelected?.call(imagePath);
                   Get.back();
                 },
-
-
-
               ),
             ),
           ],
@@ -92,5 +90,3 @@ class ShowBottom extends StatelessWidget {
     );
   }
 }
-
-

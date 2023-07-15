@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
 class loadDetailTabBarView extends StatelessWidget {
-  final String refNumber;
+  final String loadId;
   final String currentAddress;
   final String dateTime;
   final String piece;
@@ -20,7 +20,7 @@ class loadDetailTabBarView extends StatelessWidget {
   final String deliveryDateTime;
   const loadDetailTabBarView(
       {Key? key,
-      required this.refNumber,
+      required this.loadId,
       required this.currentAddress,
       required this.dateTime,
       required this.piece,
@@ -41,13 +41,13 @@ class loadDetailTabBarView extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: LoadDetailTabBar(
-          refNumber: refNumber,
+          loadId: loadId,
         ),
         body: SafeArea(
           child: TabBarView(
             children: [
               LoadDetailView(
-                refNumber: refNumber,
+                loadId: loadId,
                 currentAddress: currentAddress,
                 dateTime: dateTime,
                 piece: piece,

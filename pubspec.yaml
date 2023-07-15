@@ -68,6 +68,9 @@ dependencies:
   intl: ^0.18.1
   #Image
   image: ^3.0.2
+  #Pull to Refresh
+  pull_to_refresh: ^2.0.0
+
 
 
 
