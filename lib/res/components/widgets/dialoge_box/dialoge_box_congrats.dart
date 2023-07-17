@@ -69,10 +69,10 @@ class DialogeBoxCongrats extends StatelessWidget {
                   width: 100,
                   onPress: () async {
                     Utils.snackBar("Status Changed", "Successfully");
-                    await currentTripVM.currentTripListApi();
+                 //   await currentTripVM.currentTripListApi();
 
-                    Get.toNamed(RouteName.homeView);
-                    //Get.close(3);
+                  //  Get.toNamed(RouteName.homeView);
+                    Get.close(3);
 
 
                   },

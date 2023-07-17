@@ -3,6 +3,7 @@ import 'package:celient_project/res/components/widgets/dialoge_box/dialoge_box_c
 import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 // class ButtonController extends GetxController {
 //   Rx<Widget> button = Rx<Widget>(Container());
@@ -115,6 +116,7 @@ class ButtonController extends GetxController {
   Rx<Widget> button = Rx<Widget>(Container());
   final currentTripVM = Get.put(CurrentTripController());
 
+
   void setInitialButton(void Function() onPressAction) {
     button.value = RoundButton(
       loading: false,
@@ -136,7 +138,7 @@ class ButtonController extends GetxController {
   }
 
   void buildArrivedButton(void Function() onPressAction) {
-    button.value = RoundButton(
+    button.value =  RoundButton(
       loading: false,
       width: 300,
       height: Get.height * 0.06,
@@ -155,34 +157,36 @@ class ButtonController extends GetxController {
     );
   }
 
-  // void updateButton() {
-  //   final loadStatus = currentTripVM.currentTripList.value.data![0].loadStatus;
-  //   switch (loadStatus) {
-  //     case 'started':
-  //       setInitialButton(() {
-  //         // Handle the button press for 'started' load status
-  //       });
-  //       break;
-  //     case 'pickup':
-  //       buildUpdatedButton(() {
-  //         // Handle the button press for 'pickup' load status
-  //       });
-  //       break;
-  //     case 'in-transit':
-  //       buildArrivedButton(() {
-  //         // Handle the button press for 'loaded' load status
-  //       });
-  //       break;
-  //     case 'customer':
-  //       buildUnloadButton(() {
-  //         // Handle the button press for 'delivered' load status
-  //       });
-  //       break;
-  //     default:
-  //       setInitialButton(() {
-  //         // Handle the button press for other load statuses
-  //       });
-  //       break;
-  //   }
-  // }
 }
+
+
+// void updateButton() {
+//   final loadStatus = currentTripVM.currentTripList.value.data![0].loadStatus;
+//   switch (loadStatus) {
+//     case 'started':
+//       setInitialButton(() {
+//         // Handle the button press for 'started' load status
+//       });
+//       break;
+//     case 'pickup':
+//       buildUpdatedButton(() {
+//         // Handle the button press for 'pickup' load status
+//       });
+//       break;
+//     case 'in-transit':
+//       buildArrivedButton(() {
+//         // Handle the button press for 'loaded' load status
+//       });
+//       break;
+//     case 'customer':
+//       buildUnloadButton(() {
+//         // Handle the button press for 'delivered' load status
+//       });
+//       break;
+//     default:
+//       setInitialButton(() {
+//         // Handle the button press for other load statuses
+//       });
+//       break;
+//   }
+// }

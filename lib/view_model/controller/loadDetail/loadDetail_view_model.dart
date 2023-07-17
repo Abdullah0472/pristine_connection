@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:celient_project/repository/upload_loaded_repository/upload_loaded_repository.dart';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/utils/utils.dart';
+import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
+import 'package:celient_project/view_model/controller/load_status_view_model/load_status_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,7 +17,7 @@ import 'package:image_cropper/image_cropper.dart';
 // ignore: camel_case_types
 class loadDetailViewModel extends GetxController {
   final Completer<GoogleMapController> controller = Completer();
-
+  final currentTripVM = Get.put(CurrentTripController());
   final pieceController = TextEditingController().obs;
   final totalWeightController = TextEditingController().obs;
   final bolNumberController = TextEditingController().obs;
@@ -25,6 +27,7 @@ class loadDetailViewModel extends GetxController {
   final totalWeightFocusNode = FocusNode().obs;
   final bolNumberFocusNode = FocusNode().obs;
   final unloadByFocusNode = FocusNode().obs;
+  LoadStatusPreference loadStatuses = LoadStatusPreference();
 
   final _api = UploadLoadedRepository();
 
@@ -134,8 +137,6 @@ class loadDetailViewModel extends GetxController {
         final bolPicExtension = bolPic.split(".").last;
         final bolPicBytes = await bolPicFile.readAsBytes();
         final bolPicBase64 = 'data:image/$bolPicExtension;base64,${base64Encode(bolPicBytes)}';
-
-
         final freightPicFile = File(freightPic);
         final freightPicExtension = freightPic.split(".").last;
         final freightPicBytes = await freightPicFile.readAsBytes();
@@ -155,6 +156,16 @@ class loadDetailViewModel extends GetxController {
 
       if (response['status_code'] == 200) {
         Utils.snackBar('Load Data Uploaded', 'Successfully');
+        loadStatuses
+            .saveLoadStatus('in-transit')
+            .then((value) {
+          // You could do something here after saving, or simply do nothing
+        })
+            .onError((error, stackTrace) {
+          // Log or handle error here
+          // setError(error.toString());
+        });
+
       } else {
         Utils.snackBar('Failed to Upload Load data', 'Server responded with status code: ${response['status_code']}');
         print('The error is Loading data  $response');

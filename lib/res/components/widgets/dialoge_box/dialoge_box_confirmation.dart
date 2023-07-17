@@ -96,21 +96,10 @@ class DialogeBoxConfirmation extends StatelessWidget {
                         textColor: AppColor.textColor,
                         buttonColor: AppColor.offWhite,
                         width: 50,
-                        // onPress: () {
-                        //   tripStatusVM.tripStatusApi(loadId, status,piece,totalWeight,deliverAddress);
-                        //   Navigator.of(context).pop();
-                        // },
                           onPress: () async {
                             tripStatusVM.tripStatusApi(loadId, status, piece, totalWeight, deliverAddress);
-
-                            // Assuming that you have access to CurrentTripController in DialogeBoxConfirmation
-                            // Call currentTripListApi() after calling tripStatusApi()
-                            // Make sure to handle any potential exceptions and consider using a loading state for better UX
-                            await currentTripVM.currentTripListApi();
-
-                            // Update the button based on the new status
-                           // buttonController.updateButton();
-
+                            // await currentTripVM.currentTripListApi();
+                            // currentTripVM.refreshApi();
                             Navigator.of(context).pop();
                           }
 

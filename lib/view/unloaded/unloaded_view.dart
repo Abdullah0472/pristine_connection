@@ -272,7 +272,7 @@ class UnloadedView extends StatelessWidget {
 
                   unloadVM.uploadUnLoadApi(podPath, unloadPlacePath, loadId);
 
-                  await currentTripVM.currentTripListApi();
+               //   await currentTripVM.currentTripListApi();
 
                 //  buttonController.updateButton();
 

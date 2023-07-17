@@ -16,6 +16,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../model/current_trip/current_trip_model.dart';
@@ -182,53 +183,6 @@ class _HomeViewState extends State<HomeView> {
           Positioned(
             top: 60,
             child:
-            // Obx((){
-            //   switch(currentTripVM.rxRequestStatus.value){
-            //     case Status.LOADING:
-            //       return const Center(child: CircularProgressIndicator());
-            //     case Status.ERROR:
-            //       if(currentTripVM.error.value =='No internet'){
-            //         return InterNetExceptionWidget(onPress: () {
-            //           currentTripVM.refreshApi();
-            //         },);
-            //       }
-            //       else {
-            //         return GeneralExceptionWidget(onPress: (){
-            //           currentTripVM.refreshApi();
-            //         });
-            //       }
-            //     case Status.COMPLETED:
-            //       return Container(
-            //          height: Get.height*0.5,
-            //         width: Get.width *0.9,
-            //         child: ListView.builder(
-            //             itemCount: currentTripVM.currentTripList.value.data?.length ?? 0,
-            //             itemBuilder: (context, index){
-            //               return
-            //              //   currentTripVM.currentTripList.value.data![index].loadStatus == 'started'?
-            //                 LoadCards(
-            //                   loadId: currentTripVM.currentTripList.value.data![index].loadId.toString(),
-            //                   dateTime: currentTripVM.currentTripList.value.data?[index].pickupDate??"",
-            //                   piece:currentTripVM.currentTripList.value.data![index].pieces.toString(),
-            //                   dims: currentTripVM.currentTripList.value.data?[index].dims??"",
-            //                   weight: currentTripVM.currentTripList.value.data![index].weight.toString(),
-            //                   miles: currentTripVM.currentTripList.value.data![index].miles.toString(),
-            //                   pickupName: '',
-            //                   // profileVM.userList.value.data!.name??'',
-            //                   pickupAddress: currentTripVM.currentTripList.value.data![index].pickupLocation??"",
-            //                   pickupDateTime: currentTripVM.currentTripList.value.data![index].pickupDate??"",
-            //                   deliveryName: '',
-            //                   deliveryAddress:currentTripVM.currentTripList.value.data![index].deliveryLocation??"",
-            //                   deliveryDateTime: currentTripVM.currentTripList.value.data![index].deliveryDate??"",
-            //                 );
-            //               // :
-            //               //   SizedBox();
-            //             }
-            //         ),
-            //       );
-            //   }
-            // }),
-
             Obx(() {
               switch (currentTripVM.rxRequestStatus.value) {
                 case Status.LOADING:
@@ -252,24 +206,31 @@ class _HomeViewState extends State<HomeView> {
                     return Container(
                       height: Get.height * 0.5,
                       width: Get.width * 0.9,
-                      child: ListView.builder(
-                        itemCount: currentTripVM.currentTripList.value.data!.length,
-                        itemBuilder: (context, index) {
-                          return LoadCards(
-                            loadId: currentTripVM.currentTripList.value.data![index].loadId.toString(),
-                            dateTime: currentTripVM.currentTripList.value.data?[index].pickupDate ?? "",
-                            piece: currentTripVM.currentTripList.value.data![index].pieces.toString(),
-                            dims: currentTripVM.currentTripList.value.data?[index].dims ?? "",
-                            weight: currentTripVM.currentTripList.value.data![index].weight.toString(),
-                            miles: currentTripVM.currentTripList.value.data![index].miles.toString(),
-                            pickupName: '',
-                            pickupAddress: currentTripVM.currentTripList.value.data![index].pickupLocation ?? "",
-                            pickupDateTime: currentTripVM.currentTripList.value.data![index].pickupDate ?? "",
-                            deliveryName: '',
-                            deliveryAddress: currentTripVM.currentTripList.value.data![index].deliveryLocation ?? "",
-                            deliveryDateTime: currentTripVM.currentTripList.value.data![index].deliveryDate ?? "",
-                          );
+                      child: SmartRefresher(
+                        controller: currentTripVM.refreshController,
+                        onRefresh: () async {
+                          await currentTripVM.refreshApi();
+                          currentTripVM.refreshController.refreshCompleted();
                         },
+                        child: ListView.builder(
+                          itemCount: currentTripVM.currentTripList.value.data!.length,
+                          itemBuilder: (context, index) {
+                            return LoadCards(
+                              loadId: currentTripVM.currentTripList.value.data![index].loadId.toString(),
+                              dateTime: currentTripVM.currentTripList.value.data?[index].pickupDate ?? "",
+                              piece: currentTripVM.currentTripList.value.data![index].pieces.toString(),
+                              dims: currentTripVM.currentTripList.value.data?[index].dims ?? "",
+                              weight: currentTripVM.currentTripList.value.data![index].weight.toString(),
+                              miles: currentTripVM.currentTripList.value.data![index].miles.toString(),
+                              pickupName: '',
+                              pickupAddress: currentTripVM.currentTripList.value.data![index].pickupLocation ?? "",
+                              pickupDateTime: currentTripVM.currentTripList.value.data![index].pickupDate ?? "",
+                              deliveryName: '',
+                              deliveryAddress: currentTripVM.currentTripList.value.data![index].deliveryLocation ?? "",
+                              deliveryDateTime: currentTripVM.currentTripList.value.data![index].deliveryDate ?? "",
+                            );
+                          },
+                        ),
                       ),
                     );
                   } else {
@@ -284,71 +245,6 @@ class _HomeViewState extends State<HomeView> {
               }
             }),
 
-            // Obx(() {
-            //   switch (currentTripVM.rxRequestStatus.value) {
-            //     case Status.LOADING:
-            //       return const Center(child: CircularProgressIndicator());
-            //     case Status.ERROR:
-            //       if (currentTripVM.error.value == 'No internet') {
-            //         return InterNetExceptionWidget(
-            //           onPress: () {
-            //             currentTripVM.refreshApi();
-            //           },
-            //         );
-            //       }
-            //       else {
-            //         return
-            //
-            //           GeneralExceptionWidget(
-            //           onPress: () {
-            //             currentTripVM.refreshApi();
-            //           },
-            //         );
-            //       }
-            //     case Status.COMPLETED:
-            //       final List<Data>? tripData = currentTripVM.currentTripList.value.data;
-            //       if (tripData != null || tripData?.isNotEmpty || tripData[0] != null) {
-            //         return Container(
-            //           height: Get.height * 0.5,
-            //           width: Get.width * 0.9,
-            //           child: ListView.builder(
-            //             itemCount: tripData.length,
-            //             itemBuilder: (context, index) {
-            //               final currentTrip = tripData[index];
-            //               if (currentTrip != null) {
-            //                 return LoadCards(
-            //                   loadId: currentTrip.loadId.toString(),
-            //                   dateTime: currentTrip.pickupDate ?? "",
-            //                   piece: currentTrip.pieces.toString(),
-            //                   dims: currentTrip.dims ?? "",
-            //                   weight: currentTrip.weight.toString(),
-            //                   miles: currentTrip.miles.toString(),
-            //                   pickupName: '',
-            //                   pickupAddress: currentTrip.pickupLocation ?? "",
-            //                   pickupDateTime: currentTrip.pickupDate ?? "",
-            //                   deliveryName: '',
-            //                   deliveryAddress: currentTrip.deliveryLocation ?? "",
-            //                   deliveryDateTime: currentTrip.deliveryDate ?? "",
-            //                 );
-            //               } else {
-            //                 return SizedBox(); // Skip null values
-            //               }
-            //             },
-            //           ),
-            //         );
-            //       } else {
-            //         return Container(
-            //           height: Get.height * 0.5,
-            //           width: Get.width * 0.9,
-            //           child: Center(
-            //             child: Text('No data available'),
-            //           ),
-            //         );
-            //       }
-            //   }
-            // }),
-
-
 
           ),
 
@@ -358,51 +254,3 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
-
-// widget.status == 'started'
-//     ? Positioned(
-//         top: 60,
-//         child:
-//         LoadCards(
-//           loadId: widget.loadId.toString(),
-//           dateTime: widget.pickUpDateTime ?? "",
-//           piece: widget.pieces.toString(),
-//           dims: widget.dims??"",
-//           weight: widget.weight??"",
-//           miles: widget.miles??"",
-//           pickupName: widget.pickupName?? "",
-//           pickupAddress: widget.pickUpLocation??"",
-//           pickupDateTime: widget.pickUpDateTime??"",
-//           deliveryName: widget.deliveryName??"",
-//           deliveryAddress: widget.deliveryAddress??"",
-//           deliveryDateTime: widget.deliveryDateTime??"",
-//         ),
-// )
-//     : SizedBox(),
-
-
-// this.status = "no started",
-// this.loadId = 0,
-// this.pieces = 0,
-// this.deliveryDateTime = '',
-// this.dims = '',
-// this.weight = '',
-// this.pickupName = '',
-// this.pickUpLocation = '',
-// this.deliveryName = '',
-// this.deliveryAddress = '',
-// this.pickUpDateTime = '',
-// this.miles = '',
-
-// final int? loadId;
-// final String? pickUpDateTime;
-// final int? pieces;
-// final String? dims;
-// final String? weight;
-// final String? pickupName;
-// final String? miles;
-// final String? pickUpLocation;
-// final String? deliveryName;
-// final String? deliveryAddress;
-// final String? deliveryDateTime;
-// final String? status;

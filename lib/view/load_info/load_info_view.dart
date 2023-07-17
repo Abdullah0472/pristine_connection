@@ -39,7 +39,7 @@ class _LoadInfoViewState extends State<LoadInfoView> {
   final loadVM = Get.put(loadDetailViewModel());
 
   final currentTripVM = Get.put(CurrentTripController());
-  LoadStatusPrefernce loadStatuses = LoadStatusPrefernce();
+  LoadStatusPreference loadStatuses = LoadStatusPreference();
 
   final ButtonController buttonController = Get.put(ButtonController());
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -389,16 +389,9 @@ class _LoadInfoViewState extends State<LoadInfoView> {
                   final bolPath = loadVM.bolPicPath.value;
                   // Get the licence image path
                   final freightPath = loadVM.freightPicPath.value;
-
                   loadVM.uploadLoadApi(bolPath, freightPath, widget.loadId);
-
-
-                  await currentTripVM.currentTripListApi();
-
               //    buttonController.updateButton();
-
-
-                  buttonController.buildArrivedButton(() {
+                  buttonController.buildArrivedButton(() async {
                     Future.delayed(Duration.zero, () {
                       showDialog(
                         context: Get.overlayContext!,
@@ -416,15 +409,16 @@ class _LoadInfoViewState extends State<LoadInfoView> {
                       );
                     });
 
-                    loadStatuses
-                        .saveLoadStatus('customer')
-                        .then((value) {
-                      // You could do something here after saving, or simply do nothing
-                    })
-                        .onError((error, stackTrace) {
-                      // Log or handle error here
-                      // setError(error.toString());
-                    });
+                    // loadStatuses
+                    //     .saveLoadStatus('customer')
+                    //     .then((value) {
+                    //   // You could do something here after saving, or simply do nothing
+                    // })
+                    //     .onError((error, stackTrace) {
+                    //   // Log or handle error here
+                    //   // setError(error.toString());
+                    // });
+
 
                   });
                   Get.back();
