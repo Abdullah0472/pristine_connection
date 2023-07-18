@@ -7,7 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class GetBidsController extends GetxController {
   final _api = BidsRepository();
-  RefreshController refreshController = RefreshController();
+  RefreshController refreshPendingBidsController = RefreshController();
   final rxRequestStatus = Status.LOADING.obs;
   final bidsList = GetBidsModel().obs;
   RxString error = ''.obs;

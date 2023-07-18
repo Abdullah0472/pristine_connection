@@ -19,7 +19,7 @@ class AssignBidsController extends GetxController {
   void setRxRequestStatus(Status _value) => rxRequestStatus.value = _value;
   void setUserList(AssignBidsModel _value) => assignbidsList.value = _value;
   void setError(String _value) => error.value = _value;
-  RefreshController refreshController = RefreshController();
+  RefreshController refreshAssignBidController = RefreshController();
 
   void assignBidsListApi() {
     _api.getAssignBidsApi().then((value) {

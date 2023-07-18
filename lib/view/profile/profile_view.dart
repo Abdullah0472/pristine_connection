@@ -87,10 +87,10 @@ class _ProfileViewState extends State<ProfileView> {
               }
             case Status.COMPLETED:
               return SmartRefresher(
-                controller: profileVM.refreshController,
+                controller: profileVM.refreshProfileController,
                 onRefresh: () async {
                   await profileVM.refreshApi();
-                  profileVM.refreshController.refreshCompleted();
+                  profileVM.refreshProfileController.refreshCompleted();
                 },
                 child: Padding(
                   padding:

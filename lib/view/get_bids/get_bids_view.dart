@@ -74,10 +74,10 @@ class _GetBidViewState extends State<GetBidView> {
           case Status.COMPLETED:
             return (getBidsVM.bidsList.value.data!.isNotEmpty)
                 ? SmartRefresher(
-              controller: getBidsVM.refreshController,
+              controller: getBidsVM.refreshPendingBidsController,
               onRefresh: () async {
                 await getBidsVM.refreshApi();
-                getBidsVM.refreshController.refreshCompleted();
+                getBidsVM.refreshPendingBidsController.refreshCompleted();
               },
                   child: SizedBox(
                       height:

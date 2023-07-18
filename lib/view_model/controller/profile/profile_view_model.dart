@@ -41,7 +41,7 @@ class ProfileViewModel extends GetxController {
   void setUserList(UserModel _value) => userList.value = _value;
   void setError(String _value) => error.value = _value;
 
-  RefreshController refreshController = RefreshController();
+  RefreshController refreshProfileController = RefreshController();
 
 
   void userListApi() {

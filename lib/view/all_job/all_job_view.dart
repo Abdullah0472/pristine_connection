@@ -140,10 +140,10 @@ class AllJobView extends StatelessWidget {
                                   height: 650,
                                   // Or any other height that makes sense in your app
                                   child: SmartRefresher(
-                                    controller: allJobVM.refreshController,
+                                    controller: allJobVM.refreshAllJobController,
                                     onRefresh: () async {
                                       await allJobVM.refreshApi();
-                                      allJobVM.refreshController
+                                      allJobVM.refreshAllJobController
                                           .refreshCompleted();
                                     },
                                     child: ListView.builder(

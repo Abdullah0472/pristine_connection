@@ -80,7 +80,7 @@ class CurrentTripController extends GetxController {
   void setRxRequestStatus(Status _value) => rxRequestStatus.value = _value;
   void setUserList(CurrentTripModel _value) => currentTripList.value = _value;
   void setError(String _value) => error.value = _value;
-  RefreshController refreshController = RefreshController();
+  RefreshController refreshHomeController = RefreshController();
 
    currentTripListApi() {
     loadingStatus();

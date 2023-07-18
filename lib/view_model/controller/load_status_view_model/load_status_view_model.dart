@@ -11,23 +11,6 @@ class LoadStatusPreference {
       _loadStatusStreamController.add(loadStatus);
     });
   }
-
-  // Stream<String> get loadStatusStream => _loadStatusStreamController.stream;
-  //
-  // Future<bool> saveLoadStatus(String loadStatus) async {
-  //   SharedPreferences sp = await SharedPreferences.getInstance();
-  //   sp.setString('load_status', loadStatus);
-  //   _loadStatusStreamController.add(loadStatus);
-  //   return true;
-  // }
-  //
-  // Future<String> getLoadStatus() async {
-  //   SharedPreferences sp = await SharedPreferences.getInstance();
-  //   String loadStatus = sp.getString('load_status') ?? 'default';
-  //   return loadStatus;
-  // }
-
- // final _loadStatusStreamController = StreamController<String>.broadcast();
   Stream<String> get loadStatusStream => _loadStatusStreamController.stream;
 
   Future<void> saveLoadStatus(String loadStatus) async {

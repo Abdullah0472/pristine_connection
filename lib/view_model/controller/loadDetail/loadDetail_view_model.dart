@@ -156,15 +156,15 @@ class loadDetailViewModel extends GetxController {
 
       if (response['status_code'] == 200) {
         Utils.snackBar('Load Data Uploaded', 'Successfully');
-        loadStatuses
-            .saveLoadStatus('in-transit')
-            .then((value) {
-          // You could do something here after saving, or simply do nothing
-        })
-            .onError((error, stackTrace) {
-          // Log or handle error here
-          // setError(error.toString());
-        });
+        // loadStatuses
+        //     .saveLoadStatus('in-transit')
+        //     .then((value) {
+        //   // You could do something here after saving, or simply do nothing
+        // })
+        //     .onError((error, stackTrace) {
+        //   // Log or handle error here
+        //   // setError(error.toString());
+        // });
 
       } else {
         Utils.snackBar('Failed to Upload Load data', 'Server responded with status code: ${response['status_code']}');

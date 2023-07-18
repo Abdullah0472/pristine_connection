@@ -29,12 +29,11 @@ class NetworkApiServices extends BaseApiServices {
           'Authorization': 'Bearer $getToken',
         },
       ).timeout(const Duration(seconds: 10));
-      print("The Bearer Token $getToken");
-      print("Raw Response Body: ${response.body}");
+
       responseJson = returnResponse(response);
 
       if (response.statusCode == 200) {
-        print("Response OK: ${response.body}");
+
         responseJson = returnResponse(response);
       } else {
         print("HTTP Error ${response.statusCode}: ${response.body}");
@@ -61,11 +60,9 @@ class NetworkApiServices extends BaseApiServices {
       final response = await http
           .post(Uri.parse(url), body: data)
           .timeout(const Duration(seconds: 10));
-      print("Raw Response Body: ${response.body}");
       responseJson = returnResponse(response);
 
       if (response.statusCode == 200) {
-        print("Response OK: ${response.body}");
         responseJson = returnResponse(response);
       } else {
         print("HTTP Error ${response.statusCode}: ${response.body}");

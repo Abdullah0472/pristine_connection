@@ -70,6 +70,9 @@ dependencies:
   image: ^3.0.2
   #Pull to Refresh
   pull_to_refresh: ^2.0.0
+  #Flutter Signature Pad
+  signature: ^5.1.0
+  path_provider: ^2.0.15
 
 
 

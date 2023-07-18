@@ -16,7 +16,7 @@ class AllJobViewModel extends GetxController {
   final messageController = TextEditingController().obs;
   final vehicleTypeController = TextEditingController().obs;
 
-  RefreshController refreshController = RefreshController();
+  RefreshController refreshAllJobController = RefreshController();
 
   RxString price = '0'.obs;
 

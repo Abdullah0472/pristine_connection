@@ -206,12 +206,12 @@ class _HomeViewState extends State<HomeView> {
                     return Container(
                       height: Get.height * 0.5,
                       width: Get.width * 0.9,
-                      child: SmartRefresher(
-                        controller: currentTripVM.refreshController,
-                        onRefresh: () async {
-                          await currentTripVM.refreshApi();
-                          currentTripVM.refreshController.refreshCompleted();
-                        },
+                      // child: SmartRefresher(
+                      //   controller: currentTripVM.refreshHomeController,
+                      //   onRefresh: () async {
+                      //     await currentTripVM.refreshApi();
+                      //     currentTripVM.refreshHomeController.refreshCompleted();
+                      //   },
                         child: ListView.builder(
                           itemCount: currentTripVM.currentTripList.value.data!.length,
                           itemBuilder: (context, index) {
@@ -231,7 +231,7 @@ class _HomeViewState extends State<HomeView> {
                             );
                           },
                         ),
-                      ),
+                   //   ),
                     );
                   } else {
                     return Container(
