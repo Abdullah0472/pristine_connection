@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/navigationBar/navigationBar.dart';
+import 'package:celient_project/testing_view/testing_home_view.dart';
 import 'package:celient_project/view/history/history_view.dart';
 import 'package:celient_project/view/home/home_view.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,8 @@ class _BottomNavigationBarViewState extends State<BottomNavigationBarView> {
 
     /// Will Be Moving To Home Screen
 
-    HomeView(),
+   // HomeView(),
+    TestingHomeView(),
 
     /// Will Be Moving To Connection Screen
 

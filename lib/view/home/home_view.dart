@@ -59,18 +59,7 @@ class _HomeViewState extends State<HomeView> {
 
   loadData() {
     getUserCurrentLocation().then((value) async {
-      // _markers.add(
-      //   Marker(
-      //     markerId: const MarkerId('2'),
-      //     position: LatLng(
-      //       value.latitude,
-      //       value.longitude,
-      //     ),
-      //     infoWindow: const InfoWindow(
-      //       title: "Your Current Location",
-      //     ),
-      //   ),
-      // );
+
       CameraPosition cameraPosition = CameraPosition(
         zoom: 18,
         target: LatLng(
@@ -96,7 +85,6 @@ class _HomeViewState extends State<HomeView> {
     return await Geolocator.getCurrentPosition();
   }
 
-  final panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -180,6 +168,7 @@ class _HomeViewState extends State<HomeView> {
               _controller.complete(controller);
             },
           ),
+
           Positioned(
             top: 60,
             child:
@@ -206,12 +195,6 @@ class _HomeViewState extends State<HomeView> {
                     return Container(
                       height: Get.height * 0.5,
                       width: Get.width * 0.9,
-                      // child: SmartRefresher(
-                      //   controller: currentTripVM.refreshHomeController,
-                      //   onRefresh: () async {
-                      //     await currentTripVM.refreshApi();
-                      //     currentTripVM.refreshHomeController.refreshCompleted();
-                      //   },
                         child: ListView.builder(
                           itemCount: currentTripVM.currentTripList.value.data!.length,
                           itemBuilder: (context, index) {
@@ -234,12 +217,10 @@ class _HomeViewState extends State<HomeView> {
                    //   ),
                     );
                   } else {
-                    return Container(
+                    return SizedBox(
                       height: Get.height * 0.5,
                       width: Get.width * 0.9,
-                      child: Center(
-                        child: Text(''),
-                      ),
+                      child: const Text(''),
                     );
                   }
               }

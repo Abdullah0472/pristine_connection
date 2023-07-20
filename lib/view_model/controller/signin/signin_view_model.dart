@@ -99,10 +99,12 @@ class SignInViewModel extends GetxController {
         loading.value = false;
         Get.back();  // Close the dialog in case of error
         Utils.snackBar('Error', error.toString());
+        print("Error while LoginIn ${error.toString()}");
         Get.offAllNamed(RouteName.signInView);  // Go back to SignInView in case of error
       });
     } catch (e) {
       Utils.snackBar('Login Failed', 'An error occurred while logging in');
+
 
       Get.dialog(
         WillPopScope(

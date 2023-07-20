@@ -52,6 +52,8 @@ dependencies:
   #Get Permission
   geolocator: ^9.0.2
   geocoding: ^2.1.0
+  #Flutter Polyline Point
+  flutter_polyline_points: ^1.0.0
   #Custom Info Window
   custom_info_window: ^1.0.1
   #Simple Animation
@@ -59,7 +61,7 @@ dependencies:
   #Sliding Up-Panel
   sliding_up_panel: ^2.0.0+1
   #Image Cropper
-  image_cropper: ^5.0.0
+  image_cropper:   # ^5.0.0
   #Image Picker
   image_picker: ^0.8.5+3
   #Permission Handler

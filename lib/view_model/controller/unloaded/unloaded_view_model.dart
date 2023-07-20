@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/dialoge_box/dialoge_box_congrats.dart';
 import 'package:celient_project/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +11,6 @@ import 'package:signature/signature.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
 import 'package:path/path.dart' as p;
-
-
-
 import '../../../repository/upload_unloaded_repository/upload_unload_repository.dart';
 
 class UnloadDataViewModel extends GetxController {
@@ -28,7 +25,7 @@ class UnloadDataViewModel extends GetxController {
 
   final SignatureController signatureController = SignatureController(
     penStrokeWidth: 5,
-    penColor: Colors.black,
+    penColor: AppColor.blackColor,
   );
 
   final GlobalKey imageKey = GlobalKey();
