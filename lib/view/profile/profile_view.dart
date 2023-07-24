@@ -40,34 +40,34 @@ class _ProfileViewState extends State<ProfileView> {
     GlobalKey<FormState> profileformkey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: AppColor.offWhite,
-      appBar: CustomAppBar(
-        icon: true,
-        actionIcon: true,
-        action: [
-          IconButton(
-              onPressed: () {
-            Get.toNamed(RouteName.updatePasswordView);
-              },
-              icon: const Icon(
-                MdiIcons.lockReset,
-                color: AppColor.blackColor,
-                size: 25,
-              )),
-          IconButton(
-              onPressed: () {
-                userPreference.removeUser();
-                Get.back();
-                Get.back();
-              },
-              icon: const Icon(
-                MdiIcons.logout,
-                color: AppColor.blackColor,
-                size: 25,
-              )),
-        ],
-        title: 'User Profile',
-        leadingIcon: const SizedBox(),
-      ),
+      // appBar: CustomAppBar(
+      //   icon: true,
+      //   actionIcon: true,
+      //   action: [
+      //     IconButton(
+      //         onPressed: () {
+      //       Get.toNamed(RouteName.updatePasswordView);
+      //         },
+      //         icon: const Icon(
+      //           MdiIcons.lockReset,
+      //           color: AppColor.blackColor,
+      //           size: 25,
+      //         )),
+      //     IconButton(
+      //         onPressed: () {
+      //           userPreference.removeUser();
+      //           Get.back();
+      //           Get.back();
+      //         },
+      //         icon: const Icon(
+      //           MdiIcons.logout,
+      //           color: AppColor.blackColor,
+      //           size: 25,
+      //         )),
+      //   ],
+      //   title: 'User Profile',
+      //   leadingIcon: const SizedBox(),
+      // ),
       body: SafeArea(
         child: Obx(() {
           switch (profileVM.rxRequestStatus.value) {

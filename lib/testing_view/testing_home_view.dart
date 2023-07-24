@@ -34,10 +34,10 @@ class _TestingHomeViewState extends State<TestingHomeView> {
 
   final currentTripVM = Get.put(CurrentTripController());
   final profileVM = Get.put(ProfileViewModel());
+
   @override
   void initState() {
     super.initState();
-    gmServices = GoogleMapServices();
     currentTripVM.currentTripListApi();
     DefaultAssetBundle.of(context)
         .loadString('assets/maptheme/retro_theme.json')
@@ -48,6 +48,7 @@ class _TestingHomeViewState extends State<TestingHomeView> {
     gmServices.getCurrentLocation();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,15 +57,16 @@ class _TestingHomeViewState extends State<TestingHomeView> {
         actionIcon: true,
         action: [
           PopupMenuButton(
-            itemBuilder: (context) => [
+            itemBuilder: (context) =>
+            [
               PopupMenuItem(
                 onTap: () {
                   _controller.future.then(
-                    (value) {
+                        (value) {
                       DefaultAssetBundle.of(context)
                           .loadString('assets/maptheme/silver_theme.json')
                           .then(
-                        (string) {
+                            (string) {
                           value.setMapStyle(string);
                         },
                       );
@@ -76,11 +78,11 @@ class _TestingHomeViewState extends State<TestingHomeView> {
               PopupMenuItem(
                 onTap: () {
                   _controller.future.then(
-                    (value) {
+                        (value) {
                       DefaultAssetBundle.of(context)
                           .loadString('assets/maptheme/retro_theme.json')
                           .then(
-                        (string) {
+                            (string) {
                           value.setMapStyle(string);
                         },
                       );
@@ -92,11 +94,11 @@ class _TestingHomeViewState extends State<TestingHomeView> {
               PopupMenuItem(
                 onTap: () {
                   _controller.future.then(
-                    (value) {
+                        (value) {
                       DefaultAssetBundle.of(context)
                           .loadString('assets/maptheme/night_theme.json')
                           .then(
-                        (string) {
+                            (string) {
                           value.setMapStyle(string);
                         },
                       );
@@ -123,19 +125,22 @@ class _TestingHomeViewState extends State<TestingHomeView> {
       body: SafeArea(
         child: Stack(alignment: AlignmentDirectional.center, children: [
           // Map View
-          GoogleMap(
-            markers: Set<Marker>.from(gmServices.markers),
-            initialCameraPosition: gmServices.initialLocation,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            mapType: MapType.normal,
-            zoomGesturesEnabled: true,
-            zoomControlsEnabled: false,
-            polylines: Set<Polyline>.of(gmServices.polylines.values),
-            onMapCreated: (GoogleMapController controller) {
-              gmServices.mapController = controller;
-            },
-          ),
+          Obx(() {
+            return GoogleMap(
+              markers: Set<Marker>.from(gmServices.markers),
+              initialCameraPosition: gmServices.initialLocation,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              mapType: MapType.normal,
+              zoomGesturesEnabled: true,
+              zoomControlsEnabled: false,
+              //polylines: Set<Polyline>.of(gmServices.polylines.value.values),
+              polylines: gmServices.polylines.value.values.toSet(),
+              onMapCreated: (GoogleMapController controller) {
+                gmServices.mapController = controller;
+              },
+            );
+          }),
 
           Positioned(
             top: 60,
@@ -165,41 +170,31 @@ class _TestingHomeViewState extends State<TestingHomeView> {
                       width: Get.width * 0.9,
                       child: ListView.builder(
                         itemCount:
-                            currentTripVM.currentTripList.value.data!.length,
+                        currentTripVM.currentTripList.value.data!.length,
                         itemBuilder: (context, index) {
                           return LoadCards(
-                            loadId: currentTripVM
-                                .currentTripList.value.data![index].loadId
-                                .toString(),
+                            loadId: currentTripVM.currentTripList.value
+                                .data![index].loadId.toString(),
                             dateTime: currentTripVM.currentTripList.value
-                                    .data?[index].pickupDate ??
-                                "",
-                            piece: currentTripVM
-                                .currentTripList.value.data![index].pieces
-                                .toString(),
-                            dims: currentTripVM
-                                    .currentTripList.value.data?[index].dims ??
-                                "",
-                            weight: currentTripVM
-                                .currentTripList.value.data![index].weight
-                                .toString(),
-                            miles: currentTripVM
-                                .currentTripList.value.data![index].miles
-                                .toString(),
+                                .data?[index].pickupDate ?? "",
+                            piece: currentTripVM.currentTripList.value
+                                .data![index].pieces.toString(),
+                            dims: currentTripVM.currentTripList.value
+                                .data?[index].dims ?? "",
+                            weight: currentTripVM.currentTripList.value
+                                .data![index].weight.toString(),
+                            miles: currentTripVM.currentTripList.value
+                                .data![index].miles.toString(),
                             pickupName: '',
                             pickupAddress: currentTripVM.currentTripList.value
-                                    .data![index].pickupLocation ??
-                                "",
+                                .data![index].pickupLocation ?? "",
                             pickupDateTime: currentTripVM.currentTripList.value
-                                    .data![index].pickupDate ??
-                                "",
+                                .data![index].pickupDate ?? "",
                             deliveryName: '',
                             deliveryAddress: currentTripVM.currentTripList.value
-                                    .data![index].deliveryLocation ??
-                                "",
+                                .data![index].deliveryLocation ?? "",
                             deliveryDateTime: currentTripVM.currentTripList
-                                    .value.data![index].deliveryDate ??
-                                "",
+                                .value.data![index].deliveryDate ?? "",
                           );
                         },
                       ),
@@ -215,35 +210,35 @@ class _TestingHomeViewState extends State<TestingHomeView> {
               }
             }),
           ),
-
           Positioned(
             top: 30,
             child: Visibility(
               visible: gmServices.placeDistance == null ? false : true,
-              child: Text(
-                'DISTANCE: ${gmServices.placeDistance} km',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: Obx(() {
+                return Text(
+                  'DISTANCE: ${gmServices.placeDistance} km',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }),
             ),
           ),
           const SizedBox(height: 5),
-
-
           ElevatedButton(
             onPressed: () async {
               int index = 0; // replace with actual index
+              await gmServices.getCurrentLocation();
               bool result = await gmServices.calculateDistance(index);
-              if(result){
+              if (result) {
                 print("Route calculated successfully");
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Distance Calculated Successfully'),
                   ),
                 );
-              }else{
+              } else {
                 print("Failed to calculate route");
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -260,64 +255,3 @@ class _TestingHomeViewState extends State<TestingHomeView> {
     );
   }
 }
-
-
-
-
-// GestureDetector(
-//   onTap: (gmServices.startAddress.value != '' &&
-//           gmServices.destinationAddress.value != '')
-//       ? () async {
-//           print('Show Route button pressed.');
-//           setState(() {
-//             if (gmServices.markers.isNotEmpty)
-//               gmServices.markers.clear();
-//             if (gmServices.polylines.isNotEmpty)
-//               gmServices.polylines.clear();
-//             if (gmServices.polylineCoordinates.isNotEmpty)
-//               gmServices.polylineCoordinates.clear();
-//             gmServices.placeDistance.value = null;
-//           });
-//           gmServices
-//               .calculateDistance(currentTripIndex)
-//               .then((isCalculated) {
-//             if (isCalculated) {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 const SnackBar(
-//                   content: Text('Distance Calculated Successfully'),
-//                 ),
-//               );
-//             } else {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 const SnackBar(
-//                   content: Text('Error Calculating Distance'),
-//                 ),
-//               );
-//             }
-//           });
-//         }
-//       : null,
-//   child: ElevatedButton(
-//     onPressed: null,
-//     child: Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Text(
-//         'Show Route'.toUpperCase(),
-//         style: const TextStyle(
-//           color: Colors.white,
-//           fontSize: 20.0,
-//         ),
-//       ),
-//     ),
-//     style: ElevatedButton.styleFrom(
-//       backgroundColor: (gmServices.startAddress.value != '' &&
-//               gmServices.destinationAddress.value != '')
-//           ? Colors.red
-//           : Colors
-//               .grey, // Disable button color when conditions not met
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(20.0),
-//       ),
-//     ),
-//   ),
-// ),

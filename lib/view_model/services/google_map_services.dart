@@ -1,5 +1,3 @@
-
-
 import 'dart:math';
 import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
 import 'package:flutter/material.dart';
@@ -8,55 +6,50 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 class GoogleMapServices extends GetxController {
-
   final currentTripVM = Get.put(CurrentTripController());
   CameraPosition initialLocation = const CameraPosition(target: LatLng(0.0, 0.0));
   late GoogleMapController mapController;
-
   var currentPosition = Rx<Position?>(null);
   var currentAddress = ''.obs;
   var startAddress = ''.obs;
   var destinationAddress = ''.obs;
   var placeDistance = Rx<String?>("0");
-
   Set<Marker> markers = {};
-
   late PolylinePoints polylinePoints;
-  Map<PolylineId, Polyline> polylines = {};
+  var polylines = Rx<Map<PolylineId, Polyline>>({});
+
   List<LatLng> polylineCoordinates = [];
 
-
-  getCurrentLocation() async {
-    print('Getting current location...'); // Add this line
+  Future<void> getCurrentLocation() async {
+    try {
+      print('Getting current location...');
       await Geolocator.requestPermission()
           .then((value) {})
           .onError((error, stackTrace) {
         print('error$error');
       });
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) async {
-      currentPosition.value = position;
-      print('CURRENT POS: ${currentPosition.value}');
-      mapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(position.latitude, position.longitude),
-            zoom: 18.0,
+      await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+          .then((Position position) async {
+        currentPosition.value = position;
+        print('CURRENT POS: ${currentPosition.value}');
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(position.latitude, position.longitude),
+              zoom: 18.0,
+            ),
           ),
-        ),
-      );
-      await _getAddress();
-    }).catchError((e) {
+        );
+        await _getAddress();
+        update();
+      });
+    } catch (e) {
       print(e);
-    });
+    }
   }
 
-
-
-
-  _getAddress() async {
+ _getAddress() async {
     try {
       List<Placemark> p = await placemarkFromCoordinates(
           currentPosition.value!.latitude, currentPosition.value!.longitude);
@@ -77,32 +70,23 @@ class GoogleMapServices extends GetxController {
       print('Calculating distance...'); // Add this line
       // Retrieving placemarks from addresses
       List<Location> startPlacemark = await locationFromAddress(startAddress.value);
-      // List<Location> destinationPlacemark = await locationFromAddress(currentTripVM.currentTripList.value.data![index].pickupLocation);
-
       String? destinationAddress = currentTripVM.currentTripList.value.data![index].loadStatus == "started"
           ? currentTripVM.currentTripList.value.data![index].pickupLocation
           : currentTripVM.currentTripList.value.data![index].deliveryLocation;
 
-// Here we use the null-coalescing operator (??) to handle the case where destinationAddress might be null.
+      print("The Destination Address is : ${destinationAddress}");
+      print("The Destination Address is : ${currentTripVM.currentTripList.value.data![index].loadStatus}");
       List<Location> destinationPlacemark = await locationFromAddress(destinationAddress ?? "Default Address");
-
-      // Use the retrieved coordinates of the current position,
-      // instead of the address if the start position is user's
-      // current position, as it results in better accuracy.
       double startLatitude = startAddress.value == currentAddress.value
           ? currentPosition.value!.latitude
           : startPlacemark[0].latitude;
-
       double startLongitude = startAddress.value == currentAddress.value
           ? currentPosition.value!.longitude
           : startPlacemark[0].longitude;
-
       double destinationLatitude = destinationPlacemark[0].latitude;
       double destinationLongitude = destinationPlacemark[0].longitude;
-
       String startCoordinatesString = '($startLatitude, $startLongitude)';
       String destinationCoordinatesString = '($destinationLatitude, $destinationLongitude)';
-
       // Start Location Marker
       Marker startMarker = Marker(
         markerId: MarkerId(startCoordinatesString),
@@ -113,31 +97,22 @@ class GoogleMapServices extends GetxController {
         ),
         icon: BitmapDescriptor.defaultMarker,
       );
-
       // Destination Location Marker
       Marker destinationMarker = Marker(
         markerId: MarkerId(destinationCoordinatesString),
         position: LatLng(destinationLatitude, destinationLongitude),
         infoWindow: InfoWindow(
           title: 'Destination $destinationCoordinatesString',
-          snippet: currentTripVM.currentTripList.value.data![index].pickupLocation,
+          snippet: destinationAddress,
         ),
         icon: BitmapDescriptor.defaultMarker,
       );
-
       // Adding the markers to the list
       markers.add(startMarker);
       markers.add(destinationMarker);
+      print('START COORDINATES: ($startLatitude, $startLongitude)',);
+      print('DESTINATION COORDINATES: ($destinationLatitude, $destinationLongitude)',);
 
-      print(
-        'START COORDINATES: ($startLatitude, $startLongitude)',
-      );
-      print(
-        'DESTINATION COORDINATES: ($destinationLatitude, $destinationLongitude)',
-      );
-
-      // Calculating to check that the position relative
-      // to the frame, and pan & zoom the camera accordingly.
       double miny = (startLatitude <= destinationLatitude)
           ? startLatitude
           : destinationLatitude;
@@ -150,15 +125,10 @@ class GoogleMapServices extends GetxController {
       double maxx = (startLongitude <= destinationLongitude)
           ? destinationLongitude
           : startLongitude;
-
       double southWestLatitude = miny;
       double southWestLongitude = minx;
-
       double northEastLatitude = maxy;
       double northEastLongitude = maxx;
-
-      // Accommodate the two locations within the
-      // camera view of the map
       mapController.animateCamera(
         CameraUpdate.newLatLngBounds(
           LatLngBounds(
@@ -170,13 +140,8 @@ class GoogleMapServices extends GetxController {
       );
       await _createPolylines(startLatitude, startLongitude, destinationLatitude,
           destinationLongitude);
-
       double totalDistance = 0.0;
-
-      // Calculating the total distance by adding the distance
-      // between small segments
       for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-
         totalDistance += _coordinateDistance(
           polylineCoordinates[i].latitude,
           polylineCoordinates[i].longitude,
@@ -185,17 +150,17 @@ class GoogleMapServices extends GetxController {
         );
       }
       print('Polyline coordinates: $polylineCoordinates');
-
       placeDistance.value = totalDistance.toStringAsFixed(2);
       print('DISTANCE: ${placeDistance.value} km');
-
+      refresh();
       return true;
     } catch (e) {
       print(e);
     }
-    return false;
-  }
 
+    return false;
+
+  }
 
   // Formula for calculating distance between two coordinates
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
@@ -206,8 +171,6 @@ class GoogleMapServices extends GetxController {
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
   }
-
-  // Create the polylines for showing the route between two places
   _createPolylines(
       double startLatitude,
       double startLongitude,
@@ -221,13 +184,7 @@ class GoogleMapServices extends GetxController {
       PointLatLng(destinationLatitude, destinationLongitude),
       travelMode: TravelMode.driving,
     );
-
     if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    }
-    if (result.status == 'OK') {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
@@ -235,7 +192,6 @@ class GoogleMapServices extends GetxController {
       print('Error fetching polyline: ${result.status}');
       return false;
     }
-
     PolylineId id = const PolylineId('poly');
     Polyline polyline = Polyline(
       polylineId: id,
@@ -243,7 +199,9 @@ class GoogleMapServices extends GetxController {
       points: polylineCoordinates,
       width: 3,
     );
-    polylines[id] = polyline;
+    polylines.value[id] = polyline;
+    refresh();
   }
 
 }
+

@@ -65,7 +65,7 @@ dependencies:
   #Image Picker
   image_picker: ^0.8.5+3
   #Permission Handler
-  permission_handler: ^10.3.0
+  permission_handler: ^10.4.3
   #Intel Package
   intl: ^0.18.1
   #Image
@@ -75,6 +75,9 @@ dependencies:
   #Flutter Signature Pad
   signature: ^5.1.0
   path_provider: ^2.0.15
+  #Multi Image Picker
+  multi_image_picker: ^4.8.1
+  #multiple_images_picker: ^1.0.1
 
 
 

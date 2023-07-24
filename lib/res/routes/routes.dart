@@ -1,3 +1,4 @@
+import 'package:celient_project/testing_view/testing_signup_view.dart';
 import 'package:celient_project/view/all_job/all_job_view.dart';
 import 'package:celient_project/view/assign_bids/assign_bids_view.dart';
 import 'package:celient_project/view/bottomNavigationBar/bottomNavigationBar_view.dart';
@@ -42,7 +43,7 @@ class AppRoutes {
         ),
     GetPage(
       name: RouteName.signUpView,
-      page: () => const SignUpView(),
+      page: () =>  TestingSignUpView(),//const SignUpView(),
       transitionDuration: const Duration(milliseconds: 250),
       transition: Transition.leftToRightWithFade,
     ),

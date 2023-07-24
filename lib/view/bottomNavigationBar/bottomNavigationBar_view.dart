@@ -5,6 +5,7 @@ import 'package:celient_project/res/components/widgets/navigationBar/navigationB
 import 'package:celient_project/testing_view/testing_home_view.dart';
 import 'package:celient_project/view/history/history_view.dart';
 import 'package:celient_project/view/home/home_view.dart';
+import 'package:celient_project/view/profile_tabbar/profile_tabbar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -38,7 +39,8 @@ class _BottomNavigationBarViewState extends State<BottomNavigationBarView> {
     // ChatsView(),
     ///Will Be Moving To Profile View Screen
     // CustomInspectionView(),
-    ProfileView(),
+   // ProfileView(),
+    ProfileTabBarView(),
   ];
 
   _onItemTapped(var index) {
