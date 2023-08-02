@@ -120,7 +120,7 @@ class LoadCards extends StatelessWidget {
                     textColor: AppColor.textColor,
                     width: 80,
                     height: 40,
-                  )
+                  ),
                 ],
               ),
               const Divider(

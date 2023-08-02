@@ -10,6 +10,7 @@ class InputEmailTextField extends StatelessWidget {
   final String hintText;
   final bool number;
   TextEditingController controller;
+  final bool iconDisplay;
   final String? Function(String?)? validator;
   final signInVM = Get.put(SignInViewModel());
   InputEmailTextField({
@@ -18,6 +19,7 @@ class InputEmailTextField extends StatelessWidget {
     required this.controller,
     required this.icons,
     this.number = true,
+    this.iconDisplay = true,
    this.hintText = 'Email',
   });
 
@@ -38,13 +40,12 @@ class InputEmailTextField extends StatelessWidget {
       cursorColor: Colors.grey,
       style: TextStyle(color: AppColor.blackColor,fontSize: 18,fontWeight: FontWeight.w400),
       decoration: InputDecoration(
-        prefixIcon: icons,
+        prefixIcon: iconDisplay?icons:SizedBox(),
         prefixIconColor: AppColor.greyColor,
       //  contentPadding: const EdgeInsets.symmetric(vertical: 18),
         border: InputBorder.none,
         //fillColor: const Color.fromARGB(255, 251, 250, 249),
        fillColor: Colors.transparent,
-
         filled: true,
         hintText: hintText,
         hintStyle:  TextStyle(

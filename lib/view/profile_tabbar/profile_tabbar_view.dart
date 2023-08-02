@@ -14,7 +14,7 @@ class ProfileTabBarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: ProfileTabBar(),
         body: SafeArea(

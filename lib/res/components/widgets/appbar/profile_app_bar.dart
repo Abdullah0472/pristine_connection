@@ -69,7 +69,7 @@ class ProfileTabBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               Tab(
                 child: Text(
-                  'Vehicle Detail',
+                  'Vehicle Details',
                   style: TextStyle(
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w400,

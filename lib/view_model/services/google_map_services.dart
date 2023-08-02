@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class GoogleMapServices extends GetxController {
+
+
   final currentTripVM = Get.put(CurrentTripController());
   CameraPosition initialLocation = const CameraPosition(target: LatLng(0.0, 0.0));
   late GoogleMapController mapController;
@@ -16,10 +20,34 @@ class GoogleMapServices extends GetxController {
   var destinationAddress = ''.obs;
   var placeDistance = Rx<String?>("0");
   Set<Marker> markers = {};
-  late PolylinePoints polylinePoints;
-  var polylines = Rx<Map<PolylineId, Polyline>>({});
-
+  Set<Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
+
+  ///============= Working with the New Method That is working ======== ///
+  bool hasCalculatedDistance = false;
+
+  @override
+  void onReady() {
+    super.onReady();
+    getCurrentLocation();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    once(currentTripVM.currentTripList, (data) {
+      if (!hasCalculatedDistance && data.data!.isNotEmpty) {
+        int index = 0; // Replace this with your desired index.
+        calculateDistance(index);
+        hasCalculatedDistance = true;
+      }
+    });
+  }
+
+
+
+
+  ///============= Working with the New Method That is working ======== ///
 
   Future<void> getCurrentLocation() async {
     try {
@@ -45,9 +73,11 @@ class GoogleMapServices extends GetxController {
         update();
       });
     } catch (e) {
-      print(e);
+
+      print("The Error in Getting Current user function ${e.toString()}");
     }
   }
+
 
  _getAddress() async {
     try {
@@ -58,16 +88,18 @@ class GoogleMapServices extends GetxController {
 
       currentAddress.value = "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
       startAddress.value = currentAddress.value;
+
       print("The Current Address ${currentAddress.value}");
       print("The Start Address  ${startAddress.value}");
+
     } catch (e) {
       print(e);
     }
   }
 
   Future<bool> calculateDistance(int index) async {
+
     try {
-      print('Calculating distance...'); // Add this line
       // Retrieving placemarks from addresses
       List<Location> startPlacemark = await locationFromAddress(startAddress.value);
       String? destinationAddress = currentTripVM.currentTripList.value.data![index].loadStatus == "started"
@@ -75,7 +107,8 @@ class GoogleMapServices extends GetxController {
           : currentTripVM.currentTripList.value.data![index].deliveryLocation;
 
       print("The Destination Address is : ${destinationAddress}");
-      print("The Destination Address is : ${currentTripVM.currentTripList.value.data![index].loadStatus}");
+      print("The Status is : ${currentTripVM.currentTripList.value.data![index].loadStatus}");
+
       List<Location> destinationPlacemark = await locationFromAddress(destinationAddress ?? "Default Address");
       double startLatitude = startAddress.value == currentAddress.value
           ? currentPosition.value!.latitude
@@ -83,6 +116,7 @@ class GoogleMapServices extends GetxController {
       double startLongitude = startAddress.value == currentAddress.value
           ? currentPosition.value!.longitude
           : startPlacemark[0].longitude;
+
       double destinationLatitude = destinationPlacemark[0].latitude;
       double destinationLongitude = destinationPlacemark[0].longitude;
       String startCoordinatesString = '($startLatitude, $startLongitude)';
@@ -152,7 +186,8 @@ class GoogleMapServices extends GetxController {
       print('Polyline coordinates: $polylineCoordinates');
       placeDistance.value = totalDistance.toStringAsFixed(2);
       print('DISTANCE: ${placeDistance.value} km');
-      refresh();
+     // refresh();
+      update();
       return true;
     } catch (e) {
       print(e);
@@ -177,8 +212,7 @@ class GoogleMapServices extends GetxController {
       double destinationLatitude,
       double destinationLongitude,
       ) async {
-    polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+    PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
       'AIzaSyBCgMkgjHVW3WL4GD4M6FdLar-tjlIT8aU', // Google Maps API Key
       PointLatLng(startLatitude, startLongitude),
       PointLatLng(destinationLatitude, destinationLongitude),
@@ -192,15 +226,14 @@ class GoogleMapServices extends GetxController {
       print('Error fetching polyline: ${result.status}');
       return false;
     }
-    PolylineId id = const PolylineId('poly');
-    Polyline polyline = Polyline(
-      polylineId: id,
+    polylines =  {
+      Polyline(
+      polylineId: PolylineId('poly'),
       color: Colors.red,
       points: polylineCoordinates,
       width: 3,
-    );
-    polylines.value[id] = polyline;
-    refresh();
+    )};
+    update();
   }
 
 }

@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:celient_project/model/current_trip/current_trip_model.dart';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/cards/load_detail_card.dart';
@@ -15,8 +13,6 @@ import 'package:celient_project/view_model/controller/current_trip/current_trip_
 import 'package:celient_project/view_model/controller/load_status_view_model/load_status_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 class LoadDetailView extends StatefulWidget {
   final String loadId;
   final String currentAddress;
@@ -57,7 +53,6 @@ class _LoadDetailViewState extends State<LoadDetailView> {
 
   final currentTripVM = Get.put(CurrentTripController());
 
- // LoadStatusPrefernce loadStatuses = LoadStatusPrefernce();
   LoadStatusPreference loadStatuspre = LoadStatusPreference();
 
   Timer? _timer;
@@ -68,6 +63,7 @@ class _LoadDetailViewState extends State<LoadDetailView> {
     // Start the timer when the widget is initialized
     startTimer();
   }
+
 
   @override
   void dispose() {
@@ -164,7 +160,6 @@ class _LoadDetailViewState extends State<LoadDetailView> {
                         );
 
                       case 'pickup':
-
                         return RoundButton(
                           loading: false,
                           width: 300,

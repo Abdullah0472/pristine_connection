@@ -30,8 +30,6 @@ class _TestingHomeViewState extends State<TestingHomeView> {
 
   int currentTripIndex = 0;
 
-  GoogleMapServices gmServices = GoogleMapServices();
-
   final currentTripVM = Get.put(CurrentTripController());
   final profileVM = Get.put(ProfileViewModel());
 
@@ -45,213 +43,192 @@ class _TestingHomeViewState extends State<TestingHomeView> {
       mapTheme = value;
     });
 
-    gmServices.getCurrentLocation();
+   // gmServices.getCurrentLocation();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        icon: true,
-        actionIcon: true,
-        action: [
-          PopupMenuButton(
-            itemBuilder: (context) =>
-            [
-              PopupMenuItem(
-                onTap: () {
-                  _controller.future.then(
-                        (value) {
-                      DefaultAssetBundle.of(context)
-                          .loadString('assets/maptheme/silver_theme.json')
-                          .then(
-                            (string) {
-                          value.setMapStyle(string);
-                        },
-                      );
-                    },
-                  );
-                },
-                child: const Text('Silver'),
-              ),
-              PopupMenuItem(
-                onTap: () {
-                  _controller.future.then(
-                        (value) {
-                      DefaultAssetBundle.of(context)
-                          .loadString('assets/maptheme/retro_theme.json')
-                          .then(
-                            (string) {
-                          value.setMapStyle(string);
-                        },
-                      );
-                    },
-                  );
-                },
-                child: const Text('Retro'),
-              ),
-              PopupMenuItem(
-                onTap: () {
-                  _controller.future.then(
-                        (value) {
-                      DefaultAssetBundle.of(context)
-                          .loadString('assets/maptheme/night_theme.json')
-                          .then(
-                            (string) {
-                          value.setMapStyle(string);
-                        },
-                      );
-                    },
-                  );
-                },
-                child: const Text('Night'),
-              ),
-            ],
-          )
-        ],
-        title: 'Trips on Going',
-        leadingIcon: IconButton(
-          onPressed: () {
-            Get.toNamed(RouteName.allJobVIew);
-          },
-          icon: const Icon(
-            MdiIcons.tag,
-            size: 30,
-            color: AppColor.blackColor,
+    return GetBuilder<GoogleMapServices>(
+      init: GoogleMapServices(),
+        builder: (gmServices) {
+      return Scaffold(
+        appBar: CustomAppBar(
+          icon: true,
+          actionIcon: true,
+          action: [
+            PopupMenuButton(
+              itemBuilder: (context) =>
+              [
+                PopupMenuItem(
+                  onTap: () {
+                    _controller.future.then(
+                          (value) {
+                        DefaultAssetBundle.of(context)
+                            .loadString('assets/maptheme/silver_theme.json')
+                            .then(
+                              (string) {
+                            value.setMapStyle(string);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: const Text('Silver'),
+                ),
+                PopupMenuItem(
+                  onTap: () {
+                    _controller.future.then(
+                          (value) {
+                        DefaultAssetBundle.of(context)
+                            .loadString('assets/maptheme/retro_theme.json')
+                            .then(
+                              (string) {
+                            value.setMapStyle(string);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: const Text('Retro'),
+                ),
+                PopupMenuItem(
+                  onTap: () {
+                    _controller.future.then(
+                          (value) {
+                        DefaultAssetBundle.of(context)
+                            .loadString('assets/maptheme/night_theme.json')
+                            .then(
+                              (string) {
+                            value.setMapStyle(string);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: const Text('Night'),
+                ),
+              ],
+            )
+          ],
+          title: 'Trips on Going',
+          leadingIcon: IconButton(
+            onPressed: () {
+              Get.toNamed(RouteName.allJobVIew);
+            },
+            icon: const Icon(
+              MdiIcons.tag,
+              size: 30,
+              color: AppColor.blackColor,
+            ),
           ),
         ),
-      ),
-      body: SafeArea(
-        child: Stack(alignment: AlignmentDirectional.center, children: [
-          // Map View
-          Obx(() {
-            return GoogleMap(
-              markers: Set<Marker>.from(gmServices.markers),
+        body: SafeArea(
+          child: Stack(alignment: AlignmentDirectional.center, children: [
+            // Map View
+            GoogleMap(
+              markers: gmServices.markers,
               initialCameraPosition: gmServices.initialLocation,
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
               mapType: MapType.normal,
               zoomGesturesEnabled: true,
               zoomControlsEnabled: false,
-              //polylines: Set<Polyline>.of(gmServices.polylines.value.values),
-              polylines: gmServices.polylines.value.values.toSet(),
+              polylines: gmServices.polylines,
               onMapCreated: (GoogleMapController controller) {
                 gmServices.mapController = controller;
               },
-            );
-          }),
+            ),
 
-          Positioned(
-            top: 60,
-            child: Obx(() {
-              switch (currentTripVM.rxRequestStatus.value) {
-                case Status.LOADING:
-                  return const Center(child: CircularProgressIndicator());
-                case Status.ERROR:
-                  if (currentTripVM.error.value == 'No internet') {
-                    return InterNetExceptionWidget(
-                      onPress: () {
-                        currentTripVM.refreshApi();
-                      },
-                    );
-                  } else {
-                    return GeneralExceptionWidget(
-                      onPress: () {
-                        currentTripVM.refreshApi();
-                      },
-                    );
-                  }
-                case Status.COMPLETED:
-                  if (currentTripVM.currentTripList.value.data != null &&
-                      currentTripVM.currentTripList.value.data!.isNotEmpty) {
-                    return Container(
-                      height: Get.height * 0.5,
-                      width: Get.width * 0.9,
-                      child: ListView.builder(
-                        itemCount:
-                        currentTripVM.currentTripList.value.data!.length,
-                        itemBuilder: (context, index) {
-                          return LoadCards(
-                            loadId: currentTripVM.currentTripList.value
-                                .data![index].loadId.toString(),
-                            dateTime: currentTripVM.currentTripList.value
-                                .data?[index].pickupDate ?? "",
-                            piece: currentTripVM.currentTripList.value
-                                .data![index].pieces.toString(),
-                            dims: currentTripVM.currentTripList.value
-                                .data?[index].dims ?? "",
-                            weight: currentTripVM.currentTripList.value
-                                .data![index].weight.toString(),
-                            miles: currentTripVM.currentTripList.value
-                                .data![index].miles.toString(),
-                            pickupName: '',
-                            pickupAddress: currentTripVM.currentTripList.value
-                                .data![index].pickupLocation ?? "",
-                            pickupDateTime: currentTripVM.currentTripList.value
-                                .data![index].pickupDate ?? "",
-                            deliveryName: '',
-                            deliveryAddress: currentTripVM.currentTripList.value
-                                .data![index].deliveryLocation ?? "",
-                            deliveryDateTime: currentTripVM.currentTripList
-                                .value.data![index].deliveryDate ?? "",
-                          );
-                        },
-                      ),
-                      //   ),
-                    );
-                  } else {
-                    return SizedBox(
-                      height: Get.height * 0.5,
-                      width: Get.width * 0.9,
-                      child: const Text(''),
-                    );
-                  }
-              }
-            }),
-          ),
-          Positioned(
-            top: 30,
-            child: Visibility(
-              visible: gmServices.placeDistance == null ? false : true,
+            Positioned(
+              top: 60,
               child: Obx(() {
-                return Text(
-                  'DISTANCE: ${gmServices.placeDistance} km',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
+                switch (currentTripVM.rxRequestStatus.value) {
+                  case Status.LOADING:
+                    return const Center(child: CircularProgressIndicator());
+                  case Status.ERROR:
+                    if (currentTripVM.error.value == 'No internet') {
+                      return InterNetExceptionWidget(
+                        onPress: () {
+                          currentTripVM.refreshApi();
+                        },
+                      );
+                    } else {
+                      return GeneralExceptionWidget(
+                        onPress: () {
+                          currentTripVM.refreshApi();
+                        },
+                      );
+                    }
+                  case Status.COMPLETED:
+                    if (currentTripVM.currentTripList.value.data != null &&
+                        currentTripVM.currentTripList.value.data!.isNotEmpty) {
+                      return Container(
+                        height: Get.height * 0.5,
+                        width: Get.width * 0.9,
+                        child: ListView.builder(
+                          itemCount:
+                          currentTripVM.currentTripList.value.data!.length,
+                          itemBuilder: (context, index) {
+                            return LoadCards(
+                              loadId: currentTripVM.currentTripList.value
+                                  .data![index].loadId.toString(),
+                              dateTime: currentTripVM.currentTripList.value
+                                  .data?[index].pickupDate ?? "",
+                              piece: currentTripVM.currentTripList.value
+                                  .data![index].pieces.toString(),
+                              dims: currentTripVM.currentTripList.value
+                                  .data?[index].dims ?? "",
+                              weight: currentTripVM.currentTripList.value
+                                  .data![index].weight.toString(),
+                              miles: currentTripVM.currentTripList.value
+                                  .data![index].miles.toString(),
+                              pickupName: '',
+                              pickupAddress: currentTripVM.currentTripList.value
+                                  .data![index].pickupLocation ?? "",
+                              pickupDateTime: currentTripVM.currentTripList
+                                  .value
+                                  .data![index].pickupDate ?? "",
+                              deliveryName: '',
+                              deliveryAddress: currentTripVM.currentTripList
+                                  .value
+                                  .data![index].deliveryLocation ?? "",
+                              deliveryDateTime: currentTripVM.currentTripList
+                                  .value.data![index].deliveryDate ?? "",
+                            );
+                          },
+                        ),
+                        //   ),
+                      );
+                    } else {
+                      return SizedBox(
+                        height: Get.height * 0.5,
+                        width: Get.width * 0.9,
+                        child: const Text(''),
+                      );
+                    }
+                }
               }),
             ),
-          ),
-          const SizedBox(height: 5),
-          ElevatedButton(
-            onPressed: () async {
-              int index = 0; // replace with actual index
-              await gmServices.getCurrentLocation();
-              bool result = await gmServices.calculateDistance(index);
-              if (result) {
-                print("Route calculated successfully");
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Distance Calculated Successfully'),
-                  ),
-                );
-              } else {
-                print("Failed to calculate route");
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Error Calculating Distance'),
-                  ),
-                );
-              }
-            },
-            child: Text('Show Route'),
-          )
+            Positioned(
+              top: 30,
+              child: Visibility(
+                visible: gmServices.placeDistance == null ? false : true,
+                child: Obx(() {
+                  return Text(
+                    'DISTANCE: ${gmServices.placeDistance} km',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }),
+              ),
+            ),
 
-        ]),
-      ),
-    );
+          ]),
+        ),
+      );
+    });
   }
 }

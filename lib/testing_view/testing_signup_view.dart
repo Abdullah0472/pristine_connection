@@ -1,23 +1,54 @@
+import 'dart:io';
 import 'package:celient_project/res/animation/FadeAnimation.dart';
 import 'package:celient_project/res/colors/colors.dart';
+import 'package:celient_project/res/components/widgets/bottom_sheet/bottom_sheet.dart';
+import 'package:celient_project/res/components/widgets/buttons/radio_button/radio_button.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_email_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_password_widget.dart';
+import 'package:celient_project/view_model/controller/loadDetail/loadDetail_view_model.dart';
 import 'package:celient_project/view_model/controller/signup/signup_view_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-//import 'package:multiple_images_picker/multiple_images_picker.dart';
 
-class TestingSignUpView extends StatelessWidget {
+class TestingSignUpView extends StatefulWidget {
   TestingSignUpView({Key? key}) : super(key: key);
+
+  @override
+  State<TestingSignUpView> createState() => _TestingSignUpViewState();
+}
+
+class _TestingSignUpViewState extends State<TestingSignUpView> {
   final signUpVM = Get.put(SignUpViewModel());
+
+  final loadVM = Get.put(loadDetailViewModel());
+
+  String title1 = "facemask";
+
+  String title2 = "dock_height";
+
+  String title3 = "pallet_jack";
+
+  String title4 = "lift_gate";
+
+  String title5 = "temp_count";
+
+  final accountdockey = GlobalKey<ScaffoldState>();
+
+  GlobalKey<FormState> personalformkey = GlobalKey<FormState>();
+
   GlobalKey<FormState> singnUpformkey = GlobalKey<FormState>();
+
+  GlobalKey<FormState> vehicleformkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: accountdockey,
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -66,86 +97,91 @@ class TestingSignUpView extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: Form(
-                key: singnUpformkey,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(60),
-                      topRight: Radius.circular(60),
-                    ),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(60),
+                    topRight: Radius.circular(60),
                   ),
-                  child: Obx(() => Theme(
-                        data: Theme.of(context).copyWith(
-                            canvasColor: Colors.white,
-                            colorScheme: const ColorScheme.light(
-                                primary: AppColor.applicationColor)),
-                        child: Stepper(
-                          type: StepperType.horizontal,
-                          steps: buildStep(),
-                          currentStep: signUpVM.currentStep.value,
-                          onStepContinue: () {
-                            if (signUpVM.currentStep.value ==
-                                buildStep().length - 1) {
-                              print("Send data to server");
-                            } else {
-                              signUpVM.currentStep.value++;
-                            }
-                          },
-                          onStepCancel: () {
-                            signUpVM.currentStep.value == 0
-                                ? null
-                                : signUpVM.currentStep.value--;
-                          },
-                          onStepTapped: (index) {
-                            signUpVM.currentStep.value = index;
-                          },
-                          controlsBuilder: (BuildContext context,
-                              ControlsDetails controlsDetails) {
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: RoundButton(
-                                      title: signUpVM.currentStep.value ==
-                                              buildStep().length - 1
-                                          ? "SIGN UP"
-                                          : "NEXT",
-                                      onPress: signUpVM.currentStep.value ==
-                                              buildStep().length - 1
-                                          ? () {
+                ),
+                child: Obx(() => Theme(
+                      data: Theme.of(context).copyWith(
+                          canvasColor: Colors.white,
+                          colorScheme: const ColorScheme.light(
+                              primary: AppColor.applicationColor)),
+                      child: Stepper(
+                        type: StepperType.horizontal,
+                        steps: buildStep(),
+                        currentStep: signUpVM.currentStep.value,
+                        onStepContinue: () {
+                          if (signUpVM.currentStep.value ==
+                              buildStep().length - 1) {
+                            print("Send data to server");
+                          } else {
+                            signUpVM.currentStep.value++;
+                          }
+                        },
+                        onStepCancel: () {
+                          signUpVM.currentStep.value == 0
+                              ? null
+                              : signUpVM.currentStep.value--;
+                        },
+                        onStepTapped: (index) {
+                          signUpVM.currentStep.value = index;
+                        },
+                        controlsBuilder: (BuildContext context,
+                            ControlsDetails controlsDetails) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: RoundButton(
+                                    title: signUpVM.currentStep.value ==
+                                            buildStep().length - 1
+                                        ? "SIGN UP"
+                                        : "NEXT",
+                                    onPress: signUpVM.currentStep.value ==
+                                            buildStep().length - 1
+                                        ? () {
+                                            if (singnUpformkey.currentState!
+                                                .validate()) {
                                               signUpVM.signUpApi();
-                                              signUpVM.emailController.value
-                                                  .clear();
-                                              signUpVM.passwordController.value
-                                                  .clear();
-                                              signUpVM.nameController.value
-                                                  .clear();
-                                              signUpVM.phoneController.value
-                                                  .clear();
+                                              // signUpVM.emailController.value
+                                              //     .clear();
+                                              // signUpVM.passwordController.value
+                                              //     .clear();
+                                              // signUpVM.nameController.value
+                                              //     .clear();
+                                              // signUpVM.phoneController.value
+                                              //     .clear();
                                             }
-                                          : () {
+                                          }
+                                        : () {
+                                            if (personalformkey.currentState!
+                                                .validate()) {
                                               controlsDetails
                                                   .onStepContinue!(); // fix here
-                                            }),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                                if (signUpVM.currentStep.value != 0)
-                                  Expanded(
-                                      child: RoundButton(
-                                          title: "PREVIOUS",
-                                          onPress: () {
-                                            controlsDetails
-                                                .onStepCancel!(); // fix here
-                                          })),
-                              ],
-                            );
-                          },
-                        ),
-                      )),
-                ),
+                                            }
+                                          }),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              if (signUpVM.currentStep.value != 0)
+                                Expanded(
+                                    child: RoundButton(
+                                        title: "PREVIOUS",
+                                        onPress: () {
+                                          if (vehicleformkey.currentState!
+                                              .validate()) {
+                                            controlsDetails.onStepCancel!();
+                                          }
+                                        })),
+                            ],
+                          );
+                        },
+                      ),
+                    )),
               ),
             ),
           ],
@@ -156,21 +192,198 @@ class TestingSignUpView extends StatelessWidget {
 
   List<Step> buildStep() {
     return [
+      // Personal Information
       Step(
-          title: const Text(
-            'Personal Info',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
+          // title: const Text(
+          //   'Personal',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.w600,
+          //   ),
+          // ),
+          title: Icon(MdiIcons.account,size: 30,),
+          content: Form(
+            key: personalformkey,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                child: Column(
+                  children: <Widget>[
+                    FadeAnimation(
+                      1.4,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromRGBO(32, 132, 232, .3),
+                              blurRadius: 20,
+                              offset: Offset(0, 10),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                validator: signUpVM.validateEmail,
+                                controller: signUpVM.nameController.value,
+                                hintText: 'Name',
+                                icons: const Icon(MdiIcons.accountCircle),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                validator: signUpVM.validateEmail,
+                                controller: signUpVM.emailController.value,
+                                icons: const Icon(MdiIcons.email),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                number: false,
+                                hintText: 'Phone Number',
+                                validator: signUpVM.validateEmail,
+                                controller: signUpVM.phoneController.value,
+                                icons: const Icon(MdiIcons.phone),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputPasswordTextField(
+                                isPasswordType: true,
+                                icons: const Icon(MdiIcons.lock),
+                                controllerpass:
+                                    signUpVM.passwordController.value,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                number: false,
+                                hintText: 'Licence Number',
+                                validator: signUpVM.validateEmail,
+                                controller:
+                                    signUpVM.licenceNumberController.value,
+                                icons: const Icon(MdiIcons.license),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                number: false,
+                                hintText: 'Licence Expiry',
+                                validator: signUpVM.validateEmail,
+                                controller:
+                                    signUpVM.licenceExpireController.value,
+                                icons: const Icon(MdiIcons.calendar),
+                              ),
+                            ),
+                            Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.grey.shade200,
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Text('Face Mask',
+                                        style: TextStyle(
+                                            color: AppColor.greyColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400)),
+                                    MyRadioButtons(
+                                      onSelected: (String? selectedValue) {
+                                        // title1 = selectedValue!;
+                                        title1 = selectedValue ?? "facemask";
+                                        signUpVM.faceMaskController.value.text =
+                                            selectedValue!;
+                                      },
+                                      radioController:
+                                          signUpVM.faceMaskController.value,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-          content: SingleChildScrollView(
+          isActive: signUpVM.currentStep.value >= 0,
+          state: signUpVM.currentStep.value > 0
+              ? StepState.complete
+              : StepState.indexed),
+      // Vehicle Information
+      Step(
+        // title: const Text(
+        //   'Vehicle',
+        //   style: TextStyle(
+        //     fontWeight: FontWeight.w600,
+        //   ),
+        // ),
+          title: Icon(MdiIcons.truck,size: 30,),
+        content: Form(
+          key: vehicleformkey,
+          child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(30),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               child: Column(
                 children: <Widget>[
-                  const SizedBox(
-                    height: 10,
-                  ),
                   FadeAnimation(
                     1.4,
                     Container(
@@ -186,6 +399,8 @@ class TestingSignUpView extends StatelessWidget {
                         ],
                       ),
                       child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             padding: const EdgeInsets.all(10),
@@ -196,13 +411,190 @@ class TestingSignUpView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            child: InputEmailTextField(
-                              validator: signUpVM.validateEmail,
-                              controller: signUpVM.nameController.value,
-                              hintText: 'Name',
-                              icons: const Icon(MdiIcons.accountCircle),
+                            child: IntrinsicHeight(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.vehicleTypeController.value,
+                                      hintText: 'Type',
+                                      icons: const Icon(MdiIcons.truck),
+                                    ),
+                                  ),
+                                  const VerticalDivider(
+                                    color: AppColor.greyColor,
+                                    thickness: 1,
+                                  ),
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      iconDisplay: false,
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.vehicleModelController.value,
+                                      hintText: 'Model',
+                                      icons: const Icon(MdiIcons.truck),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
+
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade200,
+                                ),
+                              ),
+                            ),
+                            child: IntrinsicHeight(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.vehicleMakeController.value,
+                                      hintText: 'Make',
+                                      icons: const Icon(MdiIcons.truck),
+                                    ),
+                                  ),
+                                  const VerticalDivider(
+                                    color: AppColor.greyColor,
+                                    thickness: 1,
+                                  ),
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                     number: false,
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.vehicleYearController.value,
+                                      hintText: 'Year',
+                                      icons: const Icon(MdiIcons.calendarBlank),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade200,
+                                ),
+                              ),
+                            ),
+                            child: IntrinsicHeight(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.heightController.value,
+                                      hintText: 'Height',
+                                      icons: const Icon(MdiIcons.arrowUpDown),
+                                    ),
+                                  ),
+                                  const VerticalDivider(
+                                    color: AppColor.greyColor,
+                                    thickness: 1,
+                                  ),
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      number: false,
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.lengthController.value,
+                                      hintText: 'Length',
+                                      icons: const Icon(MdiIcons.arrowLeftRight),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade200,
+                                ),
+                              ),
+                            ),
+                            child: IntrinsicHeight(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.widthController.value,
+                                      hintText: 'Width',
+                                      icons: const Icon(MdiIcons.arrowLeftRight),
+                                    ),
+                                  ),
+                                  const VerticalDivider(
+                                    color: AppColor.greyColor,
+                                    thickness: 1,
+                                  ),
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      number: false,
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.weightController.value,
+                                      hintText: 'Weight',
+                                      icons: const Icon(MdiIcons.weight),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade200,
+                                ),
+                              ),
+                            ),
+                            child: IntrinsicHeight(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.cargoDimsController.value,
+                                      hintText: 'Cargo Dims',
+                                      icons: const Icon(MdiIcons.truckCargoContainer),
+                                    ),
+                                  ),
+                                  const VerticalDivider(
+                                    color: AppColor.greyColor,
+                                    thickness: 1,
+                                  ),
+                                  Expanded(
+                                    child: InputEmailTextField(
+                                      number: false,
+                                      validator: signUpVM.validateEmail,
+                                      controller: signUpVM.doorDimsController.value,
+                                      hintText: 'Door Dims',
+                                      icons: const Icon(MdiIcons.carDoor),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                          ),
+
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -213,190 +605,139 @@ class TestingSignUpView extends StatelessWidget {
                               ),
                             ),
                             child: InputEmailTextField(
+                              hintText: "Registration Number",
                               validator: signUpVM.validateEmail,
-                              controller: signUpVM.emailController.value,
-                              icons: const Icon(MdiIcons.email),
+                              controller:
+                                  signUpVM.vehicleRegistrationController.value,
+                              icons: const Icon(MdiIcons.poundBox),
                             ),
                           ),
+
                           Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: InputEmailTextField(
-                              number: false,
-                              hintText: 'Phone Number',
-                              validator: signUpVM.validateEmail,
-                              controller: signUpVM.phoneController.value,
-                              icons: const Icon(MdiIcons.phone),
-                            ),
-                          ),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Text('Dock Height',
+                                      style: TextStyle(
+                                          color: AppColor.greyColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400)),
+                                  MyRadioButtons(
+                                    onSelected: (String? selectedValue) {
+                                      // title2 = selectedValue!;
+                                      title2 = selectedValue ?? "dock_height";
+                                      signUpVM.dockHeightController.value.text =
+                                          selectedValue!;
+                                    },
+                                    radioController:
+                                    signUpVM.dockHeightController.value,
+                                  ),
+                                ],
+                              )),
+
                           Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: InputPasswordTextField(
-                              isPasswordType: true,
-                              icons: const Icon(MdiIcons.lock),
-                              controllerpass: signUpVM.passwordController.value,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          isActive: signUpVM.currentStep.value >= 0,
-          state: signUpVM.currentStep.value > 0
-              ? StepState.complete
-              : StepState.indexed),
-      Step(
-        title: const Text(
-          'Vehicle Info',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        content: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                FadeAnimation(
-                  1.4,
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color.fromRGBO(32, 132, 232, .3),
-                          blurRadius: 20,
-                          offset: Offset(0, 10),
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.grey.shade200,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Text('Pallet Jack',
+                                      style: TextStyle(
+                                          color: AppColor.greyColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400)),
+                                  MyRadioButtons(
+                                    onSelected: (String? selectedValue) {
+                                      // title3 = selectedValue!;
+                                      title3 = selectedValue ?? "pallet_jack";
+                                      signUpVM.palletJeckController.value.text =
+                                          selectedValue!;
+                                    },
+                                    radioController:
+                                    signUpVM.palletJeckController.value,
+                                  ),
+                                ],
+                              )),
+
+                          Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          child: InputEmailTextField(
-                            validator: signUpVM.validateEmail,
-                            controller: signUpVM.vehicleTypeController.value,
-                            hintText: 'Truck Type',
-                            icons: const Icon(MdiIcons.truckFlatbed),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.grey.shade200,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Text('Lift Gate ',
+                                      style: TextStyle(
+                                          color: AppColor.greyColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400)),
+                                  MyRadioButtons(
+                                    onSelected: (String? selectedValue) {
+                                      // title4 = selectedValue!;
+                                      title4 = selectedValue ?? "lift_gate";
+                                      signUpVM.liftGateController.value.text =
+                                          selectedValue!;
+                                    },
+                                    radioController:
+                                    signUpVM.liftGateController.value,
+                                  ),
+                                ],
+                              )),
+
+                          Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          child: InputEmailTextField(
-                            hintText: "Registration Number",
-                            validator: signUpVM.validateEmail,
-                            controller:
-                                signUpVM.vehicleRegistrationController.value,
-                            icons: const Icon(MdiIcons.poundBox),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.grey.shade200,
-                              ),
-                            ),
-                          ),
-                          child: InputEmailTextField(
-                            number: false,
-                            hintText: 'Weight',
-                            validator: signUpVM.validateEmail,
-                            controller: signUpVM.weightController.value,
-                            icons: const Icon(MdiIcons.weight),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.grey.shade200,
-                              ),
-                            ),
-                          ),
-                          child: InputEmailTextField(
-                            number: false,
-                            hintText: 'l x w x h',
-                            validator: signUpVM.validateEmail,
-                            controller: signUpVM.lengthController.value,
-                            icons: const Icon(MdiIcons.arrowLeftRight),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            Map<Permission, PermissionStatus> statuses = await [
-                              Permission.storage,
-                              Permission.camera,
-                              Permission.photos,
-                            ].request();
-                            if (statuses[Permission.camera]!.isGranted &&
-                                statuses[Permission.storage]!.isGranted &&
-                                statuses[Permission.photos]!.isGranted) {
-                              signUpVM.loadAssets();
-                            } else {
-                              print('No permission provided');
-                              if (statuses[Permission.storage]!.isDenied ||
-                                  statuses[Permission.storage]!.isPermanentlyDenied) {
-                                print('Storage permission denied');
-                                PermissionStatus storageStatus = await Permission.storage.request();
-                                if (storageStatus.isDenied || storageStatus.isPermanentlyDenied) {
-                                  print('Storage permission still denied after re-request');
-                                  // openAppSettings();
-                                }
-                              }
-                              if (statuses[Permission.camera]!.isDenied ||
-                                  statuses[Permission.camera]!.isPermanentlyDenied) {
-                                // Handle camera permission denied or permanently denied
-                                print('Camera permission denied');
-                                PermissionStatus cameraStatus = await Permission.camera.request();
-                                if (cameraStatus.isDenied || cameraStatus.isPermanentlyDenied) {
-                                  print('Camera permission still denied after re-request');
-                                  openAppSettings();
-                                }
-                              }
-                            }
-                          },
-                          child: Container(
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Text('Temp Count',
+                                      style: TextStyle(
+                                          color: AppColor.greyColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400)),
+                                  MyRadioButtons(
+                                    onSelected: (String? selectedValue) {
+                                      // title5 = selectedValue!;
+                                      title5 = selectedValue ?? "temp_count";
+                                      signUpVM.tempCountController.value.text =
+                                          selectedValue!;
+                                    },
+                                    radioController:
+                                    signUpVM.tempCountController.value,
+                                  ),
+                                ],
+                              )),
+
+                          Container(
                             height: 200,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -406,43 +747,252 @@ class TestingSignUpView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            child: Obx(() {
-                              return GridView.builder(
-                                itemCount: signUpVM.images.length,
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 10.0,
-                                  mainAxisSpacing: 10.0,
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-                                  Asset asset = signUpVM.images[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                      child: AssetThumb(
-                                        asset: asset,
-                                        width: 300,
-                                        height: 300,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            }),
+                            child: SizedBox(
+                              width:
+                                  200.0, // To show images in particular area only
+                              child: signUpVM.selectedImages
+                                      .isEmpty // If no images is selected
+                                  ? const Center(
+                                      child: Text('Sorry nothing selected!!'))
+                                  // If atleast 1 images is selected
+                                  : Obx(() {
+                                      return GridView.builder(
+                                        itemCount:
+                                            signUpVM.selectedImages.length,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing: 5.0,
+                                          mainAxisSpacing: 5.0,
+                                        ),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          // Asset asset = signUpVM.images[index];
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                                child: kIsWeb
+                                                    ? Image.network(signUpVM
+                                                        .selectedImages[index]
+                                                        .path)
+                                                    : Image.file(
+                                                        signUpVM.selectedImages[
+                                                            index])),
+                                          );
+                                        },
+                                      );
+                                    }),
+                            ),
                           ),
-                        ),
-
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  RoundButton(
+                      height: 40,
+                      width: 150,
+                      title: "Select Image",
+                      onPress: () {
+                        signUpVM.getImages();
+                      }),
+                ],
+              ),
             ),
           ),
         ),
         isActive: signUpVM.currentStep.value >= 1,
+          state: signUpVM.currentStep.value > 1
+              ? StepState.complete
+              : StepState.indexed
       ),
+      // Account Information
+      Step(
+          // title: const Text(
+          //   'Account',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.w600,
+          //   ),
+          // ),
+        title: Icon(MdiIcons.bankCircle,size: 30,),
+          content: Form(
+            key: singnUpformkey,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                child: Column(
+                  children: <Widget>[
+                    FadeAnimation(
+                      1.4,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromRGBO(32, 132, 232, .3),
+                              blurRadius: 20,
+                              offset: Offset(0, 10),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                validator: signUpVM.validateEmail,
+                                controller: signUpVM.bankNameController.value,
+                                hintText: 'Bank Name',
+                                icons: const Icon(MdiIcons.bank),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                hintText: 'Account Name',
+                                validator: signUpVM.validateEmail,
+                                controller: signUpVM.accountNameController.value,
+                                icons: const Icon(MdiIcons.account),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child: InputEmailTextField(
+                                number: false,
+                                hintText: 'Routing',
+                                validator: signUpVM.validateEmail,
+                                controller: signUpVM.routingController.value,
+                                icons: const Icon(MdiIcons.counter),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                  ),
+                                ),
+                              ),
+                              child:InputEmailTextField(
+                                number: false,
+                                hintText: 'Account Number',
+                                validator: signUpVM.validateEmail,
+                                controller: signUpVM.accountNumberController.value,
+                                icons: const Icon(MdiIcons.accountBox),
+                              ),
+                            ),
+
+                            SizedBox(height: 5,),
+                            const Text(
+                              'PICTURE OF THE BANK DOCUMENT',
+                              style: TextStyle(
+                                color: AppColor.infoTextColor,
+                                fontWeight: FontWeight.w500,
+                               // fontSize: 16,
+                              ),
+                            ),
+
+                            Container(
+                              width: Get.width,
+                              height: 200,
+                              color: AppColor.whiteColor,
+                              child: Center(
+                                child: IconButton(
+                                  onPressed: () async {
+                                    Map<Permission, PermissionStatus> statuses = await [
+                                      Permission.storage,
+                                      Permission.camera,
+                                    ].request();
+
+                                    if (statuses[Permission.camera]!.isGranted) {
+                                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                                        accountdockey.currentState!.showBottomSheet(
+                                              (context) {
+                                            return ShowBottom(
+                                                containerIndex: 8,
+                                                onImageSelected: (String? imageUrl) {
+                                                  if (imageUrl != null) {
+                                                    signUpVM.accountDocPic.value = imageUrl;
+                                                  }
+                                                }); // Pass the container index as 0 for the first container
+                                          },
+                                        );
+                                      });
+                                    } else {
+                                      print('No permission provided');
+                                      if (statuses[Permission.storage]!.isDenied ||
+                                          statuses[Permission.storage]!.isPermanentlyDenied) {
+                                        // Handle storage permission denied or permanently denied
+                                        print('Storage permission denied');
+                                      }
+                                      if (statuses[Permission.camera]!.isDenied ||
+                                          statuses[Permission.camera]!.isPermanentlyDenied) {
+                                        // Handle camera permission denied or permanently denied
+                                        print('Camera permission denied');
+                                      }
+                                    }
+                                  },
+                                  icon: Obx(() {
+                                    if (loadVM.imageFiles[8].value.path != '') {
+                                      // Use the imageFile list with index 1 for the second container
+                                      return Image.file(
+                                        loadVM.imageFiles[8].value,
+                                        fit: BoxFit.fill,
+                                        width: Get.width,
+                                        height: 200,
+                                      );
+                                    } else {
+                                      return const Icon(
+                                        MdiIcons.cameraIris,
+                                        size: 55,
+                                        color: AppColor.blackColor,
+                                      );
+                                    }
+                                  }),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          isActive: signUpVM.currentStep.value >= 2,
+          // state: signUpVM.currentStep.value > 0
+          //     ? StepState.complete
+          //     : StepState.indexed
+      ),
+
     ];
   }
 }
