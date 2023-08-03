@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:celient_project/view_model/controller/current_trip/current_trip_view_model.dart';
+import 'package:celient_project/view_model/services/update_location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -44,11 +45,6 @@ class GoogleMapServices extends GetxController {
     });
   }
 
-
-
-
-  ///============= Working with the New Method That is working ======== ///
-
   Future<void> getCurrentLocation() async {
     try {
       print('Getting current location...');
@@ -79,6 +75,7 @@ class GoogleMapServices extends GetxController {
   }
 
 
+
  _getAddress() async {
     try {
       List<Placemark> p = await placemarkFromCoordinates(
@@ -96,6 +93,7 @@ class GoogleMapServices extends GetxController {
       print(e);
     }
   }
+
 
   Future<bool> calculateDistance(int index) async {
 
@@ -206,6 +204,7 @@ class GoogleMapServices extends GetxController {
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
   }
+
   _createPolylines(
       double startLatitude,
       double startLongitude,

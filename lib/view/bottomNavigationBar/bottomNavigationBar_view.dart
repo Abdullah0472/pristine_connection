@@ -1,13 +1,18 @@
 // ignore: file_names
+import 'dart:async';
 import 'dart:io';
+import 'package:celient_project/res/app_url/app_url.dart';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/navigationBar/navigationBar.dart';
 import 'package:celient_project/testing_view/testing_home_view.dart';
 import 'package:celient_project/view/history/history_view.dart';
 import 'package:celient_project/view/home/home_view.dart';
 import 'package:celient_project/view/profile_tabbar/profile_tabbar_view.dart';
+import 'package:celient_project/view_model/services/update_location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../profile/profile_view.dart';
 
@@ -20,8 +25,18 @@ class BottomNavigationBarView extends StatefulWidget {
       _BottomNavigationBarViewState();
 }
 
+
 class _BottomNavigationBarViewState extends State<BottomNavigationBarView> {
   int _selectedIndex = 0;
+
+
+  Timer? timer;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Get.find<UpdateLocationServices>().startLocationUpdates();
+  }
 
   final List _widgetOptions = [
     ///------------ Name of The Screens/View ------------------- ///

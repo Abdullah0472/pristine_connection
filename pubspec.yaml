@@ -52,6 +52,7 @@ dependencies:
   #Get Permission
   geolocator: ^9.0.2
   geocoding: ^2.1.0
+  #location: ^5.0.1
   #Flutter Polyline Point
   flutter_polyline_points: ^1.0.0
   #Custom Info Window

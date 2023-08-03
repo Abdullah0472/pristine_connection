@@ -6,7 +6,9 @@ class UserPreference {
     print('Saving user...');
 
     SharedPreferences sp = await SharedPreferences.getInstance();
+
     sp.setString('token', responseModel.data!.bearerToken ?? '');
+    sp.setString('uniqueId', responseModel.data!.uniqueId ?? '');
     sp.setBool('isLogin', responseModel.isLogin ?? false);
     print('User saved.');
     return true;
@@ -17,10 +19,11 @@ class UserPreference {
     print('Getting user...');
     SharedPreferences sp = await SharedPreferences.getInstance();
     String? token = sp.getString('token');
+    String? uniqueId = sp.getString('uniqueId');
     bool? isLogin = sp.getBool('isLogin');
     print('User got.');
     return LoginModel(
-      data: Data(bearerToken: token),
+      data: Data(bearerToken: token,uniqueId:uniqueId ),
       isLogin: isLogin,
     );
   }

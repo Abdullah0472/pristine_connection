@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class SignUpViewModel extends GetxController {
   final _api = SignUpRepository();
 
@@ -20,7 +19,8 @@ class SignUpViewModel extends GetxController {
   var currentStep = 0.obs;
 
   UserPreference userPreference = UserPreference();
- /// -------------- Personal Information -------------- ///
+
+  /// -------------- Personal Information -------------- ///
   final emailController = TextEditingController().obs;
   final passwordController = TextEditingController().obs;
   final nameController = TextEditingController().obs;
@@ -28,6 +28,7 @@ class SignUpViewModel extends GetxController {
   final licenceNumberController = TextEditingController().obs;
   final licenceExpireController = TextEditingController().obs;
   final faceMaskController = TextEditingController().obs;
+
   /// -------------- Personal Information -------------- ///
 
   /// -------------- Vehicle Information -------------- ///
@@ -46,6 +47,7 @@ class SignUpViewModel extends GetxController {
   final palletJeckController = TextEditingController().obs;
   final liftGateController = TextEditingController().obs;
   final tempCountController = TextEditingController().obs;
+
   /// -------------- Vehicle Information -------------- ///
 
   /// -------------- Bank Account Information -------------- ///
@@ -53,14 +55,34 @@ class SignUpViewModel extends GetxController {
   final accountNameController = TextEditingController().obs;
   final routingController = TextEditingController().obs;
   final accountNumberController = TextEditingController().obs;
+
   /// -------------- Bank Account Information -------------- ///
+
+  /// -------------- Insurance Information -------------- ///
+  final insuranceExpController = TextEditingController().obs;
+  final hardHatController = TextEditingController().obs;
+  final steelToeController = TextEditingController().obs;
+  final vestController = TextEditingController().obs;
+
+  /// -------------- Insurance Information -------------- ///
+
+  /// -------------- Team Information -------------- ///
+  final teamController = TextEditingController().obs;
+  final teamNameController = TextEditingController().obs;
+  final teamNumberController = TextEditingController().obs;
+  final regExpController = TextEditingController().obs;
+  final dlExpController = TextEditingController().obs;
+  final hazmatExpController = TextEditingController().obs;
+
+  /// -------------- Team Information -------------- ///
+
   final emailFocusNode = FocusNode().obs;
   final passwordFocusNode = FocusNode().obs;
   final nameFocusNode = FocusNode().obs;
   final phoneFocusNode = FocusNode().obs;
-  RxList<File> selectedImages = RxList<File>(); // Reactive list of selected images
+  RxList<File> selectedImages =
+      RxList<File>(); // Reactive list of selected images
   final picker = ImagePicker(); // Instance of Image picker
-
 
   RxBool loading = false.obs;
   ////////////////////////Validation for Email///////////////////////////
@@ -95,9 +117,7 @@ class SignUpViewModel extends GetxController {
       // Convert List<XFile> to List<File>
       List<File> files = pickedFiles.map((xfile) => File(xfile.path)).toList();
 
-
       selectedImages.addAll(files);
-
     } else {
       Get.snackbar(
         'No image selected',
@@ -111,6 +131,19 @@ class SignUpViewModel extends GetxController {
 
   RxString accountDocPic = ''.obs;
 
+  RxString insuranceExpPic = ''.obs;
+
+  RxString regExpPic = ''.obs;
+
+  RxString dlExpPic = ''.obs;
+
+  RxString greenCardExpPic = ''.obs;
+
+  RxString twicCardExpPic = ''.obs;
+
+  RxString tsaCardExpPic = ''.obs;
+
+  RxString hazmatExpPic = ''.obs;
 
   void signUpApi() async {
     try {
@@ -125,21 +158,15 @@ class SignUpViewModel extends GetxController {
 
       loading.value = true;
 
-      // List<String> multiplePicBase64List = []; // List to store base64-encoded images
-      // // Convert each image to base64 and add to the list
-      // for (File imageFile in selectedImages) {
-      //   final extension = imageFile.path.split(".").last;
-      //   final imageBytes = await imageFile.readAsBytes();
-      //   final imageBase64 = 'data:image/$extension;base64,${base64Encode(imageBytes)}';
-      //   multiplePicBase64List.add(imageBase64);
-      // }
 
-      String multiplePicBase64String = ''; // String to store base64-encoded images separated by ';'
+      String multiplePicBase64String =
+          ''; // String to store base64-encoded images separated by ';'
 // Convert each image to base64 and add to the string
       for (File imageFile in selectedImages) {
         final extension = imageFile.path.split(".").last;
         final imageBytes = await imageFile.readAsBytes();
-        final imageBase64 = 'data:image/$extension;base64,${base64Encode(imageBytes)}';
+        final imageBase64 =
+            'data:image/$extension;base64,${base64Encode(imageBytes)}';
         if (multiplePicBase64String.isNotEmpty) {
           // If the string is not empty, add a ';' before adding the new image
           multiplePicBase64String += ';';
@@ -147,17 +174,111 @@ class SignUpViewModel extends GetxController {
         multiplePicBase64String += imageBase64;
       }
 
-
       /// Account Document Information Picture ///
       final accountDocPicFile = File(accountDocPic.value);
       if (!accountDocPicFile.existsSync()) {
-        print('Unload Place file does not exist at this path: $accountDocPic');
+        print(
+            'Account Document Information Picture does not exist at this path: $accountDocPic');
         return; // Exit if the file doesn't exist
       }
 
       final accountDocPicExtension = accountDocPic.split(".").last;
       final accountDocPicBytes = await accountDocPicFile.readAsBytes();
-      final accountDocPicBase64 = 'data:image/$accountDocPicExtension;base64,${base64Encode(accountDocPicBytes)}';
+      final accountDocPicBase64 =
+          'data:image/$accountDocPicExtension;base64,${base64Encode(accountDocPicBytes)}';
+
+      /// Insurance Expiry Picture ///
+      final insuranceExpPicFile = File(insuranceExpPic.value);
+      if (!insuranceExpPicFile.existsSync()) {
+        print(
+            'Insurance Expiry Picture does not exist at this path: $insuranceExpPic');
+        return; // Exit if the file doesn't exist
+      }
+
+      final insuranceExpPicExtension = insuranceExpPic.split(".").last;
+      final insuranceExpPicBytes = await insuranceExpPicFile.readAsBytes();
+      final insuranceExpPicBase64 =
+          'data:image/$insuranceExpPicExtension;base64,${base64Encode(insuranceExpPicBytes)}';
+
+      /// Registration Expiry Picture ///
+      final regExpPicFile = File(regExpPic.value);
+      if (!regExpPicFile.existsSync()) {
+        print(
+            'Insurance Expiry Picture does not exist at this path: $regExpPic');
+        return; // Exit if the file doesn't exist
+      }
+
+      final regExpPicExtension = regExpPic.split(".").last;
+      final regExpPicBytes = await regExpPicFile.readAsBytes();
+      final regExpPicBase64 =
+          'data:image/$regExpPicExtension;base64,${base64Encode(regExpPicBytes)}';
+
+
+      /// DL Expiry Picture ///
+      final dlExpPicFile = File(dlExpPic.value);
+      if (!dlExpPicFile.existsSync()) {
+        print(
+            'Insurance Expiry Picture does not exist at this path: $dlExpPic');
+        return; // Exit if the file doesn't exist
+      }
+
+      final dlExpPicExtension = dlExpPic.split(".").last;
+      final dlExpPicBytes = await dlExpPicFile.readAsBytes();
+      final dlExpPicBase64 =
+          'data:image/$dlExpPicExtension;base64,${base64Encode(dlExpPicBytes)}';
+
+      /// GREEN CARD Picture ///
+      final greenCardFile = File(greenCardExpPic.value);
+      if (!greenCardFile.existsSync()) {
+        print(
+            'Insurance Expiry Picture does not exist at this path: $greenCardExpPic');
+        return; // Exit if the file doesn't exist
+      }
+
+      final greenCardExtension = greenCardExpPic.split(".").last;
+      final greenCardPicBytes = await greenCardFile.readAsBytes();
+      final greenCardExpPicBase64 =
+          'data:image/$greenCardExtension;base64,${base64Encode(greenCardPicBytes)}';
+
+      /// TWIC CARD Picture ///
+      final twicCardFile = File(twicCardExpPic.value);
+      if (!twicCardFile.existsSync()) {
+        print(
+            'Insurance Expiry Picture does not exist at this path: $twicCardExpPic');
+        return; // Exit if the file doesn't exist
+      }
+
+      final twicCardExtension = twicCardExpPic.split(".").last;
+      final twicCardPicBytes = await twicCardFile.readAsBytes();
+      final twicCardExpPicBase64 =
+          'data:image/$twicCardExtension;base64,${base64Encode(twicCardPicBytes)}';
+
+
+      /// TSA CARD Picture ///
+      final tsaCardFile = File(tsaCardExpPic.value);
+      if (!tsaCardFile.existsSync()) {
+        print(
+            'Insurance Expiry Picture does not exist at this path: $tsaCardExpPic');
+        return; // Exit if the file doesn't exist
+      }
+
+      final tsaCardExtension = tsaCardExpPic.split(".").last;
+      final tsaCardPicBytes = await tsaCardFile.readAsBytes();
+      final tsaCardExpPicBase64 =
+          'data:image/$tsaCardExtension;base64,${base64Encode(tsaCardPicBytes)}';
+
+      /// HAZMAT Picture ///
+      final hazmatFile = File(hazmatExpPic.value);
+      if (!hazmatFile.existsSync()) {
+        print(
+            'Insurance Expiry Picture does not exist at this path: $hazmatExpPic');
+        return; // Exit if the file doesn't exist
+      }
+
+      final hazmatExtension = hazmatExpPic.split(".").last;
+      final hazmatPicBytes = await hazmatFile.readAsBytes();
+      final hazmatExpPicBase64 =
+          'data:image/$hazmatExtension;base64,${base64Encode(hazmatPicBytes)}';
 
 
       Map data = {
@@ -176,12 +297,12 @@ class SignUpViewModel extends GetxController {
         'height': heightController.value.text,
         'length': lengthController.value.text,
         'width': widthController.value.text,
-       // 'weight': weightController.value.text,
+        'weight': weightController.value.text,
         'cargo_dims': cargoDimsController.value.text,
         'door_dims': doorDimsController.value.text,
-        'dock_height': dockHeightController.value.text,
+        'dock_high': dockHeightController.value.text,
         'pallet_jack': palletJeckController.value.text,
-        'lift_gate':liftGateController.value.text,
+        'lift_gate': liftGateController.value.text,
         'temp_count': tempCountController.value.text,
         'vehicle_images': multiplePicBase64String, //multiplePicBase64List,
         'bank_name': bankNameController.value.text,
@@ -189,6 +310,24 @@ class SignUpViewModel extends GetxController {
         'routing': routingController.value.text,
         'account_number': accountNumberController.value.text,
         'bank_docs': accountDocPicBase64,
+        'insurance_exp': insuranceExpPicBase64,
+        'ins_exp_date': insuranceExpController.value.text,
+        'hard_hat': hardHatController.value.text,
+        'steel_toe': steelToeController.value.text,
+        'vest': vestController.value.text,
+        'reg_exp': regExpPicBase64,
+        'reg_exp_date': regExpController.value.text,
+        'team': teamController.value.text,
+        'team_name': teamNameController.value.text,
+        'team_number': teamNumberController.value.text,
+        'dl_exp_date': dlExpController.value.text,
+        'dl_exp': dlExpPicBase64,
+        'green_card': greenCardExpPicBase64,
+        'twic_card': twicCardExpPicBase64,
+        'tsa_card': tsaCardExpPicBase64,
+        'hazmat_exp': hazmatExpPicBase64,
+        'hazmat_exp_date': hazmatExpController.value.text,
+
       };
       _api.signUpApi(data).then((value) {
         loading.value = false;
@@ -224,10 +363,7 @@ class SignUpViewModel extends GetxController {
       return; // End the function
     }
   }
-
-
 }
-
 
 // void signUpApi() async {
 //   try {
@@ -286,4 +422,3 @@ class SignUpViewModel extends GetxController {
 //     return; // End the function
 //   }
 // }
-

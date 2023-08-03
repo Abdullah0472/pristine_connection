@@ -44,6 +44,10 @@ class loadDetailViewModel extends GetxController {
     Rx<File>(File('')), // For the tenth container
     Rx<File>(File('')), // For the eleven container
     Rx<File>(File('')), // For the twelve container
+    Rx<File>(File('')), // For the thirteen container
+    Rx<File>(File('')), // For the fourteen container
+    Rx<File>(File('')), // For the fifteen container
+    Rx<File>(File('')), // For the sixteen container
   ];
 
 

@@ -3,14 +3,20 @@ import 'package:celient_project/res/routes/routes.dart';
 import 'package:celient_project/view/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'view_model/services/update_location_services.dart';
+
 
 void main() {
   runApp(const MyApp());
+  // Initialize the UpdateLocationServices controller
+  Get.put(UpdateLocationServices());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -13,6 +13,7 @@ class TripStatusViewModel extends GetxController {
   final ButtonController buttonController = Get.put(ButtonController());
   LoadStatusPreference loadStatuses = LoadStatusPreference();
   final currentTripVM = Get.put(CurrentTripController());
+
   void tripStatusApi(String loadId, String status, String piece,
       String totalWeight, String deliverAddress) async {
     try {
