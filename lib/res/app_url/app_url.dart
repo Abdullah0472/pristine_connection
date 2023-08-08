@@ -21,4 +21,7 @@ class AppUrl {
   static const String currentTripApi = '$baseUrl/api/current/trip';
   static const String uploadDataApi = '$baseUrl/api/load/data';
   static const String uploadUnloadDataApi = '$baseUrl/api/unload/data';
+  static const String getVehiclesDataApi = '$baseUrl/api/get/Vehicles';
+  static const String addVehiclesDataApi = '$baseUrl/api/save/Vehicles';
+  static const String updateBankApi = '$baseUrl/api/bank/update';
 }

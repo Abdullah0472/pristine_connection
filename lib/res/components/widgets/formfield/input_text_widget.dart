@@ -46,7 +46,7 @@ class InputTextField extends StatelessWidget {
       decoration: InputDecoration(
 
        prefixIcon: Icon(icons,color: AppColor.darkerColor),
-        contentPadding: const EdgeInsets.symmetric(vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(vertical: 18,horizontal: 20),
         border: InputBorder.none,
        // fillColor: const Color.fromARGB(255, 251, 250, 249),
        // filled: true,
@@ -58,6 +58,11 @@ class InputTextField extends StatelessWidget {
 
         filled: true,
 
+        labelText: hintText,
+        labelStyle: TextStyle(
+          color: Colors.grey.shade400,
+          fontSize: 17,
+        ),
         hintText: hintText,
         hintStyle:  TextStyle(
           color: Colors.grey.shade400,

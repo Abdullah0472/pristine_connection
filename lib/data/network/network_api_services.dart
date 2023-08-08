@@ -59,7 +59,7 @@ class NetworkApiServices extends BaseApiServices {
       print(url);
       final response = await http
           .post(Uri.parse(url), body: data)
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 20));
       responseJson = returnResponse(response);
 
       if (response.statusCode == 200) {
@@ -93,7 +93,7 @@ class NetworkApiServices extends BaseApiServices {
       final response = await http.post(Uri.parse(url), body: data, headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $getToken',
-      }).timeout(const Duration(seconds: 10));
+      }).timeout(const Duration(seconds: 20));
       print("The Bearer Token $getToken");
       print("Raw Response Body: ${response.body}");
       responseJson = returnResponse(response);

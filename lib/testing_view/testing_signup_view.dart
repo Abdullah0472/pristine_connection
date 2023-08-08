@@ -206,12 +206,6 @@ class _TestingSignUpViewState extends State<TestingSignUpView> {
     return [
       // Personal Information
       Step(
-          // title: const Text(
-          //   'Personal',
-          //   style: TextStyle(
-          //     fontWeight: FontWeight.w600,
-          //   ),
-          // ),
           title: Icon(
             MdiIcons.account,
             size: 30,
@@ -383,12 +377,7 @@ class _TestingSignUpViewState extends State<TestingSignUpView> {
               : StepState.indexed),
       // Vehicle Information
       Step(
-          // title: const Text(
-          //   'Vehicle',
-          //   style: TextStyle(
-          //     fontWeight: FontWeight.w600,
-          //   ),
-          // ),
+
           title: Icon(
             MdiIcons.truck,
             size: 30,
@@ -860,43 +849,39 @@ class _TestingSignUpViewState extends State<TestingSignUpView> {
                                   ),
                                 ),
                               ),
-                              child: SizedBox(
-                                width:
-                                    200.0, // To show images in particular area only
-                                child: signUpVM.selectedImages
-                                        .isEmpty // If no images is selected
-                                    ? const Center(
-                                        child: Text('Sorry nothing selected!!'))
-                                    // If atleast 1 images is selected
-                                    : Obx(() {
-                                        return GridView.builder(
-                                          itemCount:
-                                              signUpVM.selectedImages.length,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            crossAxisSpacing: 5.0,
-                                            mainAxisSpacing: 5.0,
-                                          ),
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            // Asset asset = signUpVM.images[index];
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Center(
-                                                  child: kIsWeb
-                                                      ? Image.network(signUpVM
-                                                          .selectedImages[index]
-                                                          .path)
-                                                      : Image.file(signUpVM
-                                                              .selectedImages[
-                                                          index])),
-                                            );
-                                          },
-                                        );
-                                      }),
-                              ),
+                              child: signUpVM.selectedImages
+                                      .isEmpty // If no images is selected
+                                  ? const Center(
+                                      child: Text('Sorry nothing selected!!'))
+                                  // If atleast 1 images is selected
+                                  : Obx(() {
+                                      return GridView.builder(
+                                        itemCount:
+                                            signUpVM.selectedImages.length,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          // crossAxisSpacing: 5.0,
+                                          // mainAxisSpacing: 5.0,
+                                        ),
+                                        itemBuilder: (BuildContext context,
+                                            int index) {
+                                          // Asset asset = signUpVM.images[index];
+                                          return Padding(
+                                            padding:
+                                                const EdgeInsets.all(8.0),
+                                            child: Center(
+                                                child: kIsWeb
+                                                    ? Image.network(signUpVM
+                                                        .selectedImages[index]
+                                                        .path)
+                                                    : Image.file(signUpVM
+                                                            .selectedImages[
+                                                        index])),
+                                          );
+                                        },
+                                      );
+                                    }),
                             ),
                           ],
                         ),
@@ -923,12 +908,6 @@ class _TestingSignUpViewState extends State<TestingSignUpView> {
               : StepState.indexed),
       // Account Information
       Step(
-        // title: const Text(
-        //   'Account',
-        //   style: TextStyle(
-        //     fontWeight: FontWeight.w600,
-        //   ),
-        // ),
         title: Icon(
           MdiIcons.bankCircle,
           size: 30,

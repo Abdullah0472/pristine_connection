@@ -27,7 +27,8 @@ class CardButton extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
            border: Border.all(color: AppColor.textColor,width: 2),
-            color: buttonColor, borderRadius: BorderRadius.circular(8)),
+            color: buttonColor,
+            borderRadius: BorderRadius.circular(8)),
         child: Center(
           child: Text(
             title,

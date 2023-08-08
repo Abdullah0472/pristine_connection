@@ -2,8 +2,6 @@ import 'package:celient_project/res/animation/FadeAnimation.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_email_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_password_widget.dart';
-import 'package:celient_project/res/components/widgets/text/text_widget.dart';
-import 'package:celient_project/view_model/controller/signin/signin_view_model.dart';
 import 'package:celient_project/view_model/controller/signup/signup_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

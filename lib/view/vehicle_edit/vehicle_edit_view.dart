@@ -1,381 +1,512 @@
-import 'package:celient_project/res/animation/FadeAnimation.dart';
-import 'package:celient_project/res/assets/images.dart';
+import 'dart:io';
+
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/appbar/custom_app_bar.dart';
-import 'package:celient_project/res/components/widgets/bottom_sheet/bottom_sheet.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
+import 'package:celient_project/res/components/widgets/dropdown/dropDown.dart';
+import 'package:celient_project/res/components/widgets/formfield/input_select_edit_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_text_widget.dart';
 import 'package:celient_project/view_model/controller/vehicle/vehicle_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../res/components/widgets/bottom_sheet/bottom_sheet.dart';
+
+// ignore: must_be_immutable
 class VehicleEditView extends StatelessWidget {
-  final String image1;
-  final String image2;
-  final String image3;
-  final String image4;
-  final String image5;
-  final String image6;
-  final String image7;
-  final String image8;
-  final String image9;
-  final String image10;
-  final String image11;
-  final String image12;
   final String vehicleType;
+  final String vehicleModel;
+  final String vehicleMake;
+  final String vehicleYear;
+  final String cargoDims;
+  final String doorDims;
+  String dockHigh;
+  String liftGate;
+  String tempCount;
   final String weight;
   final String width;
   final String height;
   final String length;
   final String registerNumber;
-  final String pallets;
+  final String registerNumberExp;
+  String pallets;
+  RxString registrationExpPic = ''.obs;
 
   VehicleEditView(
       {Key? key,
-      required this.image1,
-      required this.image2,
-      required this.image3,
-      required this.image4,
-      required this.image5,
-      required this.image6,
-      required this.image7,
-      required this.image8,
-      required this.image9,
-      required this.image10,
-      required this.image11,
-      required this.image12,
       required this.vehicleType,
       required this.weight,
       required this.width,
       required this.height,
       required this.length,
       required this.registerNumber,
-      required this.pallets})
+      required this.pallets,
+      required this.vehicleModel,
+      required this.vehicleMake,
+      required this.vehicleYear,
+      required this.cargoDims,
+      required this.doorDims,
+      required this.dockHigh,
+      required this.liftGate,
+      required this.tempCount,
+      required this.registerNumberExp, required this.registrationExpPic})
       : super(key: key);
 
   final vehicleVM = Get.put(VehicleViewModel());
+  final accountdockey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: accountdockey,
       backgroundColor: AppColor.offWhite,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         icon: false,
         actionIcon: true,
         action: [],
         title: 'Vehicle Edit',
-        leadingIcon: const SizedBox(),
+        leadingIcon: SizedBox(),
       ),
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 55),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                FadeAnimation(
-                  1.2,
-                  Center(
-                    child: InkWell(
-                      onTap: () async {
-                        Map<Permission, PermissionStatus> statuses = await [
-                          Permission.storage,
-                          Permission.camera,
-                        ].request();
-
-                        if (statuses[Permission.camera]!.isGranted) {
-                          // ignore: use_build_context_synchronously
-                          showBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ShowBottom(
-                                  // Select Image from
-                                  containerIndex: 7,
-                                  onImageSelected: (String? imageUrl) {
-                                    if (imageUrl != null) {
-                                      vehicleVM.image1Path =
-                                          imageUrl as RxString;
-                                    }
-                                  }); // Pass the container index as 1 for the second container
-                            },
-                          );
-                        } else {
-                          print('No permission provided');
-                          if (statuses[Permission.storage]!.isDenied ||
-                              statuses[Permission.storage]!
-                                  .isPermanentlyDenied) {
-                            // Handle storage permission denied or permanently denied
-                            print('Storage permission denied');
-                          }
-                          if (statuses[Permission.camera]!.isDenied ||
-                              statuses[Permission.camera]!
-                                  .isPermanentlyDenied) {
-                            // Handle camera permission denied or permanently denied
-                            print('Camera permission denied');
-                          }
-                        }
-                      },
-                      child: CircleAvatar(
-                        radius: 60,
-                        backgroundImage: image1.isNotEmpty
-                            ? NetworkImage(image1) as ImageProvider<Object>?
-                            : const AssetImage(ImageAssets.lady),
+          child: Column(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(32, 132, 232, .3),
+                      blurRadius: 20,
+                      offset: Offset(0, 10),
+                    )
+                  ],
+                ),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: InputTextField(
+                              initialValue: vehicleType,
+                              controller:
+                                  vehicleVM.vehicleTypeController.value,
+                              icons: MdiIcons.truck,
+                              hintText: "Vehicle Type",
+                            )),
+                            const VerticalDivider(
+                              color: AppColor.greyColor,
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              child: InputTextField(
+                                initialValue: vehicleModel,
+                                controller:
+                                    vehicleVM.vehicleModelController.value,
+                                hintText: 'Model',
+                                icons: MdiIcons.truck,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FadeAnimation(
-                    1.4,
-                    InputTextField(
-                      initialValue: vehicleType ?? '',
-                      controller: vehicleVM.vehicleTypeController.value,
-                      icons: MdiIcons.truckFlatbed,
-                      hintText: "Vehicle Type",
-                    )),
-                const SizedBox(
-                  height: 20,
-                ),
-                FadeAnimation(
-                    1.6,
-                    InputTextField(
-                      initialValue: weight ?? '',
-                      controller: vehicleVM.weightController.value,
-                      icons: MdiIcons.weight,
-                      hintText: "Weight",
-                    )),
-                const SizedBox(
-                  height: 20,
-                ),
-                FadeAnimation(
-                  1.8,
-                  InputTextField(
-                    initialValue: width ?? '',
-                    number: true,
-                    controller: vehicleVM.widthController.value,
-                    icons: MdiIcons.arrowLeftRight,
-                    hintText: "Width",
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FadeAnimation(
-                  2,
-                  InputTextField(
-                    initialValue: height ?? '',
-                    controller: vehicleVM.heightController.value,
-                    icons: MdiIcons.arrowLeft,
-                    hintText: "Height",
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FadeAnimation(
-                  2.2,
-                  InputTextField(
-                    initialValue: length ?? '',
-                    controller: vehicleVM.lengthController.value,
-                    icons: MdiIcons.arrowLeftRight,
-                    hintText: "Length",
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FadeAnimation(
-                  2.4,
-                  InputTextField(
-                    initialValue: registerNumber ?? '',
-                    controller: vehicleVM.registrationNumberController.value,
-                    icons: MdiIcons.poundBox,
-                    hintText: "Registration Number",
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FadeAnimation(
-                  2.6,
-                  InputTextField(
-                    initialValue: pallets ?? '',
-                    controller: vehicleVM.palletsController.value,
-                    icons: MdiIcons.poundBox,
-                    hintText: "Max Pallets",
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: FadeAnimation(
-                    2.6,
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
                           children: [
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.lightBlue,
-                                child: image1.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image1)),
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.red,
-                                child: image2.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image2)),
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.yellow,
-                                child: image3.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image3)),
+                            Expanded(
+                              child: InputTextField(
+                                initialValue: vehicleMake,
+                                controller:
+                                    vehicleVM.vehicleMakeController.value,
+                                hintText: 'Make',
+                                icons: MdiIcons.truck,
+                              ),
+                            ),
+                            const VerticalDivider(
+                              color: AppColor.greyColor,
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              child: InputTextField(
+                                number: false,
+                                initialValue: vehicleYear,
+                                controller:
+                                    vehicleVM.vehicleYearController.value,
+                                hintText: 'Year',
+                                icons: MdiIcons.calendarBlank,
+                              ),
+                            ),
                           ],
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.green,
-                                child: image4.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image4)),
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.brown,
-                                child: image5.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image5)),
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.purple,
-                                child: image6.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image6)),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.lightBlue,
-                                child: image7.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image7)),
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.red,
-                                child: image8.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image8)),
-                            Container(
-                                height: 100,
-                                width: 100,
-                                color: Colors.yellow,
-                                child: image9.isEmpty
-                                    ? Icon(
-                                        MdiIcons.cameraIris,
-                                        color: AppColor.greyColor,
-                                        size: 40,
-                                      )
-                                    : Image.network(image9)),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                FadeAnimation(
-                  3.2,
-                  RoundButton(
-                    loading: false,
-                    width: 300,
-                    height: Get.height * 0.06,
-                    onPress: () {
-                      // Update the profile
-                      // profileVM.updateUserApi();
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InputTextField(
+                                initialValue: height,
+                                controller: vehicleVM.heightController.value,
+                                hintText: 'Height',
+                                icons: MdiIcons.arrowUpDown,
+                              ),
+                            ),
+                            const VerticalDivider(
+                              color: AppColor.greyColor,
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              child: InputTextField(
+                                number: false,
+                                initialValue: length,
+                                controller: vehicleVM.lengthController.value,
+                                hintText: 'Length',
+                                icons: MdiIcons.arrowLeftRight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InputTextField(
+                                initialValue: width,
+                                controller: vehicleVM.widthController.value,
+                                hintText: 'Width',
+                                icons: MdiIcons.arrowLeftRight,
+                              ),
+                            ),
+                            const VerticalDivider(
+                              color: AppColor.greyColor,
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              child: InputTextField(
+                                number: false,
+                                initialValue: weight,
+                                controller: vehicleVM.weightController.value,
+                                hintText: 'Weight',
+                                icons: MdiIcons.weight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InputTextField(
+                                initialValue: cargoDims,
+                                controller:
+                                    vehicleVM.cargoDimsController.value,
+                                hintText: 'Cargo Dims',
+                                icons: MdiIcons.truckCargoContainer,
+                              ),
+                            ),
+                            const VerticalDivider(
+                              color: AppColor.greyColor,
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              child: InputTextField(
+                                number: false,
+                                initialValue: doorDims,
+                                controller:
+                                    vehicleVM.doorDimsController.value,
+                                hintText: 'Door Dims',
+                                icons: MdiIcons.carDoor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: InputTextField(
+                        hintText: "Registration Number",
+                        initialValue: registerNumber,
+                        controller:
+                            vehicleVM.vehicleRegistrationController.value,
+                        icons: MdiIcons.poundBox,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    const Text(
+                      'PICTURE OF THE REGISTRATION EXP.',
+                      style: TextStyle(
+                        color: AppColor.infoTextColor,
+                        fontWeight: FontWeight.w500,
+                        // fontSize: 16,
+                      ),
+                    ),
+                    Container(
+                      width: Get.width,
+                      height: 200,
+                      color: AppColor.whiteColor,
+                      child: Center(
+                        child: Builder(
+                          builder: (context) => IconButton(
+                            onPressed: () async {
+                              Map<Permission, PermissionStatus> statuses = await [
+                                Permission.storage,
+                                Permission.camera,
+                              ].request();
 
-                      // // Get the avatar image path
-                      // final image1 =
-                      //     vehicleVM.image1Path.value;
-                      // // Get the licence image path
-                      // final licencePath =
-                      //     profileVM.licencePath.value;
-                      //
-                      // // Update the images
-                      // profileVM.updateImageApi(avatarPath, licencePath);
-                    },
-                    title: 'Update the Vehicle',
-                  ),
+                              if (statuses[Permission.camera]!.isGranted) {
+                                SchedulerBinding.instance.addPostFrameCallback((_) {
+                                  accountdockey.currentState!.showBottomSheet(
+                                        (context) {
+                                      return ShowBottom(
+                                        containerIndex: 16,
+                                        onImageSelected: (String? imageUrl) {
+                                          if (imageUrl != null) {
+                                            vehicleVM.regExpPic.value = imageUrl;
+                                            registrationExpPic.value = imageUrl;
+                                          }
+                                        },
+                                      );
+                                    },
+                                  );
+                                });
+                              } else {
+                                print('No permission provided');
+                                if (statuses[Permission.storage]!.isDenied ||
+                                    statuses[Permission.storage]!.isPermanentlyDenied) {
+                                  // Handle storage permission denied or permanently denied
+                                  print('Storage permission denied');
+                                }
+                                if (statuses[Permission.camera]!.isDenied ||
+                                    statuses[Permission.camera]!.isPermanentlyDenied) {
+                                  // Handle camera permission denied or permanently denied
+                                  print('Camera permission denied');
+                                }
+                              }
+                            },
+                            icon:
+                            Obx(() {
+                              if (registrationExpPic.value.isNotEmpty) {
+                                if (registrationExpPic.value.startsWith('http')) {
+                                  return Image.network(
+                                    registrationExpPic.value,
+                                    fit: BoxFit.fill,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 200,
+                                  );
+                                } else {
+                                  return Image.file(
+                                    File(registrationExpPic.value), // Local file path
+                                    fit: BoxFit.fill,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 200,
+                                  );
+                                }
+                              } else {
+                                return const Icon(
+                                  MdiIcons.cameraIris,
+                                  size: 55,
+                                  color: AppColor.blackColor,
+                                );
+                              }
+                            }),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: InputDateEditSelectionTextField(
+                        initialValue: registerNumberExp,
+                        controller: vehicleVM.regExpController.value,
+                        hintText: 'Registration Expiry',
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: DropDown(
+                              hintSize: 12,
+                              onSelected: (String? selectedValue) {
+                                dockHigh = selectedValue!;
+                                vehicleVM.dockHeightController.value.text =
+                                    selectedValue;
+                              },
+                              dropDownController:
+                                  vehicleVM.dockHeightController.value,
+                              selectedItem: dockHigh,
+                              hintText:
+                                  'Dock High', // Set the initial value here
+                            )
+                            ),
+                            const VerticalDivider(
+                              color: AppColor.greyColor,
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              child: DropDown(
+                                hintSize: 12,
+                                onSelected: (String? selectedValue) {
+                                  pallets = selectedValue!;
+                                  vehicleVM.palletJeckController.value.text =
+                                      selectedValue;
+                                },
+                                dropDownController:
+                                    vehicleVM.palletJeckController.value,
+                                selectedItem: pallets,
+                                hintText:
+                                    'Pallet Jack', // Set the initial value here
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade200,
+                          ),
+                        ),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: DropDown(
+                                hintSize: 12,
+                                onSelected: (String? selectedValue) {
+                                  liftGate = selectedValue!;
+                                  vehicleVM.liftGateController.value.text =
+                                      selectedValue;
+                                },
+                                dropDownController:
+                                    vehicleVM.liftGateController.value,
+                                selectedItem: liftGate,
+                                hintText:
+                                    'Lift Gate', // Set the initial value here
+                              ),
+                            ),
+                            const VerticalDivider(
+                              color: AppColor.greyColor,
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              child: DropDown(
+                                hintSize: 12,
+                                onSelected: (String? selectedValue) {
+                                  tempCount = selectedValue!;
+                                  vehicleVM.tempCountController.value.text =
+                                      selectedValue;
+                                },
+                                dropDownController:
+                                    vehicleVM.tempCountController.value,
+                                selectedItem: tempCount,
+                                hintText:
+                                    'Temp Count', // Set the initial value here
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 30,),
+              RoundButton(title: "Update Vehicle Details", onPress: (){},width: 250,),
+
+            ],
           ),
         ),
       )),

@@ -6,11 +6,15 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class InputDateSelectionTextField extends StatefulWidget {
   TextEditingController controller;
   final String hintText;
+
   InputDateSelectionTextField({
-    super.key,
+    Key? key,
     required this.controller,
     required this.hintText,
-  });
+
+  }): super(key: key) {
+    // set initial value to controller here
+  }
 
   @override
   State<InputDateSelectionTextField> createState() =>

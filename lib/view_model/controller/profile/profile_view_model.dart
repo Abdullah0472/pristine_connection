@@ -13,10 +13,12 @@ class ProfileViewModel extends GetxController {
   final emailController = TextEditingController().obs;
   final phoneNumberController = TextEditingController().obs;
   final nameController = TextEditingController().obs;
-  final regNumberController = TextEditingController().obs;
+  final licenceNumberController = TextEditingController().obs;
+  final licenceExpNumberController = TextEditingController().obs;
   final cityController = TextEditingController().obs;
   final stateController = TextEditingController().obs;
   final addressController = TextEditingController().obs;
+  final faceMaskController = TextEditingController().obs;
   final zipController = TextEditingController().obs;
 
   final emailFocusNode = FocusNode().obs;
@@ -72,11 +74,13 @@ class ProfileViewModel extends GetxController {
         'email': emailController.value.text,
         'name': nameController.value.text,
         'phone': phoneNumberController.value.text,
-        'reg_no': regNumberController.value.text,
+        'licence_no': licenceNumberController.value.text,
+        'licence_exp': licenceExpNumberController.value.text,
         'state': stateController.value.text,
         'city': cityController.value.text,
         'address': addressController.value.text,
         'zip': zipController.value.text,
+        'facemask': faceMaskController.value.text,
       };
 
       _api.updateUser(data).then((value) {

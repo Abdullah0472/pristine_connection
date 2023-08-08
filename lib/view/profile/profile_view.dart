@@ -4,9 +4,14 @@ import 'package:celient_project/res/assets/images.dart';
 import 'package:celient_project/res/colors/colors.dart';
 import 'package:celient_project/res/components/widgets/bottom_sheet/bottom_sheet.dart';
 import 'package:celient_project/res/components/widgets/buttons/round_button_widget.dart';
+import 'package:celient_project/res/components/widgets/dropdown/dropDown.dart';
 import 'package:celient_project/res/components/widgets/exception/general_exception.dart';
 import 'package:celient_project/res/components/widgets/exception/internet_exceptions_widget.dart';
+import 'package:celient_project/res/components/widgets/formfield/input_select_edit_widget.dart';
 import 'package:celient_project/res/components/widgets/formfield/input_text_widget.dart';
+import 'package:celient_project/view/bankAccount/bankAccount_view.dart';
+import 'package:celient_project/view/insurance/insurance_view.dart';
+import 'package:celient_project/view/team/team_view.dart';
 import 'package:celient_project/view_model/controller/profile/profile_view_model.dart';
 import 'package:celient_project/view_model/controller/user_preference/user_prefrence_view_model.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +29,6 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final profileVM = Get.put(ProfileViewModel());
-  UserPreference userPreference = UserPreference();
 
   @override
   void initState() {
@@ -92,14 +96,113 @@ class _ProfileViewState extends State<ProfileView> {
                 },
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 55),
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Form(
                       key: profileformkey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Get.to(() => BankAccountView(
+                                        bankName: profileVM.userList.value.data!
+                                                .bankName ??
+                                            "",
+                                        accountName: profileVM.userList.value
+                                                .data!.accountName ??
+                                            "",
+                                        routing: profileVM
+                                                .userList.value.data!.routing ??
+                                            "",
+                                        accountNumber: profileVM.userList.value
+                                                .data!.accountNumber ??
+                                            "",
+                                        bankAccountPic: RxString(profileVM
+                                                .userList
+                                                .value
+                                                .data!
+                                                .bankDocs ??
+                                            "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg"),
+                                      ));
+                                },
+                                icon: Icon(
+                                  MdiIcons.bankCircle,
+                                  size: 30,
+                                ),
+                              ),
+
+                              IconButton(
+                                onPressed: () {
+                                  Get.to(() => InsuranceView(
+                                        hardHat: profileVM
+                                                .userList.value.data!.hardHat ??
+                                            "",
+                                        vest: profileVM
+                                                .userList.value.data!.vest ??
+                                            "",
+                                        steelToe: profileVM.userList.value.data!
+                                                .steelToe ??
+                                            "",
+                                        insurancePic: RxString(profileVM
+                                                .userList
+                                                .value
+                                                .data!
+                                                .insuranceExp ??
+                                            "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg"),
+                                        insuranceExp: profileVM.userList.value
+                                                .data!.insExpDate ??
+                                            "",
+                                      ));
+                                },
+                                icon: Icon(
+                                  MdiIcons.shield,
+                                  size: 30,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Get.to(() => TeamView(
+                                      team: profileVM.userList.value.data!.team ??
+                                          "",
+                                      teamName: profileVM
+                                              .userList.value.data!.teamName ??
+                                          "",
+                                      teamNumber: profileVM.userList.value.data!
+                                              .teamNumber ??
+                                          "",
+                                      dlExpPic:
+                                     RxString(profileVM.userList.value.data!.dlExp ??
+                                              ""),
+                                      dlExp: profileVM
+                                              .userList.value.data!.dlExpDate ??
+                                          "",
+                                      greenCard: RxString(profileVM
+                                              .userList.value.data!.greenCard ??
+                                          ""),
+                                      twicCard:
+                                      RxString(profileVM.userList.value.data!.twicCard ??
+                                              ""),
+                                      tsaCard: RxString(profileVM.userList.value.data!.tsaCard ?? ""),
+                                      hazmat: RxString(profileVM.userList.value.data!.hazmatExp ?? ""),
+                                      hazmatExp: profileVM.userList.value.data!.hazmatExpDate ?? ""));
+                                },
+                                icon: Icon(
+                                  MdiIcons.accountGroup,
+                                  size: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           FadeAnimation(
                             1.2,
                             Center(
@@ -118,16 +221,19 @@ class _ProfileViewState extends State<ProfileView> {
                                       builder: (BuildContext context) {
                                         return ShowBottom(
                                             containerIndex: 5,
-                                            onImageSelected: (String? imageUrl) {
+                                            onImageSelected:
+                                                (String? imageUrl) {
                                               if (imageUrl != null) {
-                                                profileVM.avatarPath.value = imageUrl;
+                                                profileVM.avatarPath.value =
+                                                    imageUrl;
                                               }
                                             }); // Pass the container index as 1 for the second container
                                       },
                                     );
                                   } else {
                                     print('No permission provided');
-                                    if (statuses[Permission.storage]!.isDenied ||
+                                    if (statuses[Permission.storage]!
+                                            .isDenied ||
                                         statuses[Permission.storage]!
                                             .isPermanentlyDenied) {
                                       // Handle storage permission denied or permanently denied
@@ -143,11 +249,11 @@ class _ProfileViewState extends State<ProfileView> {
                                 },
                                 child: CircleAvatar(
                                   radius: 60,
-                                  backgroundImage: profileVM
-                                                  .userList.value.data?.avatar !=
+                                  backgroundImage: profileVM.userList.value.data
+                                                  ?.avatar !=
                                               null &&
-                                          profileVM.userList.value.data!
-                                              .avatar!.isNotEmpty
+                                          profileVM.userList.value.data!.avatar!
+                                              .isNotEmpty
                                       ? NetworkImage(profileVM
                                           .userList
                                           .value
@@ -165,8 +271,7 @@ class _ProfileViewState extends State<ProfileView> {
                               1.4,
                               InputTextField(
                                 initialValue:
-                                    profileVM.userList.value.data?.email ??
-                                        '',
+                                    profileVM.userList.value.data?.email ?? '',
                                 controller: profileVM.emailController.value,
                                 icons: MdiIcons.emailOutline,
                                 hintText: "Email",
@@ -178,8 +283,7 @@ class _ProfileViewState extends State<ProfileView> {
                               1.6,
                               InputTextField(
                                 initialValue:
-                                    profileVM.userList.value.data?.name ??
-                                        '',
+                                    profileVM.userList.value.data?.name ?? '',
                                 controller: profileVM.nameController.value,
                                 icons: MdiIcons.accountCircle,
                                 hintText: "Name",
@@ -231,8 +335,7 @@ class _ProfileViewState extends State<ProfileView> {
                             2.4,
                             InputTextField(
                               initialValue:
-                                  profileVM.userList.value.data?.address ??
-                                      '',
+                                  profileVM.userList.value.data?.address ?? '',
                               controller: profileVM.addressController.value,
                               icons: MdiIcons.mapMarker,
                               hintText: "Address",
@@ -260,17 +363,65 @@ class _ProfileViewState extends State<ProfileView> {
                             InputTextField(
                               number: true,
                               initialValue:
-                                  profileVM.userList.value.data?.regNo ?? '',
-                              controller: profileVM.regNumberController.value,
-                              icons: MdiIcons.poundBox,
-                              hintText: "Registration Number",
+                                  profileVM.userList.value.data?.licenceNo ??
+                                      '',
+                              controller:
+                                  profileVM.licenceNumberController.value,
+                              icons: MdiIcons.license,
+                              hintText: "Licence Number",
                             ),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
                           FadeAnimation(
-                            3,
+                            3.0,
+                            InputDateEditSelectionTextField(
+                              initialValue:
+                                  profileVM.userList.value.data?.licenceExp ??
+                                      '',
+                              controller:
+                                  profileVM.licenceExpNumberController.value,
+                              hintText: 'Licence Expiry',
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          FadeAnimation(
+                            3.2,
+                            DropDown(
+                              hintSize: 12,
+                              onSelected: (String? selectedValue) {
+                                profileVM.userList.value.data?.facemask =
+                                    selectedValue!;
+                                profileVM.faceMaskController.value.text =
+                                    selectedValue!;
+                              },
+                              dropDownController:
+                                  profileVM.faceMaskController.value,
+                              selectedItem:
+                                  profileVM.userList.value.data!.facemask!,
+                              hintText:
+                                  'Face Mask', // Set the initial value here
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Center(
+                            child: const Text(
+                              'PICTURE OF THE LICENCE',
+                              style: TextStyle(
+                                color: AppColor.infoTextColor,
+                                fontWeight: FontWeight.w500,
+                                // fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          FadeAnimation(
+                            3.4,
                             Container(
                               width: MediaQuery.of(context).size.width,
                               height: 200,
@@ -284,7 +435,8 @@ class _ProfileViewState extends State<ProfileView> {
                                       Permission.camera,
                                     ].request();
 
-                                    if (statuses[Permission.camera]!.isGranted) {
+                                    if (statuses[Permission.camera]!
+                                        .isGranted) {
                                       // ignore: use_build_context_synchronously
                                       showBottomSheet(
                                         context: context,
@@ -294,11 +446,10 @@ class _ProfileViewState extends State<ProfileView> {
                                               onImageSelected:
                                                   (String? imageUrl) {
                                                 if (imageUrl != null) {
-                                                  profileVM.licencePath
-                                                      .value = imageUrl;
+                                                  profileVM.licencePath.value =
+                                                      imageUrl;
                                                 }
-                                              }
-                                              );
+                                              });
                                         },
                                       );
                                     } else {
@@ -309,7 +460,8 @@ class _ProfileViewState extends State<ProfileView> {
                                               .isPermanentlyDenied) {
                                         print('Storage permission denied');
                                       }
-                                      if (statuses[Permission.camera]!.isDenied ||
+                                      if (statuses[Permission.camera]!
+                                              .isDenied ||
                                           statuses[Permission.camera]!
                                               .isPermanentlyDenied) {
                                         print('Camera permission denied');
@@ -320,13 +472,13 @@ class _ProfileViewState extends State<ProfileView> {
                                     if (profileVM
                                                 .userList.value.data?.license !=
                                             null &&
-                                        profileVM.userList.value.data!
-                                            .license!.isNotEmpty) {
+                                        profileVM.userList.value.data!.license!
+                                            .isNotEmpty) {
                                       return Image.network(
-                                        profileVM
-                                            .userList.value.data!.license!,
+                                        profileVM.userList.value.data!.license!,
                                         fit: BoxFit.fill,
-                                        width: MediaQuery.of(context).size.width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         height: 200,
                                       );
                                     } else {
@@ -345,7 +497,7 @@ class _ProfileViewState extends State<ProfileView> {
                             height: 30,
                           ),
                           FadeAnimation(
-                            3.2,
+                            3.6,
                             RoundButton(
                               loading: false,
                               width: 300,
@@ -355,14 +507,13 @@ class _ProfileViewState extends State<ProfileView> {
                                 profileVM.updateUserApi();
 
                                 // Get the avatar image path
-                                final avatarPath =
-                                    profileVM.avatarPath.value;
+                                final avatarPath = profileVM.avatarPath.value;
                                 // Get the licence image path
-                                final licencePath =
-                                    profileVM.licencePath.value;
+                                final licencePath = profileVM.licencePath.value;
 
                                 // Update the images
-                                profileVM.updateImageApi(avatarPath, licencePath);
+                                profileVM.updateImageApi(
+                                    avatarPath, licencePath);
                               },
                               title: 'Update the Profile',
                             ),

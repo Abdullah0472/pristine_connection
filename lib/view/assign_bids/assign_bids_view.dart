@@ -58,7 +58,8 @@ class _AssignBidViewState extends State<AssignBidView> {
           color: AppColor.blackColor,
         ),),
       ),
-      body: SafeArea(child: Obx(() {
+      body: SafeArea(
+          child: Obx(() {
         switch (assignBidsVM.rxRequestStatus.value) {
           case Status.LOADING:
             return const Center(child: CircularProgressIndicator());
